@@ -1,5 +1,5 @@
 # isThereAnyOffer
-The Play Slick Rest is a very simple json rest api showing one way of using Play Framework 2.5 with [slick 3](https://github.com/slick/slick) library for database access.
+The isThereAnyOffer is a very simple json rest api showing one way of using Play Framework 2.5 with [slick 3](https://github.com/slick/slick) library for database access.
 
 
 It supports the following features:
