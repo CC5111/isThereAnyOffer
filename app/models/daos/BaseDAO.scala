@@ -1,15 +1,59 @@
 package models.daos
 
-import models.entities.{Supplier, BaseEntity}
+import javax.inject.{Inject, Singleton}
+
 import models.persistence.SlickTables
-import models.persistence.SlickTables.{SuppliersTable, BaseTable}
+import models.persistence.SlickTables.{BaseTable, SuppliersTable}
 import play.api.Play
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import slick.backend.DatabaseConfig
 import slick.driver.JdbcProfile
-import slick.lifted.{CanBeQueryCondition}
+import slick.lifted.CanBeQueryCondition
+
 import scala.concurrent.Future
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import models.entities._
+
+@Singleton
+class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider){
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  import dbConfig.driver.api._
+  import dbConfig.db
+
+  protected val tableQ = SlickTables.gameQ
+
+  def all: Future[Seq[Game]] = {
+    db.run(tableQ.result)
+  }
+
+  def insert(game: Game): Future[Long] = {
+    db.run(tableQ returning tableQ.map(_.id) += game)
+  }
+
+  def searchByName(name: String): Future[Seq[Game]] = all
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 trait AbstractBaseDAO[T,A] {
   def insert(row : A): Future[Long]
