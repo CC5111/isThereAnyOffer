@@ -1,0 +1,31 @@
+{
+  "name": "isThereAnyOffer",
+  "homepage": "https://github.com/CC5111/isThereAnyOffer",
+  "authors": [
+    "Pedro Bustamante <ppbb15@gmail.com>"
+  ],
+  "description": "App de juegos",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.4",
+    "bootstrap": "^3.3.6"
+  },
+  "install": {
+    "path": {
+      "css": "public/stylesheets",
+      "js": "public/javascripts",
+      "ttf": "public/fonts",
+      "woff": "public/fonts",
+      "woff2": "public/fonts"
+    }
+  }
+}
