@@ -2,10 +2,17 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# An example controller showing how to write asynchronous code
-GET     /:name                               controllers.HelloController.index(name: String)
-GET     /supplier/:id                 controllers.SuppliersController.supplier(id : Long)
-POST    /supplier                    controllers.SuppliersController.insertSupplier
+#Credentials Views
+#POST    /login                          controllers.LoginController.index
+#GET     /logout                         controllers.LogoutController.index
+#GET     /profile                        controllers.ProfileController.index
+#
+##Game views
+#GET     /detail/:id                     controllers.DetailController.index(id: String)
+#GET     /                               controllers.HomeController.index
+GET     /                                controllers.TestControllers.index()
+#API Rest
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

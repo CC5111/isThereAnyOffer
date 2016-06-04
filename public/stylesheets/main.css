@@ -1,0 +1,31 @@
+body {
+    padding-top: 70px;
+}
+/* Main marketing message and sign up button */
+.jumbotron {
+    text-align: center;
+    background-color: transparent;
+}
+.search-row .search-col {
+    padding: 0;
+    position: relative;
+}
+.search-row .btn-search {
+    border-radius: 0 3px 3px 0!important;
+}
+.search-row .search-col .form-control, .search-row button.btn-search {
+    border-radius: 0;
+    border: 0;
+    height: 48px;
+    margin-bottom: 0;
+}
+.icon-append {
+    color: #949494;
+    font-size: 18px;
+    left: 12px;
+    position: absolute;
+    top: 14px;
+}
+.has-icon {
+    padding-left: 40px;
+}
