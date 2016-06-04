@@ -1,4 +1,4 @@
-name := """play-slick-rest"""
+name := """isThereAnyOffer"""
 
 version := "0.0.1"
 
