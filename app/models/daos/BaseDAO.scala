@@ -1,6 +1,6 @@
 package models.daos
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 import models.persistence.SlickTables
 import models.persistence.SlickTables.{BaseTable, SuppliersTable}

@@ -30,10 +30,10 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
   val userQ = TableQuery[UserTable]
 
   class WatchListItemTable(tag: Tag) extends BaseTable[WatchListItem](tag, "watchListItem") {
-    def idUser = column[String]("idUser")
-    def idGame = column[String]("idGame")
-    def creationDate = column[String]("creationDate")
-    def threshold = column[java.sql.Timestamp]("threshold")
+    def idUser = column[Long]("idUser")
+    def idGame = column[Long]("idGame")
+    def creationDate = column[java.sql.Timestamp]("creationDate")
+    def threshold = column[Int]("threshold")
 
     def * = (id, idUser, idGame, creationDate, threshold)  <> (WatchListItem.tupled, WatchListItem.unapply _)
   }
