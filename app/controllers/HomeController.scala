@@ -7,17 +7,17 @@ import play.api.mvc.{Action, Controller, WebSocket}
 class HomeController extends Controller {
 
     def index() = Action { implicit request =>
-        Ok(views.html.index)
+        Ok(views.html.home(title = "Is There Any Offer"))
     }
 
-    def searchResults() = Action { implicit request =>
-        Ok(views.html.searchResults)
-    }
-
-    // JsValue ~ JSON
-    def socket = WebSocket.accept[JsValue, JsValue] { request =>
-        ActorFlow.actorRef(out => SearchActor.props(out))
-    }
+//    def searchResults() = Action { implicit request =>
+//        Ok(views.html.searchResults)
+//    }
+//
+//    // JsValue ~ JSON
+//    def socket = WebSocket.accept[JsValue, JsValue] { request =>
+//        ActorFlow.actorRef(out => SearchActor.props(out))
+//    }
 
 
 }

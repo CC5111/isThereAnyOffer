@@ -9,8 +9,7 @@
 #
 ##Game views
 #GET     /detail/:id                     controllers.DetailController.index(id: String)
-#GET     /                               controllers.HomeController.index
-GET     /                                controllers.TestControllers.index()
+GET     /                               controllers.HomeController.index
 #API Rest
 
 

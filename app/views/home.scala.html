@@ -3,29 +3,20 @@
 
 <div class="container">
         <div class="jumbotron">
-                <h1>Marketing stuff!</h1>
+                <h1 style="color: white"> @title</h1>
                 <div class="container">
-                        <p class="sub animateme fittext3 animated fadeIn"> Find local classified ads on bootclassified in
+                        <p style="color: white"> Find local classified ads on bootclassified in
                                 Minutes </p>
                         <br>
-                        @*<div class="col-md-6 col-lg-offset-3">*@
-                                @*<div class="input-group">*@
-                                        @*<input type="text" class="form-control" placeholder="Search for...">*@
-                                        @*<span class="input-group-btn">*@
-                                                @*<button class="btn btn-success btn-block" type="button">Search</button>*@
-                                        @*</span>*@
-                                @*</div><!-- /input-group -->*@
+                        <div class="row search-row animated fadeInUp col-md-offset-3">
 
-                        @*</div>*@
-                        <div class="row search-row animated fadeInUp col-md-offset-2">
-
-                                <div class="col-md-6 search-col relative locationicon">
+                                <div class="col-md-7 search-col relative locationicon">
                                         <i class="fa fa-gamepad icon-append" aria-hidden="true"></i>
-                                        <input type="text" name="ads" class="form-control has-icon" placeholder="I'm looking for a ..." value="">
+                                        <input type="text" name="ads" class="form-control has-icon" placeholder="Yo estoy buscando ..." value="">
                                 </div>
-                                <div class="col-md-3 search-col">
+                                <div class="col-md-1 search-col">
                                         <button class="btn btn-success btn-search btn-block">
-                                                <i class="fa fa-search" aria-hidden="true"></i><strong> Find</strong>
+                                                <i class="fa fa-search" aria-hidden="true"></i>
                                         </button>
                                 </div>
                         </div>
@@ -33,25 +24,61 @@
                 </div>
         </div><br>
         <div class="row">
-                <div class="col-md-3">
-                        <h2>Heading</h2>
-                        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                        <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
+                <div class="col-md-3" style="padding: 2px;">
+                        <div class="offer-item">
+                                <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/witcher.png")); background-size:contain; ">
+                                        <div class="post-content">
+                                                <div class="category">
+                                                        <a href="#">Xbox</a>
+                                                </div>
+                                                <h2 class="entry-title">
+                                                        <a href="news-details.html">The witcher 3: Wild Hunt</a>
+                                                </h2>
+                                        </div>
+                                </div>
+                        </div>
                 </div>
-                <div class="col-md-3">
-                        <h2>Heading</h2>
-                        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-                        <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
+                <div class="col-md-3" style="padding: 2px;">
+                        <div class="offer-item">
+                                <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/overwatch.jpg")); background-size:cover; ">
+                                        <div class="post-content">
+                                                <div class="category">
+                                                        <a href="#">PSN</a>
+                                                </div>
+                                                <h2 class="entry-title">
+                                                        <a href="news-details.html">Overwatch</a>
+                                                </h2>
+                                        </div>
+                                </div>
+                        </div>
                 </div>
-                <div class="col-md-3">
-                        <h2>Heading</h2>
-                        <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-                        <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
+                <div class="col-md-3" style="padding: 2px;">
+                        <div class="offer-item">
+                                <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/final.jpg")); background-size:cover; ">
+                                        <div class="post-content">
+                                                <div class="category">
+                                                        <a href="#">Steam</a>
+                                                </div>
+                                                <h2 class="entry-title">
+                                                        <a href="news-details.html">Final Fantasy XIV: A realm reborn</a>
+                                                </h2>
+                                        </div>
+                                </div>
+                        </div>
                 </div>
-                <div class="col-md-3">
-                        <h2>Heading</h2>
-                        <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-                        <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
+                <div class="col-md-3" style="padding: 2px;">
+                        <div class="offer-item">
+                                <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/uncharted.jpg")); background-size:cover; ">
+                                        <div class="post-content">
+                                                <div class="category">
+                                                        <a href="#">GoG</a>
+                                                </div>
+                                                <h2 class="entry-title">
+                                                        <a href="news-details.html">Uncharted 4: A Thief's End</a>
+                                                </h2>
+                                        </div>
+                                </div>
+                        </div>
                 </div>
         </div>
 
