@@ -107,17 +107,4 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
     def * = (id, name) <> (Platform.tupled, Platform.unapply _)
   }
   val platformQ = TableQuery[PlatformTable]
-
-
-
-  case class SimpleSupplier(name: String, desc: String)
-
-  class SuppliersTable(tag: Tag) extends BaseTable[Supplier](tag, "suppliers") {
-    def name = column[String]("name")
-    def desc = column[String]("desc")
-    def * = (id, name, desc) <> (Supplier.tupled, Supplier.unapply)
-  }
-
-  val suppliersTableQ : TableQuery[SuppliersTable] = TableQuery[SuppliersTable]
-
 }
