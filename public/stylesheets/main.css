@@ -2,6 +2,93 @@ body {
     padding-top: 70px;
     background:rgba(0, 0, 0, 1);
 }
+
+body p{
+    color: white;
+}
+
+h4{
+    color: white;
+}
+
+.badge{
+    background-color: black;
+}
+/*table*/
+
+thead tr{
+    background-color: black;
+    color: white;
+}
+
+tbody tr{
+    background-color: #0f0f0f;
+    color: white;
+}
+
+tbody tr:hover{
+    background-color: black;
+}
+
+
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+    border: 5px solid #000000;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.table-bordered {
+    border-top: 0 solid transparent;
+}
+
+/*Filter panel*/
+
+.list-group button{
+    background-color: #0f0f0f;
+    color: white;
+    position: relative;
+    display: block;
+    border: 3px solid black;
+}
+
+.list-group button.title{
+    background-color: black;
+}
+.list-group button:focus , .list-group button:active {
+    background-color: green;
+    color: white;
+    outline: none !important;
+
+}
+
+.list-group > button:hover{
+    background-color: black;
+    color: white;
+}
+
+/*pagination*/
+
+ul.pagination li a{
+    background-color: #0f0f0f;
+    color: white;
+    border: 2px solid black;
+}
+
+ul.pagination li a:focus, ul.pagination li a:active,ul.pagination li a:hover{
+    background-color: black;
+    color: white;
+    border: 2px solid black;
+}
+
+
+/*cosas*/
+
 .navbar {
     background-color: rgba(0, 0, 0, 0.8);
     background: rgba(0, 0, 0, 0.8);
@@ -53,13 +140,12 @@ a:hover{
 
 .feature-post .post-content {
     position: absolute;
-    border-radius: 0;
     width: 100%;
     bottom: 0;
     left: 0;
     margin-left: 2px;
     margin-right: 2px;
-    padding: 25px 35px;
+    padding: 25px 20px;
     z-index: 1;
     color: #fff;
     border-radius: 0 0 3px 3px;
@@ -82,14 +168,19 @@ a:hover{
     margin-bottom: 5px;
 }
 
-.feature-post .entry-title {
+.feature-post .post-content .entry-title {
     font-size: 20px;
     line-height: 25px;
-
-}
-.post .entry-title {
-    font-size: 18px;
     text-transform: capitalize;
     margin-top: 10px;
+}
+.porcentaje{
 
+    position: absolute;
+    right:    0;
+    bottom:   25px;
+}
+
+.descuento{
+    color: forestgreen;
 }

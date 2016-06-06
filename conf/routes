@@ -8,7 +8,9 @@
 #GET     /profile                        controllers.ProfileController.index
 #
 ##Game views
-#GET     /detail/:id                     controllers.DetailController.index(id: String)
+POST     /search                         controllers.HomeController.search
+GET     /detail/:id                     controllers.DetailController.index(id:Long)
+GET     /result/:query                  controllers.ResultController.index(query:String)
 GET     /                               controllers.HomeController.index
 #API Rest
 

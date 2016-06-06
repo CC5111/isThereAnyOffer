@@ -17,6 +17,7 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   }
 
+
   class UserTable(tag: Tag) extends BaseTable[User](tag, "user") {
     def username = column[String]("username")
     def name = column[String]("name")
