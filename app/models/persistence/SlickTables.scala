@@ -26,7 +26,7 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
     def password = column[String]("password")
     def photo = column[String]("photo")
 
-    def * = (id, username, name, email, birthdate, password, photo)  <> (User.tupled, User.unapply _)
+    def * = (id, username, name, email, birthdate, password, photo) <> (User.tupled, User.unapply _)
   }
   val userQ = TableQuery[UserTable]
 
@@ -36,7 +36,7 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
     def creationDate = column[java.sql.Timestamp]("creationDate")
     def threshold = column[Int]("threshold")
 
-    def * = (id, idUser, idGame, creationDate, threshold)  <> (WatchListItem.tupled, WatchListItem.unapply _)
+    def * = (id, idUser, idGame, creationDate, threshold) <> (WatchListItem.tupled, WatchListItem.unapply _)
   }
   val watchListItemQ = TableQuery[WatchListItemTable]
 
@@ -48,7 +48,7 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
     def normalPrice = column[Double]("normalPrice")
     def offerPrice = column[Double]("offerPrice")
 
-    def * = (id, link, idGame, fromDate, untilDate, normalPrice, offerPrice)  <> (Offer.tupled, Offer.unapply _)
+    def * = (id, link, idGame, fromDate, untilDate, normalPrice, offerPrice) <> (Offer.tupled, Offer.unapply _)
   }
   val offerQ = TableQuery[OfferTable]
 
@@ -60,7 +60,7 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
     def releaseDate = column[java.sql.Timestamp]("releaseDate")
     def typeGame = column[String]("typeGame")
 
-    def * = (id, name, cover, publisher, rating, releaseDate, typeGame)  <> (Game.tupled, Game.unapply _)
+    def * = (id, name, cover, publisher, rating, releaseDate, typeGame) <> (Game.tupled, Game.unapply _)
   }
   val gameQ = TableQuery[GameTable]
 
@@ -68,14 +68,14 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
     def idGame = column[Long]("idGame")
     def idCategory = column[Long]("idCategory")
 
-    def * = (id, idGame, idCategory)  <> (GameCategory.tupled, GameCategory.unapply _)
+    def * = (id, idGame, idCategory) <> (GameCategory.tupled, GameCategory.unapply _)
   }
   val gameCategoryQ = TableQuery[GameCategoryTable]
 
   class CategoryTable(tag: Tag) extends BaseTable[Category](tag, "category") {
     def name = column[String]("name")
 
-    def * = (id, name)  <> (Category.tupled, Category.unapply _)
+    def * = (id, name) <> (Category.tupled, Category.unapply _)
   }
   val categoryQ = TableQuery[CategoryTable]
 
@@ -83,14 +83,14 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
     def idGame = column[Long]("idGame")
     def idGenre = column[Long]("idGenre")
 
-    def * = (id, idGame, idGenre)  <> (GameGenre.tupled, GameGenre.unapply _)
+    def * = (id, idGame, idGenre) <> (GameGenre.tupled, GameGenre.unapply _)
   }
   val gameGenreQ = TableQuery[GameGenreTable]
 
   class GenreTable(tag: Tag) extends BaseTable[Genre](tag, "genre") {
     def name = column[String]("name")
 
-    def * = (id, name)  <> (Genre.tupled, Genre.unapply _)
+    def * = (id, name) <> (Genre.tupled, Genre.unapply _)
   }
   val genreQ = TableQuery[GenreTable]
 
@@ -98,27 +98,14 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
     def idGame = column[Long]("idGame")
     def idPlatform = column[Long]("idPlatform")
 
-    def * = (id, idGame, idPlatform)  <> (GamePlatform.tupled, GamePlatform.unapply _)
+    def * = (id, idGame, idPlatform) <> (GamePlatform.tupled, GamePlatform.unapply _)
   }
   val gamePlatformQ = TableQuery[GamePlatformTable]
 
   class PlatformTable(tag: Tag) extends BaseTable[Platform](tag, "platform") {
     def name = column[String]("name")
 
-    def * = (id, name)  <> (Platform.tupled, Platform.unapply _)
+    def * = (id, name) <> (Platform.tupled, Platform.unapply _)
   }
   val platformQ = TableQuery[PlatformTable]
-
-
-
-  case class SimpleSupplier(name: String, desc: String)
-
-  class SuppliersTable(tag: Tag) extends BaseTable[Supplier](tag, "suppliers") {
-    def name = column[String]("name")
-    def desc = column[String]("desc")
-    def * = (id, name, desc) <> (Supplier.tupled, Supplier.unapply)
-  }
-
-  val suppliersTableQ : TableQuery[SuppliersTable] = TableQuery[SuppliersTable]
-
 }

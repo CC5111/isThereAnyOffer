@@ -3,7 +3,7 @@ package models.daos
 import javax.inject.{Inject, Singleton}
 
 import models.persistence.SlickTables
-import models.persistence.SlickTables.{BaseTable, SuppliersTable}
+import models.persistence.SlickTables.{BaseTable}
 import play.api.Play
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import slick.backend.DatabaseConfig
@@ -26,33 +26,8 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider){
     db.run(tableQ.result)
   }
 
-  def insert(game: Game): Future[Long] = {
-    db.run(tableQ returning tableQ.map(_.id) += game)
-  }
-
   def searchByName(name: String): Future[Seq[Game]] = all
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 trait AbstractBaseDAO[T,A] {
