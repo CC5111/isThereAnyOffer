@@ -11,22 +11,27 @@ h4{
     color: white;
 }
 
+h3{
+    margin-top: 0;
+    color: white;
+}
+
 .badge{
     background-color: black;
 }
 /*table*/
 
-thead tr{
+.table-bordered thead tr{
     background-color: black;
     color: white;
 }
 
-tbody tr{
+.table-bordered tbody tr{
     background-color: #0f0f0f;
     color: white;
 }
 
-tbody tr:hover{
+.table-bordered tbody tr:hover{
     background-color: black;
 }
 
@@ -41,6 +46,16 @@ tbody tr:hover{
     text-align: center;
     padding-top: 20px;
     padding-bottom: 20px;
+}
+
+.detail > thead > tr > th,
+.detail > tbody > tr > th,
+.detail > tfoot > tr > th,
+.detail > thead > tr > td,
+.detail > tbody > tr > td,
+.detail > tfoot > tr > td {
+    border: 1px solid transparent;
+    color: white;
 }
 
 .table-bordered {
@@ -183,4 +198,12 @@ a:hover{
 
 .descuento{
     color: forestgreen;
+}
+
+.contenedor{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #0f0f0f;
+    padding-left: 0;
+    padding-right: 0;
 }
