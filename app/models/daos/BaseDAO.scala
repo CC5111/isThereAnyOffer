@@ -29,6 +29,31 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider){
   def searchByName(name: String): Future[Seq[Game]] = all
 }
 
+@Singleton
+class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider){
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  import dbConfig.driver.api._
+  import dbConfig.db
+
+  protected val tableQ = SlickTables.offerQ
+
+  def all: Future[Seq[Offer]] = {
+    db.run(tableQ.result)
+  }
+}
+
+@Singleton
+class PlatformDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider){
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  import dbConfig.driver.api._
+  import dbConfig.db
+
+  protected val tableQ = SlickTables.platformQ
+
+  def all: Future[Seq[Platform]] = {
+    db.run(tableQ.result)
+  }
+}
 
 trait AbstractBaseDAO[T,A] {
   def insert(row : A): Future[Long]
