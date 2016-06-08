@@ -35,18 +35,24 @@ case class GameCategory(id: Long,
                         idCategory: Long) extends BaseEntity
 
 case class Category(id: Long,
-                    name: String) extends BaseEntity
+                    name: String) extends BaseEntity {
+  override def toString: String = name
+}
 
 case class GameGenre(id: Long,
                      idGame: Long,
                      idGenre: Long) extends BaseEntity
 
 case class Genre(id: Long,
-                 name: String) extends BaseEntity
+                 name: String) extends BaseEntity {
+  override def toString: String = name
+}
 
 case class GamePlatform(id: Long,
                         idGame: Long,
                         idPlatform: Long) extends BaseEntity
 
 case class Platform(id: Long,
-                    name: String) extends BaseEntity
+                    name: String) extends BaseEntity {
+  override def toString: String = name
+}
