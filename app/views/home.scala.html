@@ -1,197 +1,190 @@
-@(title : String)
+@(title : String, platforms: List[models.entities.Platform])
 @base(title){
-
-<div class="container">
+    <div class="container">
         <div class="jumbotron">
-                <img src="@routes.Assets.versioned("images/logo_brand.png")"  height="100" width="150">
-                <h1 style="color: white"> @title</h1>
-                <div class="container">
-                        <p style="color: white"> Find local classified ads on bootclassified in
-                                Minutes </p>
-                        <br>
-                        <div class="row search-row animated fadeInUp col-md-offset-3">
-                                <form method="post" action="/search">
-                                        <div class="col-md-7 search-col relative locationicon">
-                                                <i class="fa fa-gamepad icon-append" aria-hidden="true"></i>
-                                                <input type="text" name="search" class="form-control has-icon" placeholder="Yo estoy buscando ..." value="">
-                                        </div>
-                                        <div class="col-md-1 search-col">
-                                                <button class="btn btn-success btn-search btn-block">
-                                                        <i class="fa fa-search" aria-hidden="true"></i>
-                                                </button>
-                                        </div>
-                                </form>
+            <img src="@routes.Assets.versioned("images/logo_brand.png")"  height="100" width="150">
+            <h1 style="color: white"> @title</h1>
+            <div class="container">
+                <p style="color: white"> Find local classified ads on bootclassified in
+                    Minutes </p>
+                <br>
+                <div class="row search-row animated fadeInUp col-md-offset-3">
+                    <form method="post" action="/search">
+                        <div class="col-md-7 search-col relative locationicon">
+                            <i class="fa fa-gamepad icon-append" aria-hidden="true"></i>
+                            <input type="text" name="search" class="form-control has-icon" placeholder="Yo estoy buscando ..." value="">
                         </div>
-
+                        <div class="col-md-1 search-col">
+                            <button class="btn btn-success btn-search btn-block">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </form>
                 </div>
+
+            </div>
         </div><br>
         <div class="row">
-                <div class="col-md-3" style="padding: 2px;">
-                        <div class="offer-item">
-                                <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/witcher.png")); background-size:cover; ">
-                                        <div class="post-content row ">
-                                                <div class="col-md-8">
-                                                        <div class="category">
-                                                                <a href="#">Xbox</a>
-                                                        </div>
-                                                        <h2 class="entry-title">
-                                                                <a href="detail/20938428489023">The witcher 3: Wild Hunt</a>
-                                                        </h2>
-                                                </div>
-                                                <div class="col-md-4 porcentaje">
-                                                        <h3><span class="label label-success">45%</span></h3>
-                                                </div>
-                                        </div>
+            <div class="col-md-3" style="padding: 2px;">
+                <div class="offer-item">
+                    <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/witcher.png")); background-size:cover; ">
+                        <div class="post-content row ">
+                            <div class="col-md-8">
+                                <div class="category">
+                                    <a href="#">Xbox</a>
                                 </div>
+                                <h2 class="entry-title">
+                                    <a href="detail/20938428489023">The witcher 3: Wild Hunt</a>
+                                </h2>
+                            </div>
+                            <div class="col-md-4 porcentaje">
+                                <h3><span class="label label-success">45%</span></h3>
+                            </div>
                         </div>
+                    </div>
                 </div>
-                <div class="col-md-3" style="padding: 2px;">
-                        <div class="offer-item">
-                                <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/overwatch.jpg")); background-size:cover; ">
-                                        <div class="post-content row ">
-                                                <div class="col-md-8">
-                                                        <div class="category">
-                                                                <a href="#">PSN</a>
-                                                        </div>
-                                                        <h2 class="entry-title">
-                                                                <a href="detail/20938428489023">Overwatch</a>
-                                                        </h2>
-                                                </div>
-                                                <div class="col-md-4 porcentaje">
-                                                        <h3><span class="label label-success">75%</span></h3>
-                                                </div>
+            </div>
+            <div class="col-md-3" style="padding: 2px;">
+                <div class="offer-item">
+                    <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/overwatch.jpg")); background-size:cover; ">
+                        <div class="post-content row ">
+                            <div class="col-md-8">
+                                <div class="category">
+                                    <a href="#">PSN</a>
+                                </div>
+                                <h2 class="entry-title">
+                                    <a href="detail/20938428489023">Overwatch</a>
+                                </h2>
+                            </div>
+                            <div class="col-md-4 porcentaje">
+                                <h3><span class="label label-success">75%</span></h3>
+                            </div>
 
-                                        </div>
-                                </div>
                         </div>
+                    </div>
                 </div>
-                <div class="col-md-3" style="padding: 2px;">
-                        <div class="offer-item">
-                                <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/final.jpg")); background-size:cover; ">
-                                        <div class="post-content row ">
-                                                <div class="col-md-8">
-                                                        <div class="category">
-                                                                <a href="#">Steam</a>
-                                                        </div>
-                                                        <h2 class="entry-title">
-                                                                <a href="detail/20938428489023">Final Fantasy XIV: A realm reborn</a>
-                                                        </h2>
-                                                </div>
-                                                <div class="col-md-4 porcentaje">
-                                                        <h3><span class="label label-success">65%</span></h3>
-                                                </div>
-                                        </div>
+            </div>
+            <div class="col-md-3" style="padding: 2px;">
+                <div class="offer-item">
+                    <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/final.jpg")); background-size:cover; ">
+                        <div class="post-content row ">
+                            <div class="col-md-8">
+                                <div class="category">
+                                    <a href="#">Steam</a>
                                 </div>
+                                <h2 class="entry-title">
+                                    <a href="detail/20938428489023">Final Fantasy XIV: A realm reborn</a>
+                                </h2>
+                            </div>
+                            <div class="col-md-4 porcentaje">
+                                <h3><span class="label label-success">65%</span></h3>
+                            </div>
                         </div>
+                    </div>
                 </div>
-                <div class="col-md-3" style="padding: 2px;">
-                        <div class="offer-item">
-                                <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/uncharted.jpg")); background-size:cover; ">
-                                        <div class="post-content row ">
-                                                <div class="col-md-8">
-                                                        <div class="category">
-                                                                <a href="#">GoG</a>
-                                                        </div>
-                                                        <h2 class="entry-title">
-                                                                <a href="detail/20938428489023">Uncharted 4: A Thief's End</a>
-                                                        </h2>
-                                                </div>
-                                                <div class="col-md-4 porcentaje">
-                                                        <h3><span class="label label-success">35%</span></h3>
-                                                </div>
-                                        </div>
+            </div>
+            <div class="col-md-3" style="padding: 2px;">
+                <div class="offer-item">
+                    <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/uncharted.jpg")); background-size:cover; ">
+                        <div class="post-content row ">
+                            <div class="col-md-8">
+                                <div class="category">
+                                    <a href="#">GoG</a>
                                 </div>
+                                <h2 class="entry-title">
+                                    <a href="detail/20938428489023">Uncharted 4: A Thief's End</a>
+                                </h2>
+                            </div>
+                            <div class="col-md-4 porcentaje">
+                                <h3><span class="label label-success">35%</span></h3>
+                            </div>
                         </div>
+                    </div>
                 </div>
+            </div>
         </div>
 
         <br>
         <hr>
         <br>
         <div class="col-md-3">
-                <div class="list-group">
-                        <button type="button" class="list-group-item title" disabled><b>PLATAFORMA</b></button>
+            <div class="list-group">
+                <button type="button" class="list-group-item title" disabled><b>PLATAFORMA</b></button>
+                @for(platform <- platforms) {
+                    <button type="button" class="list-group-item">@platform<span class="badge">4</span></button>
+                }
 
-                        <button type="button" class="list-group-item">PS4<span class="badge">4</span></button>
-                        <button type="button" class="list-group-item">XBox<span class="badge">4</span></button>
-                        <button type="button" class="list-group-item">Steam<span class="badge">4</span></button>
-                        <button type="button" class="list-group-item">GoG<span class="badge">4</span></button>
-
-                        <button type="button" class="list-group-item title" disabled><b>GÉNERO</b></button>
-                        <button type="button" class="list-group-item">Terror<span class="badge">4</span></button>
-                        <button type="button" class="list-group-item">Shooter<span class="badge">4</span></button>
-                        <button type="button" class="list-group-item">Acción<span class="badge">4</span></button>
-                        <button type="button" class="list-group-item">Carreras<span class="badge">4</span></button>
-                </div>
+                <button type="button" class="list-group-item title" disabled><b>GÉNERO</b></button>
+                <button type="button" class="list-group-item">Terror<span class="badge">4</span></button>
+                <button type="button" class="list-group-item">Shooter<span class="badge">4</span></button>
+                <button type="button" class="list-group-item">Acción<span class="badge">4</span></button>
+                <button type="button" class="list-group-item">Carreras<span class="badge">4</span></button>
+            </div>
         </div>
         <div class="col-md-9">
-                <table class="table table-bordered" >
-                        <thead>
-                                <tr>
-                                        <th>Nombre</th>
-                                        <th>Plataforma</th>
-                                        <th>Tipo</th>
-                                        <th>Tienda</th>
-                                        <th>Precio Normal</th>
-                                        <th colspan=2>Precio Oferta</th>
+            <table class="table table-bordered" >
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Plataforma</th>
+                        <th>Tipo</th>
+                        <th>Tienda</th>
+                        <th>Precio Normal</th>
+                        <th colspan=2>Precio Oferta</th>
 
-                                </tr>
-                        </thead>
-                        <tbody>
-                                <tr>
-                                        <td>Witcher 3 - The Wild Hunt</td>
-                                        <td>PC</td>
-                                        <td>Juego</td>
-                                        <td>Steam</td>
-                                        <td>$22.000</td>
-                                        <td>$11.000</td>
-                                        <td class="descuento">-55%</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Witcher 3 - The Wild Hunt</td>
+                        <td>PC</td>
+                        <td>Juego</td>
+                        <td>Steam</td>
+                        <td>$22.000</td>
+                        <td>$11.000</td>
+                        <td class="descuento">-55%</td>
 
 
-                                </tr>
-                                <tr>
-                                        <td>Witcher 3 - The Wild Hunt</td>
-                                        <td>PC</td>
-                                        <td>Juego</td>
-                                        <td>Steam</td>
-                                        <td>$22.000</td>
-                                        <td>$11.000</td>
-                                        <td class="descuento">-55%</td>
-                                </tr>
-                                <tr>
-                                        <td>Witcher 3 - The Wild Hunt</td>
-                                        <td>PC</td>
-                                        <td>Juego</td>
-                                        <td>Steam</td>
-                                        <td>$22.000</td>
-                                        <td>$11.000</td>
-                                        <td class="descuento">-55%</td>
-                                </tr>
-                        </tbody>
-                </table>
-                <nav style="text-align: center;">
-                        <ul class="pagination">
-                                <li>
-                                        <a href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                        </a>
-                                </li>
-                                <li><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
-                                <li>
-                                        <a href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                </li>
-                        </ul>
-                </nav>
+                    </tr>
+                    <tr>
+                        <td>Witcher 3 - The Wild Hunt</td>
+                        <td>PC</td>
+                        <td>Juego</td>
+                        <td>Steam</td>
+                        <td>$22.000</td>
+                        <td>$11.000</td>
+                        <td class="descuento">-55%</td>
+                    </tr>
+                    <tr>
+                        <td>Witcher 3 - The Wild Hunt</td>
+                        <td>PC</td>
+                        <td>Juego</td>
+                        <td>Steam</td>
+                        <td>$22.000</td>
+                        <td>$11.000</td>
+                        <td class="descuento">-55%</td>
+                    </tr>
+                </tbody>
+            </table>
+            <nav style="text-align: center;">
+                <ul class="pagination">
+                    <li>
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li>
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
-
-</div> <!-- /container -->
-
-
-
+    </div> <!-- /container -->
 }
