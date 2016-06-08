@@ -20,7 +20,7 @@ class SearchActor(out: ActorRef, gameDAO: GameDAO) extends Actor {
     def receive = {
         case msg: String => {
             val results = gameDAO.searchByName(msg)
-//            out ! Json.toJson(results)
+            //out ! Json.toJson(results)
         }
     }
 }
