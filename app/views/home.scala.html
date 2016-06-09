@@ -1,4 +1,4 @@
-@(title : String, platforms: List[models.entities.Platform])
+@(title : String, platforms: List[models.entities.Platform], genres: List[models.entities.Genre])
 @base(title){
     <div class="container">
         <div class="jumbotron">
@@ -115,10 +115,9 @@
                 }
 
                 <button type="button" class="list-group-item title" disabled><b>GÉNERO</b></button>
-                <button type="button" class="list-group-item">Terror<span class="badge">4</span></button>
-                <button type="button" class="list-group-item">Shooter<span class="badge">4</span></button>
-                <button type="button" class="list-group-item">Acción<span class="badge">4</span></button>
-                <button type="button" class="list-group-item">Carreras<span class="badge">4</span></button>
+                @for(genre <- genres) {
+                    <button type="button" class="list-group-item">@genre<span class="badge">4</span></button>
+                }
             </div>
         </div>
         <div class="col-md-9">

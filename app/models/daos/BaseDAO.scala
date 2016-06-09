@@ -55,6 +55,19 @@ class PlatformDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
   }
 }
 
+@Singleton
+class GenreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider){
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
+  import dbConfig.driver.api._
+  import dbConfig.db
+
+  protected val tableQ = SlickTables.genreQ
+
+  def all: Future[Seq[Genre]] = {
+    db.run(tableQ.result)
+  }
+}
+
 trait AbstractBaseDAO[T,A] {
   def insert(row : A): Future[Long]
   def insert(rows : Seq[A]): Future[Seq[Long]]
