@@ -1,4 +1,8 @@
-@(title : String, platforms: List[models.entities.Platform], genres: List[models.entities.Genre])
+@(      title : String,
+        platforms: List[models.entities.Platform],
+        genres: List[models.entities.Genre],
+        tuplesOfferGame: List[(models.entities.Offer, models.entities.Game)])
+
 @base(title){
     <div class="container">
         <div class="jumbotron">
@@ -150,19 +154,21 @@
                         <td>PC</td>
                         <td>Juego</td>
                         <td>Steam</td>
-                        <td>$22.000</td>
-                        <td>$11.000</td>
-                        <td class="descuento">-55%</td>
+                        <td>$23.000</td>
+                        <td>$12.000</td>
+                        <td class="descuento">-65%</td>
                     </tr>
-                    <tr>
-                        <td>Witcher 3 - The Wild Hunt</td>
-                        <td>PC</td>
-                        <td>Juego</td>
-                        <td>Steam</td>
-                        <td>$22.000</td>
-                        <td>$11.000</td>
-                        <td class="descuento">-55%</td>
-                    </tr>
+                    @for(tupleOfferGame <- tuplesOfferGame) {
+                        <tr>
+                            <td>@tupleOfferGame._2.name</td>
+                            <td>xxxxx</td>
+                            <td>@tupleOfferGame._2.typeGame</td>
+                            <td>xxxxx</td>
+                            <td>@tupleOfferGame._1.normalPrice</td>
+                            <td>@tupleOfferGame._1.offerPrice</td>
+                            <td class="descuento">xxxxx</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
             <nav style="text-align: center;">

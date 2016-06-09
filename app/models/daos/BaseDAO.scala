@@ -3,7 +3,7 @@ package models.daos
 import javax.inject.{Inject, Singleton}
 
 import models.persistence.SlickTables
-import models.persistence.SlickTables.{BaseTable}
+import models.persistence.SlickTables._
 import play.api.Play
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import slick.backend.DatabaseConfig
@@ -15,10 +15,8 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import models.entities._
 
 @Singleton
-class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider){
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[GameTable, Game]{
   import dbConfig.driver.api._
-  import dbConfig.db
 
   protected val tableQ = SlickTables.gameQ
 
@@ -30,10 +28,8 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider){
 }
 
 @Singleton
-class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider){
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[OfferTable, Offer]{
   import dbConfig.driver.api._
-  import dbConfig.db
 
   protected val tableQ = SlickTables.offerQ
 
@@ -43,10 +39,8 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 }
 
 @Singleton
-class PlatformDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider){
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+class PlatformDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[PlatformTable, Platform]{
   import dbConfig.driver.api._
-  import dbConfig.db
 
   protected val tableQ = SlickTables.platformQ
 
@@ -56,10 +50,8 @@ class PlatformDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
 }
 
 @Singleton
-class GenreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider){
-  val dbConfig = dbConfigProvider.get[JdbcProfile]
+class GenreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[GenreTable, Genre]{
   import dbConfig.driver.api._
-  import dbConfig.db
 
   protected val tableQ = SlickTables.genreQ
 
