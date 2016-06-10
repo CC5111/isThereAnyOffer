@@ -20,48 +20,16 @@ class HomeController @Inject()(gameDAO: GameDAO,
                                genreDAO: GenreDAO)(implicit ec:ExecutionContext, system: ActorSystem, mat:Materializer) extends Controller {
 
     def index() = Action.async { implicit request =>
-        /*
         for {
             platforms <- platformDAO.all
             genres <- genreDAO.all
-            offers <- offerDAO.all  //obtencion de las ofertas
-            games <- gameDAO.all
+            tupleOfferGamePLatform <- offerDAO.actualOffers  //obtencion de las ofertas
         } yield Ok(views.html.home(
             title = "Is There Any Offer - Inicio",
             platforms = platforms.toList,
             genres = genres.toList,
-            tuplesOfferGame = for {
-                offer <- offers
-                game <- games
-                tuple <- (offer, game) if offer.idGame == game.id
-            } yield tuple
+            tuplesOfferGame = tupleOfferGamePLatform.toList
         ))
-        */
-
-        platformDAO.all.flatMap { platforms =>
-            genreDAO.all.flatMap { genres =>
-                offerDAO.all.flatMap { offers =>
-                    gameDAO.all.map { games =>
-                        var tuplaRasca = mutable.MutableList[(Offer, Game)]()
-                        var i = 0
-                        var j = 0
-                        while (i < offers.length) {
-                            val offer = offers(i)
-                            val game = games.filter((game) => game.id == offer.idGame).head
-                            tuplaRasca += ((offer, game))
-                            i+=1
-                        }
-
-                        Ok(views.html.home(
-                            title = "Is There Any Offer - Inicio",
-                            platforms = platforms.toList,
-                            genres = genres.toList,
-                            tuplesOfferGame = tuplaRasca.toList
-                        ))
-                    }
-                }
-            }
-        }
     }
 
     def search() = Action(parse.urlFormEncoded) { request =>
