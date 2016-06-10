@@ -1,7 +1,7 @@
 @(      title : String,
         platforms: List[models.entities.Platform],
         genres: List[models.entities.Genre],
-        tuplesOfferGame: List[(models.entities.Offer, models.entities.Game)])
+        tuplesOfferGame: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)])
 
 @base(title){
     <div class="container">
@@ -161,7 +161,7 @@
                     @for(tupleOfferGame <- tuplesOfferGame) {
                         <tr>
                             <td>@tupleOfferGame._2.name</td>
-                            <td>xxxxx</td>
+                            <td>@tupleOfferGame._3</td>
                             <td>@tupleOfferGame._2.typeGame</td>
                             <td>xxxxx</td>
                             <td>$@tupleOfferGame._1.normalPrice</td>

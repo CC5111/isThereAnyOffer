@@ -43,13 +43,14 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
   class OfferTable(tag: Tag) extends BaseTable[Offer](tag, "offer") {
     def link = column[String]("link")
     def idGame = column[Long]("idGame")
+    def store = column[String]("store")
     def idPlatform = column[Long]("idPlatform")
     def fromDate = column[java.sql.Timestamp]("fromDate")
     def untilDate = column[java.sql.Timestamp]("untilDate")
     def normalPrice = column[Double]("normalPrice")
     def offerPrice = column[Double]("offerPrice")
 
-    def * = (id, link, idGame, idPlatform, fromDate, untilDate, normalPrice, offerPrice) <> (Offer.tupled, Offer.unapply _)
+    def * = (id, link, idGame, idPlatform, store, fromDate, untilDate, normalPrice, offerPrice) <> (Offer.tupled, Offer.unapply _)
   }
   val offerQ = TableQuery[OfferTable]
 
@@ -57,11 +58,13 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
     def name = column[String]("name")
     def cover = column[String]("cover")
     def publisher = column[String]("publisher")
+    def developer = column[String]("developer")
+    def description = column[String]("description")
     def rating = column[String]("rating")
     def releaseDate = column[java.sql.Timestamp]("releaseDate")
-    def typeGame = column[String]("typeGame")
+    def gameType = column[String]("gameType")
 
-    def * = (id, name, cover, publisher, rating, releaseDate, typeGame) <> (Game.tupled, Game.unapply _)
+    def * = (id, name, cover, publisher, developer, description, rating, releaseDate, gameType) <> (Game.tupled, Game.unapply _)
   }
   val gameQ = TableQuery[GameTable]
 

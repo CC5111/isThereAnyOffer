@@ -20,6 +20,7 @@ create table "offer" ("id" BIGSERIAL NOT NULL PRIMARY KEY,
                     "link" VARCHAR(254),
                     "idGame" BIGINT,
                     "idPlatform" BIGINT,
+                    "store" VARCHAR(254),
                     "fromDate" TIMESTAMP,
                     "untilDate" TIMESTAMP,
                     "normalPrice" DOUBLE PRECISION,
@@ -30,9 +31,11 @@ create table "game" ("id" BIGSERIAL NOT NULL PRIMARY KEY,
                    "name" VARCHAR(254),
                    "cover" VARCHAR(254),
                    "publisher" VARCHAR(254),
+                   "developer" VARCHAR(254),
+                   "description" TEXT,
                    "rating" VARCHAR(254),
                    "releaseDate" DATE,
-                   "typeGame" VARCHAR(254)
+                   "gameType" VARCHAR(254)
 );
 
 create table "gameCategory" ("id" BIGSERIAL NOT NULL PRIMARY KEY,
