@@ -95,7 +95,7 @@ abstract class BaseDAO[T <: BaseTable[A], A <: BaseEntity]() extends AbstractBas
   }
 
   def update(rows : Seq[A]): Future[Unit] = {
-    db.run(DBIO.seq((rows.filter(_.isValid).map(r => tableQ.filter(_.id === r.id).update(r))): _*))
+    db.run(DBIO.seq(rows.filter(_.isValid).map(r => tableQ.filter(_.id === r.id).update(r)): _*))
   }
 
   def findById(id : Long): Future[Option[A]] = {

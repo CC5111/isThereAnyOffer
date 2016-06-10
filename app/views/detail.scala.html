@@ -1,12 +1,12 @@
-@(title : String)
+@(title : String,game: models.entities.Game)
 @base(title){
     <div class="container contenedor">
         <div class="col-md-3">
-            <img src="@routes.Assets.versioned("images/witcher.png")" class="img-rounded" alt="Witcher">
+            <img src="@routes.Assets.versioned(game.cover)" class="img-rounded" alt="Witcher">
         </div>
 
         <div class="col-md-9">
-            <h3>The Witcher 3: Wild Hunt <small>Juego</small></h3>
+            <h3>@game.name<small> @game.typeGame</small></h3>
             <p>With the Empire attacking the Kingdoms of the North and the Wild Hunt, a cavalcade of
                 ghastly riders, breathing down your neck, the only way to survive is to fight back.
                 As Geralt of Rivia, a master swordsman and monster hunter, leave none of your enemies
@@ -19,15 +19,15 @@
                     <tbody>
                         <tr class="row">
                             <td class="col-md-1">Rating</td>
-                            <td class="col-md-2">M</td>
+                            <td class="col-md-2">@game.rating</td>
                         </tr>
                         <tr class="row">
                             <td class="col-md-1">Official Site</td>
                             <td class="col-md-2">http://www.thewitcher.com</td>
                         </tr>
                         <tr class="row">
-                            <td class="col-md-1">Developer</td>
-                            <td class="col-md-2">CD Projekt Red Studio</td>
+                            <td class="col-md-1">Publisher</td>
+                            <td class="col-md-2">@game.publisher</td>
                         </tr>
                         <tr class="row">
                             <td class="col-md-1">Genre(s)</td>
