@@ -21,14 +21,14 @@ class HomeController @Inject()(gameDAO: GameDAO,
 
     def index() = Action.async { implicit request =>
         for {
-            platforms <- platformDAO.all
-            genres <- genreDAO.all
-            tupleOfferGamePLatform <- offerDAO.actualOffers  //obtencion de las ofertas
+            tuplesPlatformCount <- platformDAO.allPlatformsWithCount
+            tuplesGenreCount <- genreDAO.allGenresWithCount
+            tuplesOfferGamePLatform <- offerDAO.actualOffers  //obtencion de las ofertas
         } yield Ok(views.html.home(
             title = "Is There Any Offer - Inicio",
-            platforms = platforms.toList,
-            genres = genres.toList,
-            tuplesOfferGame = tupleOfferGamePLatform.toList
+            tuplesPlatformCount = tuplesPlatformCount.toList,
+            tuplesGenreCount = tuplesGenreCount.toList,
+            tuplesOfferGame = tuplesOfferGamePLatform.toList
         ))
     }
 

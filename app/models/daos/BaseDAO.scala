@@ -56,6 +56,24 @@ class PlatformDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
   def all: Future[Seq[Platform]] = {
     db.run(tableQ.result)
   }
+
+  def allPlatformsWithCount: Future[Seq[(Platform, Int)]] = {
+    val gamePlatformQ = SlickTables.gamePlatformQ
+
+    val platformsWithGames = (for {
+      (platform, gamePlatform) <- tableQ join gamePlatformQ on (_.id === _.idPlatform)
+    } yield (platform, gamePlatform))
+      .groupBy(_._1).map {
+      case (plat, gamePlat) => (plat, gamePlat.length)
+    }
+
+    val platformsWithoutGames = for {
+    platform <- tableQ if !platformsWithGames.filter(_._1.id === platform.id).exists
+    } yield (platform, 0)
+
+    val query = (platformsWithGames union platformsWithoutGames) sortBy(_._1.name.asc)
+    db.run(query.result)
+  }
 }
 
 @Singleton
@@ -66,6 +84,24 @@ class GenreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 
   def all: Future[Seq[Genre]] = {
     db.run(tableQ.result)
+  }
+
+  def allGenresWithCount: Future[Seq[(Genre, Int)]] = {
+    val gameGenreQ = SlickTables.gameGenreQ
+
+    val genresWithGames = (for {
+      (genre, gameGenre) <- tableQ join gameGenreQ on (_.id === _.idGenre)
+    } yield (genre, gameGenre))
+      .groupBy(_._1).map {
+      case (gen, gameGen) => (gen, gameGen.length)
+    }
+
+    val genresWithoutGames = for {
+      genre <- tableQ if !genresWithGames.filter(_._1.id === genre.id).exists
+    } yield (genre, 0)
+
+    val query = (genresWithGames union genresWithoutGames).sortBy(_._1.name.asc)
+    db.run(query.result)
   }
 }
 
