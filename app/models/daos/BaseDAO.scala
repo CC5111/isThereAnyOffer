@@ -45,6 +45,17 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     } yield (offer, game, platform)
     db.run(query.result)
   }
+
+  def offersByGame(id :Long): Future[Seq[(Offer,Game,Platform)]] = {
+    val gameQ = SlickTables.gameQ
+    val platformQ = SlickTables.platformQ
+    val query = for {
+      ((offer, game) , platform) <- offerQ join gameQ on (_.idGame === _.id ) join platformQ on (_._1.idPlatform === _.id)
+      if game.id === id
+    } yield (offer, game, platform)
+    db.run(query.result)
+  }
+
 }
 
 @Singleton

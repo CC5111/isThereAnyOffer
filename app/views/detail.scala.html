@@ -1,4 +1,6 @@
-@(title : String,game: models.entities.Game)
+@(title : String,
+        game: models.entities.Game,
+        tuplesOfferGame: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)])
 @base(title){
     <div class="container contenedor">
         <div class="col-md-3">
@@ -20,10 +22,6 @@
                         <tr class="row">
                             <td class="col-md-1">Rating</td>
                             <td class="col-md-2">@game.rating</td>
-                        </tr>
-                        <tr class="row">
-                            <td class="col-md-1">Official Site</td>
-                            <td class="col-md-2">http://www.thewitcher.com</td>
                         </tr>
                         <tr class="row">
                             <td class="col-md-1">Publisher</td>
@@ -55,35 +53,17 @@
                 </tr>
             </thead>
             <tbody>
+            @for(tupleOfferGame <- tuplesOfferGame) {
                 <tr>
-                    <td>Witcher 3 - The Wild Hunt</td>
-                    <td>PC</td>
-                    <td>Juego</td>
-                    <td>Steam</td>
-                    <td>$22.000</td>
-                    <td>$11.000</td>
-                    <td class="descuento">-55%</td>
-
-
+                    <td>@tupleOfferGame._2.name</td>
+                    <td>@tupleOfferGame._3</td>
+                    <td>@tupleOfferGame._2.typeGame</td>
+                    <td>@tupleOfferGame._1.store</td>
+                    <td>$@tupleOfferGame._1.normalPrice</td>
+                    <td>$@tupleOfferGame._1.offerPrice</td>
+                    <td class="descuento">@tupleOfferGame._1.discount%</td>
                 </tr>
-                <tr>
-                    <td>Witcher 3 - The Wild Hunt</td>
-                    <td>PC</td>
-                    <td>Juego</td>
-                    <td>Steam</td>
-                    <td>$22.000</td>
-                    <td>$11.000</td>
-                    <td class="descuento">-55%</td>
-                </tr>
-                <tr>
-                    <td>Witcher 3 - The Wild Hunt</td>
-                    <td>PC</td>
-                    <td>Juego</td>
-                    <td>Steam</td>
-                    <td>$22.000</td>
-                    <td>$11.000</td>
-                    <td class="descuento">-55%</td>
-                </tr>
+            }
             </tbody>
         </table>
     </div>
