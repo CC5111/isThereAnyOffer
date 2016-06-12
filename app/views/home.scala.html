@@ -1,6 +1,6 @@
 @(      title : String,
-        platforms: List[models.entities.Platform],
-        genres: List[models.entities.Genre],
+        tuplesPlatformCount: List[(models.entities.Platform, Int)],
+        tuplesGenreCount: List[(models.entities.Genre, Int)],
         tuplesOfferGame: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)])
 
 @base(title){
@@ -114,13 +114,13 @@
         <div class="col-md-3">
             <div class="list-group">
                 <button type="button" class="list-group-item title" disabled><b>PLATAFORMA</b></button>
-                @for(platform <- platforms) {
-                    <button type="button" class="list-group-item">@platform<span class="badge">4</span></button>
+                @for(tuplePlatformCount <- tuplesPlatformCount) {
+                    <button type="button" class="list-group-item">@tuplePlatformCount._1<span class="badge">@tuplePlatformCount._2</span></button>
                 }
 
                 <button type="button" class="list-group-item title" disabled><b>GÉNERO</b></button>
-                @for(genre <- genres) {
-                    <button type="button" class="list-group-item">@genre<span class="badge">4</span></button>
+                @for(tupleGenreCount <- tuplesGenreCount) {
+                    <button type="button" class="list-group-item">@tupleGenreCount._1<span class="badge">@tupleGenreCount._2</span></button>
                 }
             </div>
         </div>
@@ -140,10 +140,10 @@
                 <tbody>
                     @for(tupleOfferGame <- tuplesOfferGame) {
                         <tr>
-                            <td>@tupleOfferGame._2.name</td>
+                            <td><a href="@routes.DetailController.index(tupleOfferGame._2.id)">@tupleOfferGame._2.name</a></td>
                             <td>@tupleOfferGame._3</td>
                             <td>@tupleOfferGame._2.typeGame</td>
-                            <td>@tupleOfferGame._1.store</td>
+                            <td><a target="_blank" href="@tupleOfferGame._1.link">@tupleOfferGame._1.store</a></td>
                             <td>$@tupleOfferGame._1.normalPrice</td>
                             <td>$@tupleOfferGame._1.offerPrice</td>
                             <td class="descuento">@tupleOfferGame._1.discount%</td>
