@@ -13,14 +13,15 @@ class DetailController @Inject()(game: GameDAO, offer: OfferDAO)(implicit ec:Exe
 
     def index(id: Long) = Action.async { implicit request =>
 
-       game.findById(id).flatMap{
-            case Some(game) =>
-                for {
-                    offers_data <- offer.offersByGame(id)
-                } yield Ok(views.html.detail("Is There Any Offer - Detalle", game, offers_data.toList))
-
-            case _ => Future(NotFound)
-        }
+        Future(Ok("ok"))
+//       game.findById(id).flatMap{
+//            case Some(game) =>
+//                for {
+//                    offers_data <- offer.offersByGame(id)
+//                } yield Ok(views.html.detail("Is There Any Offer - Detalle", game, offers_data.toList))
+//
+//            case _ => Future(NotFound)
+//        }
 
     }
 }
