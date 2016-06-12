@@ -11,17 +11,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DetailController @Inject()(game: GameDAO, offer: OfferDAO)(implicit ec:ExecutionContext, system: ActorSystem, mat:Materializer) extends Controller {
 
-    def index(id: Long) = Action.async { implicit request =>
-
-        Future(Ok("ok"))
-//       game.findById(id).flatMap{
-//            case Some(game) =>
-//                for {
-//                    offers_data <- offer.offersByGame(id)
-//                } yield Ok(views.html.detail("Is There Any Offer - Detalle", game, offers_data.toList))
-//
-//            case _ => Future(NotFound)
-//        }
-
-    }
+  def index(id: Long) = Action.async { implicit request =>
+    for {
+      tuples <- game.offersByGame(id)
+    } yield Ok(views.html.detail("Is There Any Offer - Detalle", tuples.toList.head._2, tuples.toList))
+  }
 }
