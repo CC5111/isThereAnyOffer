@@ -1,6 +1,6 @@
 @(title : String,
         game: models.entities.Game,
-        tuplesOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)])
+        tuplesOfferPlatform: List[(models.entities.Offer, models.entities.Platform)])
 @base(title){
     <div class="container contenedor">
         <div class="col-md-3">
@@ -53,15 +53,15 @@
                 </tr>
             </thead>
             <tbody>
-            @for(tupleOfferGamePlatform <- tuplesOfferGamePlatform) {
+            @for(tupleOfferPlatform <- tuplesOfferPlatform) {
                 <tr>
-                    <td>@tupleOfferGamePlatform._2.name</td>
-                    <td>@tupleOfferGamePlatform._3</td>
-                    <td>@tupleOfferGamePlatform._2.typeGame</td>
-                    <td>@tupleOfferGamePlatform._1.store</td>
-                    <td>$@tupleOfferGamePlatform._1.normalPrice</td>
-                    <td>$@tupleOfferGamePlatform._1.offerPrice</td>
-                    <td class="descuento">@tupleOfferGamePlatform._1.discount%</td>
+                    <td>@game.name</td>
+                    <td>@tupleOfferPlatform._2.name</td>
+                    <td>@game.typeGame</td>
+                    <td>@tupleOfferPlatform._1.store</td>
+                    <td>$@tupleOfferPlatform._1.normalPrice</td>
+                    <td>$@tupleOfferPlatform._1.offerPrice</td>
+                    <td class="descuento">@tupleOfferPlatform._1.discount%</td>
                 </tr>
             }
             </tbody>

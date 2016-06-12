@@ -25,12 +25,14 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
   }
 
   //Quiero que retorne game,seq(offer)
-  def offersByGame(id :Long): Future[Seq[(Offer,Game,Platform)]] = {
+  def offersByGame(id :Long): Future[Seq[(Offer, Platform)]] = {
     val offerQ = SlickTables.offerQ
     val platformQ = SlickTables.platformQ
+
     val query = for {
-      ((offer, platform), game) <- offerQ join platformQ on (_.idPlatform === _.id) join gameQ on (_._1.idGame === _.id) if offer.idGame === id
-    } yield (offer, game, platform)
+      (offer, platform) <- offerQ join platformQ on (_.idPlatform === _.id) if offer.idGame === id
+    } yield (offer, platform)
+
     db.run(query.result)
   }
 
