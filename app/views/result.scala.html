@@ -1,6 +1,27 @@
-@(title : String)
+@(title : String, query: String, games: List[models.entities.Game])
 @base(title){
     <div class="container">
-        <p>Result page :3</p>
+        <p>Resultados de la búsqueda: @query</p>
+    </div>
+    <div class="container">
+        <div class="row">
+            @for(game <- games) {
+                <a href="@routes.DetailController.index(game.id)">
+                    <div class="col-md-3 col-sm-6" style="padding: 2px;">
+                        <div class="offer-item">
+                            <div class="post feature-post" style="background-image: url(@routes.Assets.versioned(game.cover));
+                                background-size: cover; ">
+                                <div class="post-content row ">
+                                    <div class="col-md-8">
+                                        <h2 class="entry-title">
+                                            @game.name - @game.typeGame
+                                        </h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div></a>
+            }
+        </div>
     </div>
 }
