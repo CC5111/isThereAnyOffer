@@ -58,7 +58,7 @@
             </thead>
             <tbody>
             @for(tupleOfferPlatform <- tuplesOfferPlatform) {
-                <tr>
+                <tr class="row_detail" onclick="trLink('@tupleOfferPlatform._1.link');">
                     <td>@game.name</td>
                     <td>@tupleOfferPlatform._2.name</td>
                     <td>@game.typeGame</td>
