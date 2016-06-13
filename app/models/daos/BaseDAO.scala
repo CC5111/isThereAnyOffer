@@ -24,7 +24,7 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
     db.run(tableQ.result)
   }
 
-  //Quiero que retorne game,seq(offer)
+
   def offersByGame(id :Long): Future[Seq[(Offer, Platform)]] = {
     val offerQ = SlickTables.offerQ
     val platformQ = SlickTables.platformQ
@@ -36,7 +36,12 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
     db.run(query.result)
   }
 
-  def searchByName(name: String): Future[Seq[Game]] = all
+  def searchByName(name: String): Future[Seq[Game]] = {
+    val query = for {
+      game <- tableQ if game.name.toLowerCase.like("%" + name.toLowerCase() + "%")
+    } yield game
+    db.run(query.result)
+  }
 }
 
 @Singleton

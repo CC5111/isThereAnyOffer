@@ -9,14 +9,11 @@ import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.ExecutionContext
 
-class ResultController @Inject()(game: GameDAO)(implicit ec:ExecutionContext, system: ActorSystem, mat:Materializer) extends Controller {
+class ResultController @Inject()(gameDAO: GameDAO)(implicit ec:ExecutionContext, system: ActorSystem, mat:Materializer) extends Controller {
 
-    def index(query: String) = Action { implicit request =>
-        Ok(views.html.result(title = "Is There Any Offer - Result"))
-
-    }
-
-
-
-
+  def index(query: String) = Action.async { implicit request =>
+    for {
+      games <- gameDAO.searchByName(query)
+    } yield Ok(views.html.result(title = "Is There Any Offer - Result", query = query, games = games.toList))
+  }
 }
