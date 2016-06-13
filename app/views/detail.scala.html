@@ -3,37 +3,34 @@
         tuplesOfferPlatform: List[(models.entities.Offer, models.entities.Platform)])
 @base(title){
     <div class="container contenedor">
-        <div class="col-md-3">
-            <img src="@routes.Assets.versioned(game.cover)" class="img-rounded" alt="Witcher">
+        <div class="col-md-3 " style="text-align: center; margin-bottom: 0px">
+                <div class ="detail-image" style="background-image: url(@routes.Assets.versioned(game.cover));
+                background-size: cover; ">
+                </div>
         </div>
 
         <div class="col-md-9">
             <h3>@game.name<small> @game.typeGame</small></h3>
-            <p>With the Empire attacking the Kingdoms of the North and the Wild Hunt, a cavalcade of
-                ghastly riders, breathing down your neck, the only way to survive is to fight back.
-                As Geralt of Rivia, a master swordsman and monster hunter, leave none of your enemies
-                standing. Explore a gigantic open world, slay beasts and decide the fates of whole
-                communities with your actions, all in a genuine next generation format. Also known
-                as "The Witcher III: Wild Hunt"</p>
-
-            <div class="container" style="padding-left: 0">
+            <p>@game.description
+            </p>
+            <div style="padding-left: 0">
                 <table class="table detail">
                     <tbody>
-                        <tr class="row">
-                            <td class="col-md-1">Web Page</td>
-                            <td class="col-md-2"><a href="@game.link">@game.link</a></td>
+                        <tr >
+                            <td >Web Page</td>
+                            <td ><a href="@game.link" target="_blank">@game.link</a></td>
                         </tr>
-                        <tr class="row">
-                            <td class="col-md-1">Rating</td>
-                            <td class="col-md-2">@game.rating</td>
+                        <tr >
+                            <td >Rating</td>
+                            <td >@game.rating</td>
                         </tr>
-                        <tr class="row">
-                            <td class="col-md-1">Publisher</td>
-                            <td class="col-md-2">@game.publisher</td>
+                        <tr >
+                            <td >Publisher</td>
+                            <td >@game.publisher</td>
                         </tr>
-                        <tr class="row">
-                            <td class="col-md-1">Genre(s)</td>
-                            <td class="col-md-2">Role-Playing</td>
+                        <tr >
+                            <td >Genre(s)</td>
+                            <td >Role-Playing</td>
                         </tr>
 
                     </tbody>
@@ -42,12 +39,13 @@
 
         </div>
     </div>
-    <div class="container contenedor">
 
+
+    <div class="container contenedor">
         <table class="table table-bordered" >
             <thead>
                 <tr>
-                    <th>Nombre</th>
+
                     <th>Plataforma</th>
                     <th>Tipo</th>
                     <th>Tienda</th>
@@ -59,7 +57,7 @@
             <tbody>
             @for(tupleOfferPlatform <- tuplesOfferPlatform) {
                 <tr class="row_detail" onclick="trLink('@tupleOfferPlatform._1.link');">
-                    <td>@game.name</td>
+
                     <td>@tupleOfferPlatform._2.name</td>
                     <td>@game.typeGame</td>
                     <td>@tupleOfferPlatform._1.store</td>

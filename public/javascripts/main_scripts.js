@@ -1,4 +1,7 @@
 
 function trLink(url){
-    document.location.href = url
+    window.open(
+        url,
+        '_blank'
+    );
 }

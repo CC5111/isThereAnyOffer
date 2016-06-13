@@ -14,6 +14,6 @@ class ResultController @Inject()(gameDAO: GameDAO)(implicit ec:ExecutionContext,
   def index(query: String) = Action.async { implicit request =>
     for {
       games <- gameDAO.searchByName(query)
-    } yield Ok(views.html.result(title = "Is There Any Offer - Result", query = query, games = games.toList))
+    } yield Ok(views.html.result(title = "Búsqueda", query = query, games = games.toList))
   }
 }

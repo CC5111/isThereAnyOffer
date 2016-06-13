@@ -153,6 +153,10 @@ a:hover{
 
 }
 
+.detail-image{
+    height: 350px;
+}
+
 .feature-post .post-content {
     position: absolute;
     width: 100%;

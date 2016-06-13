@@ -20,7 +20,7 @@ class DetailController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)(implicit 
             } else {
                 for {
                     tuples <- gameDAO.offersByGame(id)
-                } yield Ok(views.html.detail("hola", g.get, tuples.toList))
+                } yield Ok(views.html.detail("Detalle", g.get, tuples.toList))
 
             }
 

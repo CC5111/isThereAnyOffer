@@ -12,15 +12,19 @@
                             <div class="post feature-post" style="background-image: url(@routes.Assets.versioned(game.cover));
                                 background-size: cover; ">
                                 <div class="post-content row ">
-                                    <div class="col-md-8">
+                                    <div class="col-md-12">
+                                        <div class="category">
+                                                @game.typeGame
+                                        </div>
                                         <h2 class="entry-title">
-                                            @game.name - @game.typeGame
+                                            @game.name
                                         </h2>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                </div></a>
+                    </div>
+                </a>
             }
         </div>
     </div>

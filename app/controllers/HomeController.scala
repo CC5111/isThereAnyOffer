@@ -25,7 +25,7 @@ class HomeController @Inject()(gameDAO: GameDAO,
             tuplesGenreCount <- genreDAO.allGenresWithCount
             tuplesOfferGamePLatform <- offerDAO.actualOffers  //obtencion de las ofertas
         } yield Ok(views.html.home(
-            title = "Is There Any Offer - Inicio",
+            title = "Inicio",
             tuplesPlatformCount = tuplesPlatformCount.toList,
             tuplesGenreCount = tuplesGenreCount.toList,
             tuplesOfferGame = tuplesOfferGamePLatform.toList
