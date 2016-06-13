@@ -1,5 +1,6 @@
 package models.daos
 
+import java.sql.Timestamp
 import javax.inject.{Inject, Singleton}
 
 import models.persistence.SlickTables
@@ -57,10 +58,27 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   def actualOffers: Future[Seq[(Offer, Game, Platform)]] = {
     val gameQ = SlickTables.gameQ
     val platformQ = SlickTables.platformQ
+
+    val dateNow = new Timestamp(new java.util.Date().getTime)
+
     val query = for {
       ((offer, game) , platform) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id)
+      if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
     } yield (offer, game, platform)
-    db.run(query.result)
+    db.run(query.sortBy(_._2.name.asc).result)
+  }
+
+  def lastGamesWithOffers: Future[Seq[(Offer, Game, Platform)]] = {
+    val gameQ = SlickTables.gameQ
+    val platformQ = SlickTables.platformQ
+
+    val dateNow = new Timestamp(new java.util.Date().getTime)
+
+    val query = for {
+      ((offer, game) , platform) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id)
+      if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
+    } yield (offer, game, platform)
+    db.run(query.sortBy(_._2.releaseDate.desc).take(4).result)
   }
 }
 

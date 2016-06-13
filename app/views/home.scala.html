@@ -1,7 +1,8 @@
 @(      title : String,
         tuplesPlatformCount: List[(models.entities.Platform, Int)],
         tuplesGenreCount: List[(models.entities.Genre, Int)],
-        tuplesOfferGame: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)])
+        tuplesOfferGame: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
+        tuplesBestOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)])
 
 @base(title){
     <div class="container">
@@ -29,83 +30,31 @@
             </div>
         </div><br>
         <div class="row">
-            <div class="col-md-3" style="padding: 2px;">
-                <div class="offer-item">
-                    <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/witcher.png")); background-size:cover; ">
-                        <div class="post-content row ">
-                            <div class="col-md-8">
-                                <div class="category">
-                                    <a href="#">Xbox</a>
+            @for(tuple <- tuplesBestOfferGamePlatform) {
+                <div class="col-md-3" style="padding: 2px;">
+                    <div class="offer-item">
+                        <div class="post feature-post" style="background-image: url(@routes.Assets.versioned(tuple._2.cover));
+                            background-size: cover; ">
+                            <div class="post-content row ">
+                                <div class="col-md-8">
+                                    <div class="category">
+                                        @tuple._3
+                                    </div>
+                                    <h2 class="entry-title">
+                                        <a href="@routes.DetailController.index(tuple._2.id)">@tuple._2.name</a>
+                                    </h2>
                                 </div>
-                                <h2 class="entry-title">
-                                    <a href="detail/1">The witcher 3: Wild Hunt</a>
-                                </h2>
-                            </div>
-                            <div class="col-md-4 porcentaje">
-                                <h3><span class="label label-success">45%</span></h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3" style="padding: 2px;">
-                <div class="offer-item">
-                    <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/games/overwatch.jpg")); background-size:cover; ">
-                        <div class="post-content row ">
-                            <div class="col-md-8">
-                                <div class="category">
-                                    <a href="#">PSN</a>
-                                </div>
-                                <h2 class="entry-title">
-                                    <a href="detail/4">Overwatch</a>
-                                </h2>
-                            </div>
-                            <div class="col-md-4 porcentaje">
-                                <h3><span class="label label-success">75%</span></h3>
-                            </div>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3" style="padding: 2px;">
-                <div class="offer-item">
-                    <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/games/final.jpg")); background-size:cover; ">
-                        <div class="post-content row ">
-                            <div class="col-md-8">
-                                <div class="category">
-                                    <a href="#">Steam</a>
-                                </div>
-                                <h2 class="entry-title">
-                                    <a href="detail/5">Final Fantasy XIV: A realm reborn</a>
-                                </h2>
-                            </div>
-                            <div class="col-md-4 porcentaje">
-                                <h3><span class="label label-success">65%</span></h3>
+                                <div class="col-md-4 porcentaje">
+                                    <a href="@tuple._1.link" target="_blank">
+                                    <h3><span class="label label-success">@tuple._1.discount%</span></h3>
+
+                                    </a></div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3" style="padding: 2px;">
-                <div class="offer-item">
-                    <div class="post feature-post" style="background-image:url(@routes.Assets.versioned("images/games/uncharted.jpg")); background-size:cover; ">
-                        <div class="post-content row ">
-                            <div class="col-md-8">
-                                <div class="category">
-                                    <a href="#">GoG</a>
-                                </div>
-                                <h2 class="entry-title">
-                                    <a href="detail/3">Uncharted 4: A Thief's End</a>
-                                </h2>
-                            </div>
-                            <div class="col-md-4 porcentaje">
-                                <h3><span class="label label-success">35%</span></h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
 
         <br>
