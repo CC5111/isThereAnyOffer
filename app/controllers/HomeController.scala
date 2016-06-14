@@ -7,7 +7,7 @@ import akka.actor.ActorSystem
 import akka.stream.Materializer
 import models.daos.{GameDAO, GenreDAO, OfferDAO, PlatformDAO}
 import models.entities.{Game, Offer}
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsValue, Json, Writes}
 import play.api.libs.streams.ActorFlow
 import play.api.mvc.{Action, AnyContent, Controller, WebSocket}
 
@@ -18,6 +18,21 @@ class HomeController @Inject()(gameDAO: GameDAO,
                                offerDAO: OfferDAO,
                                platformDAO: PlatformDAO,
                                genreDAO: GenreDAO)(implicit ec:ExecutionContext, system: ActorSystem, mat:Materializer) extends Controller {
+
+    implicit val gameWrites = new Writes[Game] {
+        def writes(game: Game) = Json.obj(
+            "id" -> game.id,
+            "name" -> game.name,
+            "cover" -> game.cover,
+            "publisher" -> game.publisher,
+            "developer" -> game.developer,
+            "link" -> game.link,
+            "description" -> game.description,
+            "rating" -> game.rating,
+            "releaseDate" -> game.releaseDate,
+            "typeGame" -> game.typeGame
+        )
+    }
 
     def index() = Action.async { implicit request =>
         for {

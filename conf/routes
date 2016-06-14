@@ -15,6 +15,8 @@ GET     /result/                  controllers.HomeController.index
 GET     /                               controllers.HomeController.index
 #API Rest
 
+GET     /api/game/:id                       controllers.ApiController.gameById(id:Long)
+GET     /api/game                           controllers.ApiController.game
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
