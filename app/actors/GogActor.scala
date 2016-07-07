@@ -2,6 +2,7 @@ package actors
 
 
 import java.sql.Timestamp
+import javax.inject._
 import java.util.Date
 
 import akka.actor.{Actor, ActorRef, Props}
@@ -9,15 +10,19 @@ import models.daos.{GameDAO, OfferDAO}
 import models.entities.Offer
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import play.api.libs.ws.WSClient
+
+import scala.util.{Failure, Success}
 
 object GogActor {
     case class Query(game: Long)
     case class Update()
-    def props(gameDAO: GameDAO, offerDAO: OfferDAO) =
-        Props(classOf[GogActor], gameDAO, offerDAO)
+    def props(gameDAO: GameDAO, offerDAO: OfferDAO)(implicit ws:WSClient) =
+        Props(new GogActor(gameDAO, offerDAO)(ws))
 }
 
-class GogActor(gameDAO: GameDAO, offerDAO: OfferDAO) extends Actor{
+class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
+                         (implicit ws: WSClient) extends Actor{
     import context._
     import actors.GogActor._
 
@@ -68,34 +73,49 @@ class GogActor(gameDAO: GameDAO, offerDAO: OfferDAO) extends Actor{
         (__ \ "price" \ "finalAmount").read[Double] and
         (__ \ "salesVisibility" \ "from").read[Long] and
         (__ \ "salesVisibility" \ "to").read[Long])(OfferData.apply _)
+    implicit def longToTimestamp(l: Long): Timestamp = {
+        new Timestamp(l*1000)
+    }
 
     def receive = {
-        case Query(game) => {
-            ???
-        }
         case Update() => {
-            val response: JsValue = ???
-            val game_ids: Map[String, Long] = ???
-
-            val new_offers = (response \ "products").as[List[OfferData]]
-            val valid_offers =
-                for {
-                    offer <- new_offers
-                    if game_ids contains offer.id.toString
-                } yield Offer(0,
-                    "www.gog.com" + offer.url,
-                    game_ids.get(offer.id.toString) match {
-                        case Some(g) => g
-                        case None => 0
-                    },
-                    5,  // PC
-                    "GOG",
-                    new Timestamp(offer.start_date*1000),
-                    new Timestamp(offer.end_date*1000),
-                    offer.base_price,
-                    offer.discounted_price)
-            offerDAO.insert(valid_offers)
+            //val gameIDs: Map[String, Long] = ???
+            println("GOGActor: Message received")
+            val gameIDs: Map[String, Long] = Map[String, Long](("id1", 1), ("id2", 2))
+            println("GOGActor: Getting GOG's JSON response")
+            val response =  ws.url("https://www.gog.com/games/ajax/filtered?mediaType=game&price=discounted&page=1").get().map {
+                resp => (resp.json \ "products").as[List[OfferData]]
+            }.onComplete{
+                case Success(newOffers) =>
+                    println("GOGActor: Sending response to UpdateActor")
+                    sender() ! ("Se encontraron " + processOffers(newOffers, gameIDs) + " nuevas ofertas en GOG")
+                case Failure(error) =>
+                    sender() ! "Error al buscar ofertas en GOG"
+            }
         }
+    }
+
+    def processOffers(newOffers: List[OfferData], gameIDs: Map[String, Long]) = {
+        println("GOGActor: Processing GOG's JSON response")
+        val validOffers =
+            for {
+                offer <- newOffers
+                if gameIDs contains offer.id.toString
+            } yield Offer(0,
+                "www.gog.com" + offer.url,
+                gameIDs.get(offer.id.toString) match {
+                    case Some(id) => id
+                    case None => 0
+                },
+                5,  // PC
+                "GOG",
+                offer.start_date,
+                offer.end_date,
+                offer.base_price,
+                offer.discounted_price)
+        //offerDAO.insert(valid_offers)
+        //validOffers.length
+        newOffers.length
     }
 
 }
