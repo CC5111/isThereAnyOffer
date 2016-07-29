@@ -2,7 +2,7 @@
 @(      title : String,
         tuplesPlatformCount: List[(models.entities.Platform, Int)],
         tuplesGenreCount: List[(models.entities.Genre, Int)],
-        tuplesOfferGame: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
+        tuplesOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
         tuplesBestOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)])
 
 @base(title){
@@ -65,12 +65,12 @@
             <div class="list-group">
                 <button type="button" class="list-group-item title" disabled><b>PLATAFORMA</b></button>
                 @for(tuplePlatformCount <- tuplesPlatformCount) {
-                    <button type="button" class="list-group-item">@tuplePlatformCount._1<span class="badge">@tuplePlatformCount._2</span></button>
+                    <button type="button" class="list-group-item simple-filter-button" data-type="platform" data-name="@tuplePlatformCount._1">@tuplePlatformCount._1<span class="badge">@tuplePlatformCount._2</span></button>
                 }
 
                 <button type="button" class="list-group-item title" disabled><b>GÉNERO</b></button>
                 @for(tupleGenreCount <- tuplesGenreCount) {
-                    <button type="button" class="list-group-item">@tupleGenreCount._1<span class="badge">@tupleGenreCount._2</span></button>
+                    <button type="button" class="list-group-item filter-button" data-type="genre" data-name="@tupleGenreCount._1">@tupleGenreCount._1<span class="badge">@tupleGenreCount._2</span></button>
                 }
             </div>
         </div>
@@ -87,9 +87,9 @@
 
                     </tr>
                 </thead>
-                <tbody>
-                    @for(tupleOfferGame <- tuplesOfferGame) {
-                        <tr>
+                <tbody id="offers">
+                    @for(tupleOfferGame <- tuplesOfferGamePlatform) {
+                        <tr data-platform="@tupleOfferGame._3">
                             <td><a href="@routes.DetailController.index(tupleOfferGame._2.id)">@tupleOfferGame._2.name</a></td>
                             <td>@tupleOfferGame._3</td>
                             <td>@tupleOfferGame._2.typeGame</td>
@@ -122,4 +122,28 @@
             </nav>
         </div>
     </div>
+    <script type="text/javascript">
+        function filter(typeFilter, nameFilter) {
+            var trs = $('#offers').children();
+            trs.each(function(index, row) {
+                var typeRow = $(row).data(typeFilter);
+                if (typeRow !== nameFilter) {
+                    $(row).hide();
+                }
+            });
+        }
+        function showAllOffers() {
+            var trs = $('#offers').children();
+            trs.each(function(index, row) {
+                $(row).show();
+            });
+        }
+
+        $('.simple-filter-button').on('click', function (event) {
+            var typeFilter = $(this).data('type');
+            var nameFilter = $(this).data('name');
+            showAllOffers();
+            filter(typeFilter, nameFilter);
+        })
+    </script>
 }

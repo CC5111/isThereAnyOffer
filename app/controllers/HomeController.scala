@@ -24,13 +24,13 @@ class HomeController @Inject()(gameDAO: GameDAO,
     for {
       tuplesPlatformCount <- platformDAO.allPlatformsWithCount
       tuplesGenreCount <- genreDAO.allGenresWithCount
-      tuplesOfferGamePLatform <- offerDAO.actualOffers  //obtencion de las ofertas
+      tuplesOfferGamePlatform <- offerDAO.actualOffers  //obtencion de las ofertas
       tuplesBestOfferGamePlatform <- offerDAO.lastGamesWithOffers
     } yield Ok(views.html.home(
       title = "Inicio",
       tuplesPlatformCount = tuplesPlatformCount.toList,
       tuplesGenreCount = tuplesGenreCount.toList,
-      tuplesOfferGame = tuplesOfferGamePLatform.toList,
+      tuplesOfferGamePlatform = tuplesOfferGamePlatform.toList,
       tuplesBestOfferGamePlatform = tuplesBestOfferGamePlatform.toList
     ))
   }
