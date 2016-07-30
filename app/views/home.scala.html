@@ -79,9 +79,9 @@
             </div>
         </div>
         <div class="col-md-9">
-            <table class="table table-bordered" >
+            <table id="tableOffers" class="table table-bordered" >
                 <thead>
-                    <tr>
+                    <tr style="cursor: pointer">
                         <th>Nombre</th>
                         <th>Plataforma</th>
                         <th>Tipo</th>
@@ -154,6 +154,9 @@
             var typeFilter = $(this).data('type');
             var nameFilter = $(this).data('name');
             filter(typeFilter, nameFilter);
+        });
+        $(document).ready(function() {
+            $("#tableOffers").tablesorter( {sortList: [[0,0], [1,0]]} );
         });
     </script>
 }
