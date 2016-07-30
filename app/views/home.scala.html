@@ -131,44 +131,26 @@
     <script type="text/javascript">
         var filters = {};
         function filter(typeFilter, nameFilter) {
+            filters[typeFilter] = nameFilter;
             var trs = $('#offers').children();
             trs.each(function(index, row) {
-                var datasRow = $(row).data(typeFilter).split(',');
-                var match = false;
-                datasRow.forEach(function(data) {
-                    match = match || (data === nameFilter);
-                });
-                if (!match) {
-                    $(row).hide();
+                var globalMatch = true;
+                for (var filter in filters) {
+                    var datasRow = $(row).data(filter).split(',');
+                    var match = false;
+                    datasRow.forEach(function (data) {
+                        match = match || (data === filters[filter]);
+                    });
+                    globalMatch = globalMatch && match;
                 }
+                if (globalMatch) $(row).show();
+                else $(row).hide();
             });
-        }
-        function showOffers(typeFilter, nameFilter) {
-            if (filters[typeFilter]) {
-                filters[typeFilter] = nameFilter;
-                var trs = $('#offers').children();
-                trs.each(function(index, row) {
-                    var globalMatch = true;
-                    for (var filter in filters) {
-                        var datasRow = $(row).data(filter).split(',');
-                        var match = false;
-                        datasRow.forEach(function (data) {
-                            match = match || (data === filters[filter]);
-                        });
-                        globalMatch = globalMatch && match;
-                    }
-                    if (globalMatch) {
-                        $(row).show();
-                    }
-                });
-            }
-            filters[typeFilter] = nameFilter;
         }
 
         $('.filter-button').on('click', function (event) {
             var typeFilter = $(this).data('type');
             var nameFilter = $(this).data('name');
-            showOffers(typeFilter, nameFilter);
             filter(typeFilter, nameFilter);
         });
     </script>
