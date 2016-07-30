@@ -32,7 +32,7 @@ class ApiController @Inject()(gameDAO: GameDAO)
     }
 
 
-    def game() = Action.async { implicit request =>
+    def games() = Action.async { implicit request =>
         gameDAO.all.map { games =>
             if (games.isEmpty)
                 Ok(createErrorJSON("No existen juegos"))
@@ -52,6 +52,17 @@ class ApiController @Inject()(gameDAO: GameDAO)
                 Ok(createErrorJSON("No existe juego con id = "+id))
             }
         }
+    }
+
+    def gameByName(name : String) = Action.async{
+
+        gameDAO.searchByName(name).map{ games =>
+            if (games.isEmpty)
+                Ok(createErrorJSON("No existen juegos"))
+            else
+                Ok(createSuccessJSON(Json.toJson(games)))
+        }
+
     }
 
     def createSuccessJSON(data : JsValue) = {
