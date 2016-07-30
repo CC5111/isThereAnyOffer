@@ -1,9 +1,13 @@
 @import play.api.libs.json.JsValue
-@(      title : String,
+@import scala.collection.immutable.HashMap
+@(
+        title : String,
         tuplesPlatformCount: List[(models.entities.Platform, Int)],
         tuplesGenreCount: List[(models.entities.Genre, Int)],
         tuplesOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
-        tuplesBestOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)])
+        tuplesBestOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
+        hashTableGenres: Map[models.entities.Game, List[models.entities.Genre]]
+)
 
 @base(title){
         <div class="container">
@@ -65,7 +69,7 @@
             <div class="list-group">
                 <button type="button" class="list-group-item title" disabled><b>PLATAFORMA</b></button>
                 @for(tuplePlatformCount <- tuplesPlatformCount) {
-                    <button type="button" class="list-group-item simple-filter-button" data-type="platform" data-name="@tuplePlatformCount._1">@tuplePlatformCount._1<span class="badge">@tuplePlatformCount._2</span></button>
+                    <button type="button" class="list-group-item filter-button" data-type="platform" data-name="@tuplePlatformCount._1">@tuplePlatformCount._1<span class="badge">@tuplePlatformCount._2</span></button>
                 }
 
                 <button type="button" class="list-group-item title" disabled><b>GÉNERO</b></button>
@@ -88,15 +92,17 @@
                     </tr>
                 </thead>
                 <tbody id="offers">
-                    @for(tupleOfferGame <- tuplesOfferGamePlatform) {
-                        <tr data-platform="@tupleOfferGame._3">
-                            <td><a href="@routes.DetailController.index(tupleOfferGame._2.id)">@tupleOfferGame._2.name</a></td>
-                            <td>@tupleOfferGame._3</td>
-                            <td>@tupleOfferGame._2.typeGame</td>
-                            <td><a href="@tupleOfferGame._1.link">@tupleOfferGame._1.store</a></td>
-                            <td>$@tupleOfferGame._1.normalPrice</td>
-                            <td>$@tupleOfferGame._1.offerPrice</td>
-                            <td class="descuento">@tupleOfferGame._1.discount%</td>
+                    @for(tupleOfferGamePlatform <- tuplesOfferGamePlatform) {
+                        <tr
+                        data-platform="@tupleOfferGamePlatform._3"
+                        data-genre='@{for {genres <- hashTableGenres.get(tupleOfferGamePlatform._2)} yield genres.mkString(",")}'>
+                            <td><a href="@routes.DetailController.index(tupleOfferGamePlatform._2.id)">@tupleOfferGamePlatform._2.name</a></td>
+                            <td>@tupleOfferGamePlatform._3</td>
+                            <td>@tupleOfferGamePlatform._2.typeGame</td>
+                            <td><a href="@tupleOfferGamePlatform._1.link">@tupleOfferGamePlatform._1.store</a></td>
+                            <td>$@tupleOfferGamePlatform._1.normalPrice</td>
+                            <td>$@tupleOfferGamePlatform._1.offerPrice</td>
+                            <td class="descuento">@tupleOfferGamePlatform._1.discount%</td>
                         </tr>
                     }
                 </tbody>
@@ -123,27 +129,47 @@
         </div>
     </div>
     <script type="text/javascript">
+        var filters = {};
         function filter(typeFilter, nameFilter) {
             var trs = $('#offers').children();
             trs.each(function(index, row) {
-                var typeRow = $(row).data(typeFilter);
-                if (typeRow !== nameFilter) {
+                var datasRow = $(row).data(typeFilter).split(',');
+                var match = false;
+                datasRow.forEach(function(data) {
+                    match = match || (data === nameFilter);
+                });
+                if (!match) {
                     $(row).hide();
                 }
             });
         }
-        function showAllOffers() {
-            var trs = $('#offers').children();
-            trs.each(function(index, row) {
-                $(row).show();
-            });
+        function showOffers(typeFilter, nameFilter) {
+            if (filters[typeFilter]) {
+                filters[typeFilter] = nameFilter;
+                var trs = $('#offers').children();
+                trs.each(function(index, row) {
+                    var globalMatch = true;
+                    for (var filter in filters) {
+                        var datasRow = $(row).data(filter).split(',');
+                        var match = false;
+                        datasRow.forEach(function (data) {
+                            match = match || (data === filters[filter]);
+                        });
+                        globalMatch = globalMatch && match;
+                    }
+                    if (globalMatch) {
+                        $(row).show();
+                    }
+                });
+            }
+            filters[typeFilter] = nameFilter;
         }
 
-        $('.simple-filter-button').on('click', function (event) {
+        $('.filter-button').on('click', function (event) {
             var typeFilter = $(this).data('type');
             var nameFilter = $(this).data('name');
-            showAllOffers();
+            showOffers(typeFilter, nameFilter);
             filter(typeFilter, nameFilter);
-        })
+        });
     </script>
 }
