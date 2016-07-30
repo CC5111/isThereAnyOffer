@@ -1,9 +1,13 @@
 @import play.api.libs.json.JsValue
-@(      title : String,
+@import scala.collection.immutable.HashMap
+@(
+        title : String,
         tuplesPlatformCount: List[(models.entities.Platform, Int)],
         tuplesGenreCount: List[(models.entities.Genre, Int)],
-        tuplesOfferGame: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
-        tuplesBestOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)])
+        tuplesOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
+        tuplesBestOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
+        hashTableGenres: Map[models.entities.Game, List[models.entities.Genre]]
+)
 
 @base(title){
         <div class="container">
@@ -65,19 +69,19 @@
             <div class="list-group">
                 <button type="button" class="list-group-item title" disabled><b>PLATAFORMA</b></button>
                 @for(tuplePlatformCount <- tuplesPlatformCount) {
-                    <button type="button" class="list-group-item">@tuplePlatformCount._1<span class="badge">@tuplePlatformCount._2</span></button>
+                    <button type="button" class="list-group-item filter-button" data-type="platform" data-name="@tuplePlatformCount._1">@tuplePlatformCount._1<span class="badge">@tuplePlatformCount._2</span></button>
                 }
 
                 <button type="button" class="list-group-item title" disabled><b>GÉNERO</b></button>
                 @for(tupleGenreCount <- tuplesGenreCount) {
-                    <button type="button" class="list-group-item">@tupleGenreCount._1<span class="badge">@tupleGenreCount._2</span></button>
+                    <button type="button" class="list-group-item filter-button" data-type="genre" data-name="@tupleGenreCount._1">@tupleGenreCount._1<span class="badge">@tupleGenreCount._2</span></button>
                 }
             </div>
         </div>
         <div class="col-md-9">
-            <table class="table table-bordered" >
+            <table id="tableOffers" class="table table-bordered" >
                 <thead>
-                    <tr>
+                    <tr style="cursor: pointer">
                         <th>Nombre</th>
                         <th>Plataforma</th>
                         <th>Tipo</th>
@@ -87,16 +91,18 @@
 
                     </tr>
                 </thead>
-                <tbody>
-                    @for(tupleOfferGame <- tuplesOfferGame) {
-                        <tr>
-                            <td><a href="@routes.DetailController.index(tupleOfferGame._2.id)">@tupleOfferGame._2.name</a></td>
-                            <td>@tupleOfferGame._3</td>
-                            <td>@tupleOfferGame._2.typeGame</td>
-                            <td><a href="@tupleOfferGame._1.link">@tupleOfferGame._1.store</a></td>
-                            <td>$@tupleOfferGame._1.normalPrice</td>
-                            <td>$@tupleOfferGame._1.offerPrice</td>
-                            <td class="descuento">@tupleOfferGame._1.discount%</td>
+                <tbody id="offers">
+                    @for(tupleOfferGamePlatform <- tuplesOfferGamePlatform) {
+                        <tr
+                        data-platform="@tupleOfferGamePlatform._3"
+                        data-genre='@{for {genres <- hashTableGenres.get(tupleOfferGamePlatform._2)} yield genres.mkString(",")}'>
+                            <td><a href="@routes.DetailController.index(tupleOfferGamePlatform._2.id)">@tupleOfferGamePlatform._2.name</a></td>
+                            <td>@tupleOfferGamePlatform._3</td>
+                            <td>@tupleOfferGamePlatform._2.typeGame</td>
+                            <td><a href="@tupleOfferGamePlatform._1.link">@tupleOfferGamePlatform._1.store</a></td>
+                            <td>$@tupleOfferGamePlatform._1.normalPrice</td>
+                            <td>$@tupleOfferGamePlatform._1.offerPrice</td>
+                            <td class="descuento">@tupleOfferGamePlatform._1.discount%</td>
                         </tr>
                     }
                 </tbody>
@@ -122,4 +128,35 @@
             </nav>
         </div>
     </div>
+    <script type="text/javascript">
+        var filters = {};
+        function filter(typeFilter, nameFilter) {
+            if (filters[typeFilter] == nameFilter) delete filters[typeFilter];
+            else filters[typeFilter] = nameFilter;
+
+            var trs = $('#offers').children();
+            trs.each(function(index, row) {
+                var globalMatch = true;
+                for (var filter in filters) {
+                    var datasRow = $(row).data(filter).split(',');
+                    var match = false;
+                    datasRow.forEach(function (data) {
+                        match = match || (data === filters[filter]);
+                    });
+                    globalMatch = globalMatch && match;
+                }
+                if (globalMatch) $(row).show();
+                else $(row).hide();
+            });
+        }
+
+        $('.filter-button').on('click', function (event) {
+            var typeFilter = $(this).data('type');
+            var nameFilter = $(this).data('name');
+            filter(typeFilter, nameFilter);
+        });
+        $(document).ready(function() {
+            $("#tableOffers").tablesorter( {sortList: [[0,0], [1,0]]} );
+        });
+    </script>
 }

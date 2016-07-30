@@ -6,7 +6,7 @@ import actors.SearchActor
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import models.daos.{GameDAO, GenreDAO, OfferDAO, PlatformDAO}
-import models.entities.{Game, Offer}
+import models.entities.{Game, Genre, Offer}
 import play.api.libs.json.{JsValue, Json, Writes}
 import play.api.libs.streams.ActorFlow
 import play.api.mvc.{Action, AnyContent, Controller, WebSocket}
@@ -22,16 +22,18 @@ class HomeController @Inject()(gameDAO: GameDAO,
 
   def index() = Action.async { implicit request =>
     for {
-      tuplesPlatformCount <- platformDAO.allPlatformsWithCount
+      tuplesPlatformCount <- platformDAO.allPlatformsOffersWithCount
       tuplesGenreCount <- genreDAO.allGenresWithCount
-      tuplesOfferGamePLatform <- offerDAO.actualOffers  //obtencion de las ofertas
+      tuplesOfferGamePlatform <- offerDAO.actualOffers  //obtencion de las ofertas
       tuplesBestOfferGamePlatform <- offerDAO.lastGamesWithOffers
+      gamesWithGenres <- genreDAO.allGamesWithGenres()
     } yield Ok(views.html.home(
       title = "Inicio",
       tuplesPlatformCount = tuplesPlatformCount.toList,
       tuplesGenreCount = tuplesGenreCount.toList,
-      tuplesOfferGame = tuplesOfferGamePLatform.toList,
-      tuplesBestOfferGamePlatform = tuplesBestOfferGamePlatform.toList
+      tuplesOfferGamePlatform = tuplesOfferGamePlatform.toList,
+      tuplesBestOfferGamePlatform = tuplesBestOfferGamePlatform.toList,
+      hashTableGenres = gamesWithGenres.groupBy(_._1).map{case (k, v) => (k, v.map(_._2).toList)}
     ))
   }
 
