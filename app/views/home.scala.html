@@ -128,35 +128,5 @@
             </nav>
         </div>
     </div>
-    <script type="text/javascript">
-        var filters = {};
-        function filter(typeFilter, nameFilter) {
-            if (filters[typeFilter] == nameFilter) delete filters[typeFilter];
-            else filters[typeFilter] = nameFilter;
 
-            var trs = $('#offers').children();
-            trs.each(function(index, row) {
-                var globalMatch = true;
-                for (var filter in filters) {
-                    var datasRow = $(row).data(filter).split(',');
-                    var match = false;
-                    datasRow.forEach(function (data) {
-                        match = match || (data === filters[filter]);
-                    });
-                    globalMatch = globalMatch && match;
-                }
-                if (globalMatch) $(row).show();
-                else $(row).hide();
-            });
-        }
-
-        $('.filter-button').on('click', function (event) {
-            var typeFilter = $(this).data('type');
-            var nameFilter = $(this).data('name');
-            filter(typeFilter, nameFilter);
-        });
-        $(document).ready(function() {
-            $("#tableOffers").tablesorter( {sortList: [[0,0], [1,0]]} );
-        });
-    </script>
 }
