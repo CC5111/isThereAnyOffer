@@ -131,7 +131,9 @@
     <script type="text/javascript">
         var filters = {};
         function filter(typeFilter, nameFilter) {
-            filters[typeFilter] = nameFilter;
+            if (filters[typeFilter] == nameFilter) delete filters[typeFilter];
+            else filters[typeFilter] = nameFilter;
+
             var trs = $('#offers').children();
             trs.each(function(index, row) {
                 var globalMatch = true;
