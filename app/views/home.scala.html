@@ -69,12 +69,18 @@
             <div class="list-group">
                 <button type="button" class="list-group-item title" disabled><b>PLATAFORMA</b></button>
                 @for(tuplePlatformCount <- tuplesPlatformCount) {
-                    <button type="button" class="list-group-item filter-button" data-type="platform" data-name="@tuplePlatformCount._1">@tuplePlatformCount._1<span class="badge">@tuplePlatformCount._2</span></button>
+                    <button type="button" class="list-group-item filter-button" data-type="platform" data-name="@tuplePlatformCount._1">
+                        @tuplePlatformCount._1
+                        <span id="platform_count_@tuplePlatformCount._1.name.replaceAll(" ", "_")" class="badge">@tuplePlatformCount._2/@tuplePlatformCount._2</span>
+                    </button>
                 }
 
                 <button type="button" class="list-group-item title" disabled><b>GÉNERO</b></button>
                 @for(tupleGenreCount <- tuplesGenreCount) {
-                    <button type="button" class="list-group-item filter-button" data-type="genre" data-name="@tupleGenreCount._1">@tupleGenreCount._1<span class="badge">@tupleGenreCount._2</span></button>
+                    <button type="button" class="list-group-item filter-button" data-type="genre" data-name="@tupleGenreCount._1">
+                        @tupleGenreCount._1
+                        <span id="genre_count_@tupleGenreCount._1.name.replaceAll(" ", "_")" class="badge">@tupleGenreCount._2/@tupleGenreCount._2</span>
+                    </button>
                 }
             </div>
         </div>
@@ -128,7 +134,7 @@
             </nav>
         </div>
     </div>
-    <script type="text/javascript">
+    <script type="text/javascript" >
 
         //Search
 
@@ -164,6 +170,23 @@
 
         // Filter
         var filters = {};
+
+        function add1(number) {return number + 1;}
+        function sus1(number) {return number - 1;}
+
+        function updateCount(row, updateFun) {
+            var allDataRow = $(row).data();
+            for (var filter in allDataRow) {
+                var datasRow = $(row).data(filter).split(',');
+                datasRow.forEach(function (data) {
+                    var countSpan = $('#' + filter + '_count_' + data.replace(/ /g, "_"));
+                    var countArray = countSpan.text().split('/');
+                    var actual = parseInt(countArray[0]);
+                    var total = parseInt(countArray[1]);
+                    countSpan.text(updateFun(actual) + '/' + total);
+                });
+            }
+        }
         function filter(typeFilter, nameFilter) {
             if (filters[typeFilter] == nameFilter) delete filters[typeFilter];
             else filters[typeFilter] = nameFilter;
@@ -179,8 +202,15 @@
                     });
                     globalMatch = globalMatch && match;
                 }
-                if (globalMatch) $(row).show();
-                else $(row).hide();
+                var display = $(row).css('display') !== 'none';
+                if (globalMatch && !display){
+                    $(row).show();
+                    updateCount(row, add1)
+                }
+                else if (!globalMatch && display) {
+                    $(row).hide();
+                    updateCount(row, sus1)
+                }
             });
         }
 
