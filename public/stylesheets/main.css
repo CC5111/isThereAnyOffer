@@ -36,6 +36,7 @@ h3{
 }
 
 
+
 .table-bordered > thead > tr > th,
 .table-bordered > tbody > tr > th,
 .table-bordered > tfoot > tr > th,
@@ -44,8 +45,11 @@ h3{
 .table-bordered > tfoot > tr > td {
     border: 5px solid #000000;
     text-align: center;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 20px;
+    vertical-align: middle;
+
 }
 
 .detail > thead > tr > th,
@@ -228,3 +232,17 @@ a:hover{
 }
 
 
+/*Table sorter*/
+th.header {
+    background-image: url(../images/bg.png);
+    background-repeat: no-repeat;
+    background-position: center right;
+}
+
+th.headerSortUp {
+    background-image: url(../images/asc.png);
+}
+
+th.headerSortDown {
+    background-image: url(../images/desc.png);
+}
