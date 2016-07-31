@@ -6,14 +6,14 @@ import actors.SearchActor
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import models.daos.{GameDAO, GenreDAO, OfferDAO, PlatformDAO}
-import models.entities.Game
+import models.entities.{Game, Offer, Platform}
 import play.api.libs.json._
 import play.api.libs.streams.ActorFlow
 import play.api.mvc.{Action, Controller, WebSocket}
 
 import scala.concurrent.ExecutionContext
 
-class ApiController @Inject()(gameDAO: GameDAO)
+class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
                              (implicit ec:ExecutionContext, system: ActorSystem, mat:Materializer) extends Controller {
 
     implicit val gameWrites = new Writes[Game] {
@@ -31,6 +31,35 @@ class ApiController @Inject()(gameDAO: GameDAO)
         )
     }
 
+    implicit val offerWrites = new Writes[Offer] {
+        def writes(offer: Offer) = Json.obj(
+            "id" -> offer.id,
+            "idGame" -> offer.idGame,
+            "idPlatform" -> offer.idPlatform,
+            "link" -> offer.link,
+            "store" -> offer.store,
+            "normalPrice" -> offer.normalPrice,
+            "offerPrice" -> offer.offerPrice,
+            "discount" -> offer.discount,
+            "fromDate" -> offer.fromDate,
+            "untilDate" -> offer.untilDate.toString
+        )
+    }
+
+    implicit val platformWrites = new Writes[Platform] {
+        def writes(platform: Platform) = Json.obj(
+            "id" -> platform.id,
+            "name" -> platform.name
+        )
+    }
+
+    implicit val bla = new Writes[(Offer, Game, Platform)] {
+        override def writes(tuple: (Offer, Game, Platform)) = Json.obj(
+            "offer" -> tuple._1,
+            "game" -> tuple._2,
+            "platform" -> tuple._3
+        )
+    }
 
     def games() = Action.async { implicit request =>
         gameDAO.all.map { games =>
@@ -63,6 +92,13 @@ class ApiController @Inject()(gameDAO: GameDAO)
                 Ok(createSuccessJSON(Json.toJson(games)))
         }
 
+    }
+
+    def filterOffers(pageNumber: Int) = Action.async{
+        offerDAO.filterOffers(pageNumber = pageNumber).map{ offers =>
+            if (offers.isEmpty) Ok(createErrorJSON("No existen ofertas"))
+            else Ok(createSuccessJSON(Json.toJson(offers)))
+        }
     }
 
     def createSuccessJSON(data : JsValue) = {
