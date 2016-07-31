@@ -94,8 +94,11 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
 
     }
 
-    def filterOffers(pageNumber: Int) = Action.async{
-        offerDAO.filterOffers(pageNumber = pageNumber).map{ offers =>
+    def filterOffers(pageNumber: Int, platform: String) = Action.async{
+        offerDAO.filterOffers(
+            pageNumber = pageNumber,
+            platformFilter = platform
+        ).map{ offers =>
             if (offers.isEmpty) Ok(createErrorJSON("No existen ofertas"))
             else Ok(createSuccessJSON(Json.toJson(offers)))
         }

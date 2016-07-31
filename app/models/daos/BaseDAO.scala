@@ -69,20 +69,24 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     db.run(query.sortBy(_._2.name).result)
   }
 
-  def filterOffers(pageNumber: Int = 1, pageSize:Int = 3): Future[Seq[(Offer, Game, Platform)]] = {
+  def filterOffers(pageNumber: Int = 1, pageSize:Int = 3, platformFilter: String = ""): Future[Seq[(Offer, Game, Platform)]] = {
     val gameQ = SlickTables.gameQ
     val platformQ = SlickTables.platformQ
 
     val dateNow = new Timestamp(new java.util.Date().getTime)
 
-    val query = for {
+    val query = (for {
       ((offer, game) , platform) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id)
       if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
-    } yield (offer, game, platform)
+    } yield (offer, game, platform))
+      .sortBy(_._2.name)
+
+    var queryFilter = query
+    if (platformFilter != "") queryFilter = query.filter((tuple) => tuple._3.name === platformFilter)
 
     val offset = (pageNumber - 1) * pageSize
 
-    db.run(query.sortBy(_._2.name).drop(offset).take(pageSize).result)
+    db.run(queryFilter.drop(offset).take(pageSize).result)
   }
 
   def lastGamesWithOffers: Future[Seq[(Offer, Game, Platform)]] = {
