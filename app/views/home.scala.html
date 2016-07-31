@@ -4,9 +4,11 @@
         title : String,
         tuplesPlatformCount: List[(models.entities.Platform, Int)],
         tuplesGenreCount: List[(models.entities.Genre, Int)],
+        tuplesCategoryCount: List[(models.entities.Category, Int)],
         tuplesOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
         tuplesBestOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
-        hashTableGenres: Map[models.entities.Game, List[models.entities.Genre]]
+        hashTableGenres: Map[models.entities.Game, List[models.entities.Genre]],
+        hashTableCategories: Map[models.entities.Game, List[models.entities.Category]]
 )
 
 @base(title){
@@ -82,6 +84,14 @@
                         <span id="genre_count_@tupleGenreCount._1.name.replaceAll(" ", "_")" class="badge">@tupleGenreCount._2/@tupleGenreCount._2</span>
                     </button>
                 }
+
+                <button type="button" class="list-group-item title" disabled><b>CATEGORÍA</b></button>
+                @for(tupleCategoryCount <- tuplesCategoryCount) {
+                    <button id="button_category_@tupleCategoryCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="category" data-name="@tupleCategoryCount._1">
+                        @tupleCategoryCount._1
+                    <span id="category_count_@tupleCategoryCount._1.name.replaceAll(" ", "_")" class="badge">@tupleCategoryCount._2/@tupleCategoryCount._2</span>
+                    </button>
+                }
             </div>
         </div>
         <div class="col-md-9">
@@ -101,7 +111,8 @@
                     @for(tupleOfferGamePlatform <- tuplesOfferGamePlatform) {
                         <tr
                         data-platform="@tupleOfferGamePlatform._3"
-                        data-genre='@{for {genres <- hashTableGenres.get(tupleOfferGamePlatform._2)} yield genres.mkString(",")}'>
+                        data-genre='@{for {genres <- hashTableGenres.get(tupleOfferGamePlatform._2)} yield genres.mkString(",")}'
+                        data-category='@{for {categories <- hashTableCategories.get(tupleOfferGamePlatform._2)} yield categories.mkString(",")}'>
                             <td><a href="@routes.DetailController.index(tupleOfferGamePlatform._2.id)">@tupleOfferGamePlatform._2.name</a></td>
                             <td>@tupleOfferGamePlatform._3</td>
                             <td>@tupleOfferGamePlatform._2.typeGame</td>

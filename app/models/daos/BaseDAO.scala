@@ -163,6 +163,57 @@ class GenreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   }
 }
 
+@Singleton
+class CategoryDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[CategoryTable, Category]{
+  import dbConfig.driver.api._
+
+  protected val tableQ = SlickTables.categoryQ
+
+  def all: Future[Seq[Category]] = {
+    db.run(tableQ.result)
+  }
+
+  def categoriesGame(game: Game): Future[Seq[Category]] = {
+    val gameCategoryQ = SlickTables.gameCategoryQ
+
+    val query = for {
+      (gameCategory, category) <- gameCategoryQ join tableQ on (_.idCategory === _.id)
+      if gameCategory.idGame === game.id
+    } yield category
+
+    db.run(query.result)
+  }
+
+  def allGamesWithCategories(): Future[Seq[(Game, Category)]] = {
+    val gameQ = SlickTables.gameQ
+    val gameCategoryQ = SlickTables.gameCategoryQ
+
+    val query = for {
+      ((game, gameCategory), category) <- gameQ join gameCategoryQ on (_.id === _.idGame) join tableQ on (_._2.idCategory === _.id)
+    } yield (game, category)
+    db.run(query.result)
+  }
+
+  def allCategoriesWithCount: Future[Seq[(Category, Int)]] = {
+    val gameCategoryQ = SlickTables.gameCategoryQ
+    val offerQ = SlickTables.offerQ
+
+    val categoriesWithGames = (for {
+      ((category, gameCategory), offer) <- tableQ join gameCategoryQ on (_.id === _.idCategory) join offerQ on (_._2.idGame === _.idGame)
+    } yield (category, gameCategory))
+      .groupBy(_._1).map {
+      case (cat, gameCat) => (cat, gameCat.length)
+    }
+
+    val categoriesWithoutGames = for {
+      category <- tableQ if !categoriesWithGames.filter(_._1.id === category.id).exists
+    } yield (category, 0)
+
+    val query = (categoriesWithGames union categoriesWithoutGames).sortBy(_._1.name.asc)
+    db.run(query.result)
+  }
+}
+
 trait AbstractBaseDAO[T,A] {
   def insert(row : A): Future[Long]
   def insert(rows : Seq[A]): Future[Seq[Long]]
