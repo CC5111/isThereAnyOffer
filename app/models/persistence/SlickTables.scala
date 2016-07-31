@@ -113,4 +113,45 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
     def * = (id, name) <> (Platform.tupled, Platform.unapply _)
   }
   val platformQ = TableQuery[PlatformTable]
+
+  // Stores
+  class G2aStoreTable(tag: Tag) extends BaseTable[G2aStore](tag, "g2aStore") {
+    def idGame = column[Long]("idGame")
+    def idStore = column[String]("idStore")
+
+    def * = (id, idGame, idStore) <> (G2aStore.tupled, G2aStore.unapply _)
+  }
+  val g2aStoreQ = TableQuery[G2aStoreTable]
+
+  class GogStoreTable(tag: Tag) extends BaseTable[GogStore](tag, "gogStore") {
+    def idGame = column[Long]("idGame")
+    def idStore = column[String]("idStore")
+
+    def * = (id, idGame, idStore) <> (GogStore.tupled, GogStore.unapply _)
+  }
+  val gogStoreQ = TableQuery[GogStoreTable]
+
+  class PsStoreTable(tag: Tag) extends BaseTable[PsStore](tag, "psStore") {
+    def idGame = column[Long]("idGame")
+    def idStore = column[String]("idStore")
+
+    def * = (id, idGame, idStore) <> (PsStore.tupled, PsStore.unapply _)
+  }
+  val psStoreQ = TableQuery[PsStoreTable]
+
+  class SteamStoreTable(tag: Tag) extends BaseTable[SteamStore](tag, "steamStore") {
+    def idGame = column[Long]("idGame")
+    def idStore = column[String]("idStore")
+
+    def * = (id, idGame, idStore) <> (SteamStore.tupled, SteamStore.unapply _)
+  }
+  val steamStoreQ = TableQuery[SteamStoreTable]
+
+  class XboxStoreTable(tag: Tag) extends BaseTable[XboxStore](tag, "xboxStore") {
+    def idGame = column[Long]("idGame")
+    def idStore = column[String]("idStore")
+
+    def * = (id, idGame, idStore) <> (XboxStore.tupled, XboxStore.unapply _)
+  }
+  val xboxStoreQ = TableQuery[XboxStoreTable]
 }
