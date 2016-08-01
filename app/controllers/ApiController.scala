@@ -1,5 +1,6 @@
 package controllers
 
+import java.util.Locale.Category
 import javax.inject.Inject
 
 import actors.SearchActor
@@ -94,10 +95,12 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
 
     }
 
-    def filterOffers(pageNumber: Int, platform: String) = Action.async{
+    def filterOffers(pageNumber: Int, platform: String, genre: String, category: String) = Action.async{
         offerDAO.filterOffers(
             pageNumber = pageNumber,
-            platformFilter = platform
+            platformFilter = platform,
+            genreFilter = genre,
+            categoryFilter = category
         ).map{ offers =>
             if (offers.isEmpty) Ok(createErrorJSON("No existen ofertas"))
             else Ok(createSuccessJSON(Json.toJson(offers)))
