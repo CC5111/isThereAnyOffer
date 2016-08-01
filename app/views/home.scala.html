@@ -108,20 +108,6 @@
                     </tr>
                 </thead>
                 <tbody id="offers">
-                    @for(tupleOfferGamePlatform <- tuplesOfferGamePlatform) {
-                        <tr
-                        data-platform="@tupleOfferGamePlatform._3"
-                        data-genre='@{for {genres <- hashTableGenres.get(tupleOfferGamePlatform._2)} yield genres.mkString(",")}'
-                        data-category='@{for {categories <- hashTableCategories.get(tupleOfferGamePlatform._2)} yield categories.mkString(",")}'>
-                            <td><a href="@routes.DetailController.index(tupleOfferGamePlatform._2.id)">@tupleOfferGamePlatform._2.name</a></td>
-                            <td>@tupleOfferGamePlatform._3</td>
-                            <td>@tupleOfferGamePlatform._2.typeGame</td>
-                            <td><a href="@tupleOfferGamePlatform._1.link">@tupleOfferGamePlatform._1.store</a></td>
-                            <td>$@tupleOfferGamePlatform._1.normalPrice</td>
-                            <td>$@tupleOfferGamePlatform._1.offerPrice</td>
-                            <td class="descuento">@tupleOfferGamePlatform._1.discount%</td>
-                        </tr>
-                    }
                 </tbody>
             </table>
             <nav style="text-align: center;">
@@ -131,11 +117,8 @@
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
+                    <li><a class="page-link" href="#">1</a></li>
+                    <li><a class="page-link" href="#">2</a></li>
                     <li>
                         <a href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
@@ -180,26 +163,44 @@
 
 
         // Filter
-        var filters = {};
+        var filters = {pageNumber: 1};
 
-        function add1(number) {return number + 1;}
-        function sus1(number) {return number - 1;}
-
-        function updateCount(row, updateFun) {
-            var allDataRow = $(row).data();
-            for (var filter in allDataRow) {
-                var datasRow = $(row).data(filter).split(',');
-                datasRow.forEach(function (data) {
-                    var countSpan = $('#' + filter + '_count_' + data.replace(/ /g, "_"));
-                    var countArray = countSpan.text().split('/');
-                    var actual = parseInt(countArray[0]);
-                    var total = parseInt(countArray[1]);
-                    countSpan.text(updateFun(actual) + '/' + total);
-                });
-            }
+        function removeRows() {
+            var offersTable = $('#offers').find('tr');
+            offersTable.each(function(index, row) {
+                $(row).remove()
+            })
         }
+        function getOffersWithFilter() {
+            console.log(filters)
+            $.get('api/filter', filters).done(function(results) {
+                if (results.status === 'success') {
+                    var offers = results['data'];
+                    removeRows();
+                    var offersTable = $('#offers');
+                    offers.forEach(function(offer) {
+                        var offerRow = '' +
+                                '<tr>' +
+                                    '<td><a href="/detail/' + offer.game.id + '">' + offer.game.name + '</a></td>' +
+                                    '<td>' + offer.platform.name + '</td>' +
+                                    '<td>' + offer.game.typeGame + '</td>' +
+                                    '<td><a href="' + offer.offer.link + '">' + offer.offer.store + '</a></td>' +
+                                    '<td>' + offer.offer.normalPrice + '</td>' +
+                                    '<td>' + offer.offer.offerPrice + '</td>' +
+                                    '<td class="descuento">' + offer.offer.discount + '</td>' +
+                                '</tr>';
+                        offersTable.append(offerRow);
+                    });
+                } else {
+                    removeRows();
+                }
+            }).fail(function(err) {
+                console.log(err);
+            })
+        }
+
         function filter(typeFilter, nameFilter) {
-            if (filters[typeFilter] == nameFilter) {
+            if (filters[typeFilter] === nameFilter) {
                 $('#button_' + typeFilter + '_' + nameFilter.replace(/ /g, '_')).removeClass('active');
                 delete filters[typeFilter];
             }
@@ -208,38 +209,25 @@
                 $('#button_' + typeFilter + '_' + nameFilter.replace(/ /g, '_')).toggleClass('active');
                 filters[typeFilter] = nameFilter;
             }
-
-            var trs = $('#offers').children();
-            trs.each(function(index, row) {
-                var globalMatch = true;
-                for (var filter in filters) {
-                    var datasRow = $(row).data(filter).split(',');
-                    var match = false;
-                    datasRow.forEach(function (data) {
-                        match = match || (data === filters[filter]);
-                    });
-                    globalMatch = globalMatch && match;
-                }
-                var display = $(row).css('display') !== 'none';
-                if (globalMatch && !display){
-                    $(row).show();
-                    updateCount(row, add1)
-                }
-                else if (!globalMatch && display) {
-                    $(row).hide();
-                    updateCount(row, sus1)
-                }
-            });
+            getOffersWithFilter();
         }
+
+        $('.page-link').on('click', function(event) {
+            event.preventDefault();
+            filters.pageNumber = parseInt($(this).text());
+            getOffersWithFilter();
+        });
 
         $('.filter-button').on('click', function (event) {
             var typeFilter = $(this).data('type');
             var nameFilter = $(this).data('name');
             filter(typeFilter, nameFilter);
         });
+
         $(document).ready(function() {
-            $("#tableOffers").tablesorter( {sortList: [[0,0], [1,0]]} );
+            $("#tableOffers").tablesorter( {sortList: []} );
             getGames();
+            getOffersWithFilter();
         });
     </script>
 }
