@@ -15,7 +15,7 @@ import scala.util.{Success, Failure}
 
 object PsActor {
     case class Query(game: Long)
-    case class Update()
+    case object Update
     def props(gameDAO: GameDAO, offerDAO: OfferDAO)(implicit ws:WSClient) =
         Props(new PsActor(gameDAO, offerDAO)(ws))
 }
@@ -78,21 +78,24 @@ class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
     val allDealsUrl = "https://store.playstation.com/chihiro-api/viewfinder/CL/es/999/STORE-MSF77008-ALLDEALS?game_content_type=games&platform=ps4%2Cps3&size=30&gkb=1&geoCountry=CL"
 
     def receive = {
-        case Update() => {
+        case Update => {
             //val gameIDs: Map[String, Long] = ???
-            println("PsActor: Message received")
+            println("PsActor: Message received from ", sender)
+            val s = sender
             val gameIDs: Map[String, Long] = Map[String, Long](("id1", 1), ("id2", 2))
             println("PsActor: Getting PsStore's JSON response")
             val response =  ws.url(allDealsUrl).get().map {
                 resp => (resp.json \ "links").as[List[OfferData]]
             }.onComplete{
                 case Success(newOffers) =>
-                    println("PsActor: Sending response to UpdateActor")
-                    sender() ! ("Se encontraron " + processOffers(newOffers, gameIDs) + " ofertas en PsStore")
+                    val number = processOffers(newOffers, gameIDs)
+                    println("PsActor: Sending response to UpdateActor", sender, sender.path)
+                    s ! ("Se encontraron " + number + " ofertas en PsStore")
                 case Failure(error) =>
-                    sender() ! "Error al buscar ofertas en PsStore"
+                    s ! "Error al buscar ofertas en PsStore"
             }
         }
+        case a => println("Recibí " + a)
     }
 
     def processOffers(newOffers: List[OfferData], gameIDs: Map[String, Long]) = {
@@ -118,7 +121,9 @@ class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
                 offer.discounted_price/100.0)
         //offerDAO.insert(valid_offers)
         //validOffers.length // -> necesita un gameIDs real
+        println("PsActor: JSON response processed. Found " + newOffers.length + " offers")
         newOffers.length
+
     }
 
 }
