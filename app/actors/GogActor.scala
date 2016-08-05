@@ -16,7 +16,7 @@ import scala.util.{Failure, Success}
 
 object GogActor {
     case class Query(game: Long)
-    case class Update()
+    case object Update
     def props(gameDAO: GameDAO, offerDAO: OfferDAO)(implicit ws:WSClient) =
         Props(new GogActor(gameDAO, offerDAO)(ws))
 }
@@ -78,7 +78,7 @@ class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
     }
 
     def receive = {
-        case Update() => {
+        case Update => {
             //val gameIDs: Map[String, Long] = ???
             println("GOGActor: Message received")
             val gameIDs: Map[String, Long] = Map[String, Long](("id1", 1), ("id2", 2))
@@ -93,6 +93,7 @@ class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
                     sender() ! "Error al buscar ofertas en GOG"
             }
         }
+        case a => println("Recibí " + a)
     }
 
     def processOffers(newOffers: List[OfferData], gameIDs: Map[String, Long]) = {
@@ -115,6 +116,7 @@ class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
                 offer.discounted_price)
         //offerDAO.insert(valid_offers)
         //validOffers.length
+        println("GOGActor: JSON response processed. Found " + newOffers.length + " offers")
         newOffers.length
     }
 
