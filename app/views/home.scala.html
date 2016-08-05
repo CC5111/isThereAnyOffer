@@ -185,9 +185,9 @@
                                     '<td>' + offer.platform.name + '</td>' +
                                     '<td>' + offer.game.typeGame + '</td>' +
                                     '<td><a href="' + offer.offer.link + '">' + offer.offer.store + '</a></td>' +
-                                    '<td>' + offer.offer.normalPrice + '</td>' +
-                                    '<td>' + offer.offer.offerPrice + '</td>' +
-                                    '<td class="descuento">' + offer.offer.discount + '</td>' +
+                                    '<td>$' + offer.offer.normalPrice + '</td>' +
+                                    '<td>$' + offer.offer.offerPrice + '</td>' +
+                                    '<td class="descuento">' + offer.offer.discount + '%</td>' +
                                 '</tr>';
                         offersTable.append(offerRow);
                     });
