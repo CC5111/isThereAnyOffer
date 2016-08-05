@@ -1,9 +1,13 @@
 @import play.api.libs.json.JsValue
-@(      title : String,
+@import scala.collection.immutable.HashMap
+@(
+        title : String,
         tuplesPlatformCount: List[(models.entities.Platform, Int)],
         tuplesGenreCount: List[(models.entities.Genre, Int)],
-        tuplesOfferGame: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
-        tuplesBestOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)])
+        tuplesOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
+        tuplesBestOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
+        hashTableGenres: Map[models.entities.Game, List[models.entities.Genre]]
+)
 
 @base(title){
         <div class="container">
@@ -15,10 +19,10 @@
                     Minutes </p>
                 <br>
                 <div class="row search-row animated fadeInUp col-md-offset-3">
-                    <form method="post" action="/search">
+                    <form id="form" method="post" action="/search">
                         <div class="col-md-7 search-col relative locationicon">
                             <i class="fa fa-gamepad icon-append" aria-hidden="true"></i>
-                            <input type="text" name="search" class="form-control has-icon" placeholder="Yo estoy buscando ..." value="">
+                            <input type="text" name="search" id="typeahead" class="form-control has-icon" placeholder="Yo estoy buscando ..." value="">
                         </div>
                         <div class="col-md-1 search-col">
                             <button class="btn btn-success btn-search btn-block">
@@ -65,19 +69,25 @@
             <div class="list-group">
                 <button type="button" class="list-group-item title" disabled><b>PLATAFORMA</b></button>
                 @for(tuplePlatformCount <- tuplesPlatformCount) {
-                    <button type="button" class="list-group-item">@tuplePlatformCount._1<span class="badge">@tuplePlatformCount._2</span></button>
+                    <button type="button" class="list-group-item filter-button" data-type="platform" data-name="@tuplePlatformCount._1">
+                        @tuplePlatformCount._1
+                        <span id="platform_count_@tuplePlatformCount._1.name.replaceAll(" ", "_")" class="badge">@tuplePlatformCount._2/@tuplePlatformCount._2</span>
+                    </button>
                 }
 
                 <button type="button" class="list-group-item title" disabled><b>GÉNERO</b></button>
                 @for(tupleGenreCount <- tuplesGenreCount) {
-                    <button type="button" class="list-group-item">@tupleGenreCount._1<span class="badge">@tupleGenreCount._2</span></button>
+                    <button type="button" class="list-group-item filter-button" data-type="genre" data-name="@tupleGenreCount._1">
+                        @tupleGenreCount._1
+                        <span id="genre_count_@tupleGenreCount._1.name.replaceAll(" ", "_")" class="badge">@tupleGenreCount._2/@tupleGenreCount._2</span>
+                    </button>
                 }
             </div>
         </div>
         <div class="col-md-9">
-            <table class="table table-bordered" >
+            <table id="tableOffers" class="table table-bordered" >
                 <thead>
-                    <tr>
+                    <tr style="cursor: pointer">
                         <th>Nombre</th>
                         <th>Plataforma</th>
                         <th>Tipo</th>
@@ -87,16 +97,18 @@
 
                     </tr>
                 </thead>
-                <tbody>
-                    @for(tupleOfferGame <- tuplesOfferGame) {
-                        <tr>
-                            <td><a href="@routes.DetailController.index(tupleOfferGame._2.id)">@tupleOfferGame._2.name</a></td>
-                            <td>@tupleOfferGame._3</td>
-                            <td>@tupleOfferGame._2.typeGame</td>
-                            <td><a href="@tupleOfferGame._1.link">@tupleOfferGame._1.store</a></td>
-                            <td>$@tupleOfferGame._1.normalPrice</td>
-                            <td>$@tupleOfferGame._1.offerPrice</td>
-                            <td class="descuento">@tupleOfferGame._1.discount%</td>
+                <tbody id="offers">
+                    @for(tupleOfferGamePlatform <- tuplesOfferGamePlatform) {
+                        <tr
+                        data-platform="@tupleOfferGamePlatform._3"
+                        data-genre='@{for {genres <- hashTableGenres.get(tupleOfferGamePlatform._2)} yield genres.mkString(",")}'>
+                            <td><a href="@routes.DetailController.index(tupleOfferGamePlatform._2.id)">@tupleOfferGamePlatform._2.name</a></td>
+                            <td>@tupleOfferGamePlatform._3</td>
+                            <td>@tupleOfferGamePlatform._2.typeGame</td>
+                            <td><a href="@tupleOfferGamePlatform._1.link">@tupleOfferGamePlatform._1.store</a></td>
+                            <td>$@tupleOfferGamePlatform._1.normalPrice</td>
+                            <td>$@tupleOfferGamePlatform._1.offerPrice</td>
+                            <td class="descuento">@tupleOfferGamePlatform._1.discount%</td>
                         </tr>
                     }
                 </tbody>
@@ -122,4 +134,94 @@
             </nav>
         </div>
     </div>
+    <script type="text/javascript" >
+
+        //Search
+
+        function getGames(){
+
+            var $input = $('#typeahead');
+
+
+            $.get('api/games', function(data){
+                console.log(data["data"]);
+                $input.typeahead({ source:data["data"] });
+            },'json');
+
+            $input.change(function() {
+                var current = $input.typeahead("getActive");
+                if (current) {
+                    // Some item from your model is active!
+                    if (current.name == $input.val()) {
+                        console.log("Match: "+ current.name);
+                        $input.val('');
+                        window.location.href = "detail/"+current.id;
+                    } else {
+                        // This means it is only a partial match, you can either add a new item
+                        // or take the active if you don't want new items
+                    }
+                } else {
+                    // Nothing is active so it is a new value (or maybe empty value)
+                }
+            });
+        }
+
+
+
+        // Filter
+        var filters = {};
+
+        function add1(number) {return number + 1;}
+        function sus1(number) {return number - 1;}
+
+        function updateCount(row, updateFun) {
+            var allDataRow = $(row).data();
+            for (var filter in allDataRow) {
+                var datasRow = $(row).data(filter).split(',');
+                datasRow.forEach(function (data) {
+                    var countSpan = $('#' + filter + '_count_' + data.replace(/ /g, "_"));
+                    var countArray = countSpan.text().split('/');
+                    var actual = parseInt(countArray[0]);
+                    var total = parseInt(countArray[1]);
+                    countSpan.text(updateFun(actual) + '/' + total);
+                });
+            }
+        }
+        function filter(typeFilter, nameFilter) {
+            if (filters[typeFilter] == nameFilter) delete filters[typeFilter];
+            else filters[typeFilter] = nameFilter;
+
+            var trs = $('#offers').children();
+            trs.each(function(index, row) {
+                var globalMatch = true;
+                for (var filter in filters) {
+                    var datasRow = $(row).data(filter).split(',');
+                    var match = false;
+                    datasRow.forEach(function (data) {
+                        match = match || (data === filters[filter]);
+                    });
+                    globalMatch = globalMatch && match;
+                }
+                var display = $(row).css('display') !== 'none';
+                if (globalMatch && !display){
+                    $(row).show();
+                    updateCount(row, add1)
+                }
+                else if (!globalMatch && display) {
+                    $(row).hide();
+                    updateCount(row, sus1)
+                }
+            });
+        }
+
+        $('.filter-button').on('click', function (event) {
+            var typeFilter = $(this).data('type');
+            var nameFilter = $(this).data('name');
+            filter(typeFilter, nameFilter);
+        });
+        $(document).ready(function() {
+            $("#tableOffers").tablesorter( {sortList: [[0,0], [1,0]]} );
+            getGames();
+        });
+    </script>
 }

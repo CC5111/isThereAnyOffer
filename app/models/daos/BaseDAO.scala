@@ -65,7 +65,8 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
       ((offer, game) , platform) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id)
       if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
     } yield (offer, game, platform)
-    db.run(query.sortBy(_._2.name.asc).result)
+
+    db.run(query.sortBy(_._2.name).result)
   }
 
   def lastGamesWithOffers: Future[Seq[(Offer, Game, Platform)]] = {
@@ -92,21 +93,21 @@ class PlatformDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     db.run(tableQ.result)
   }
 
-  def allPlatformsWithCount: Future[Seq[(Platform, Int)]] = {
-    val gamePlatformQ = SlickTables.gamePlatformQ
+  def allPlatformsOffersWithCount: Future[Seq[(Platform, Int)]] = {
+    val offerQ = SlickTables.offerQ
 
-    val platformsWithGames = (for {
-      (platform, gamePlatform) <- tableQ join gamePlatformQ on (_.id === _.idPlatform)
-    } yield (platform, gamePlatform))
+    val platformsWithOffers = (for {
+      (platform, offer) <- tableQ join offerQ on (_.id === _.idPlatform)
+    } yield (platform, offer))
       .groupBy(_._1).map {
-      case (plat, gamePlat) => (plat, gamePlat.length)
+      case (plat, offers) => (plat, offers.length)
     }
 
-    val platformsWithoutGames = for {
-    platform <- tableQ if !platformsWithGames.filter(_._1.id === platform.id).exists
+    val platformsWithoutOffers = for {
+    platform <- tableQ if !platformsWithOffers.filter(_._1.id === platform.id).exists
     } yield (platform, 0)
 
-    val query = (platformsWithGames union platformsWithoutGames) sortBy(_._1.name.asc)
+    val query = (platformsWithOffers union platformsWithoutOffers) sortBy(_._1.name.asc)
     db.run(query.result)
   }
 }
@@ -121,11 +122,33 @@ class GenreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     db.run(tableQ.result)
   }
 
-  def allGenresWithCount: Future[Seq[(Genre, Int)]] = {
+  def genresGame(game: Game): Future[Seq[Genre]] = {
     val gameGenreQ = SlickTables.gameGenreQ
 
+    val query = for {
+      (gameGenre, genre) <- gameGenreQ join tableQ on (_.idGenre === _.id)
+      if gameGenre.idGame === game.id
+    } yield genre
+
+    db.run(query.result)
+  }
+
+  def allGamesWithGenres(): Future[Seq[(Game, Genre)]] = {
+    val gameQ = SlickTables.gameQ
+    val gameGenreQ = SlickTables.gameGenreQ
+
+    val query = for {
+      ((game, gameGenre), genre) <- gameQ join gameGenreQ on (_.id === _.idGame) join tableQ on (_._2.idGenre === _.id)
+    } yield (game, genre)
+    db.run(query.result)
+  }
+
+  def allGenresWithCount: Future[Seq[(Genre, Int)]] = {
+    val gameGenreQ = SlickTables.gameGenreQ
+    val offerQ = SlickTables.offerQ
+
     val genresWithGames = (for {
-      (genre, gameGenre) <- tableQ join gameGenreQ on (_.id === _.idGenre)
+      ((genre, gameGenre), offer) <- tableQ join gameGenreQ on (_.id === _.idGenre) join offerQ on (_._2.idGame === _.idGame)
     } yield (genre, gameGenre))
       .groupBy(_._1).map {
       case (gen, gameGen) => (gen, gameGen.length)
