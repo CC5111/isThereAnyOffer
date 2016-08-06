@@ -74,7 +74,10 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
                     pageNumber: Int,
                     platformFilter: String,
                     genreFilter: String,
-                    categoryFilter: String): Future[Seq[(Offer, Game, Platform)]] = {
+                    categoryFilter: String): (Future[Seq[(Offer, Game, Platform)]],
+                                              Future[Seq[(Genre, Int)]],
+                                              Future[Seq[(Platform, Int)]],
+                                              Future[Seq[(Category, Int)]]) = {
 
     val gameQ = SlickTables.gameQ
     val platformQ = SlickTables.platformQ
@@ -95,12 +98,22 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     if (genreFilter != "") queryFilter = queryFilter.filter((tuple) => tuple._4.name === genreFilter)
     if (categoryFilter != "") queryFilter = queryFilter.filter((tuple) => tuple._5.name === categoryFilter)
 
+    // query para sacar todas las ofertas
     val queryResult = queryFilter.groupBy((t) => (t._1, t._2, t._3)).map { case (t, group) =>
       (t._1, t._2, t._3)
     }
 
     val offset = (pageNumber - 1) * pageSize
-    db.run(queryResult.sortBy(_._2.name.asc).drop(offset).take(pageSize).result)
+
+    //query para sacar el conteo de generos, plataformas y categorias
+    val queryCountGenres = queryFilter.groupBy(_._4).map{case (genre, group) => (genre, group.map(_._1.id).countDistinct)}
+    val queryCountPlatforms = queryFilter.groupBy(_._3).map{case (platform, group) => (platform, group.map(_._1.id).countDistinct)}
+    val queryCountCategories = queryFilter.groupBy(_._5).map{case (category, group) => (category, group.map(_._1.id).countDistinct)}
+
+    (db.run(queryResult.sortBy(_._2.name.asc).drop(offset).take(pageSize).result),
+      db.run(queryCountGenres.result),
+      db.run(queryCountPlatforms.result),
+      db.run(queryCountCategories.result))
   }
 
   def lastGamesWithOffers: Future[Seq[(Offer, Game, Platform)]] = {

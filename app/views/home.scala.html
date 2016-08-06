@@ -172,10 +172,10 @@
             })
         }
         function getOffersWithFilter() {
-            console.log(filters)
+            console.log(filters);
             $.get('api/filter', filters).done(function(results) {
                 if (results.status === 'success') {
-                    var offers = results['data'];
+                    var offers = results['data']['offers'];
                     removeRows();
                     var offersTable = $('#offers');
                     offers.forEach(function(offer) {

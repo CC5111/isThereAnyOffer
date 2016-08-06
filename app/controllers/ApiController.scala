@@ -1,13 +1,12 @@
 package controllers
 
-import java.util.Locale.Category
 import javax.inject.Inject
 
 import actors.SearchActor
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import models.daos.{GameDAO, GenreDAO, OfferDAO, PlatformDAO}
-import models.entities.{Game, Offer, Platform}
+import models.entities.{Game, Genre, Offer, Platform, Category}
 import play.api.libs.json._
 import play.api.libs.streams.ActorFlow
 import play.api.mvc.{Action, Controller, WebSocket}
@@ -54,11 +53,32 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
         )
     }
 
-    implicit val bla = new Writes[(Offer, Game, Platform)] {
+    implicit val OfferGamePlatformWrites = new Writes[(Offer, Game, Platform)] {
         override def writes(tuple: (Offer, Game, Platform)) = Json.obj(
             "offer" -> tuple._1,
             "game" -> tuple._2,
             "platform" -> tuple._3
+        )
+    }
+
+    implicit val genreCountWrites = new Writes[(Genre, Int)] {
+        override def writes(tuple: (Genre, Int)) = Json.obj(
+            "name" -> tuple._1.name,
+            "count" -> tuple._2
+        )
+    }
+
+    implicit val platformCountWrites = new Writes[(Platform, Int)] {
+        override def writes(tuple: (Platform, Int)) = Json.obj(
+            "name" -> tuple._1.name,
+            "count" -> tuple._2
+        )
+    }
+
+    implicit val categoriesCountWrites = new Writes[(Category, Int)] {
+        override def writes(tuple: (Category, Int)) = Json.obj(
+            "name" -> tuple._1.name,
+            "count" -> tuple._2
         )
     }
 
@@ -96,15 +116,25 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
     }
 
     def filterOffers(pageNumber: Int, platform: String, genre: String, category: String) = Action.async{
-        offerDAO.filterOffers(
+        val result = offerDAO.filterOffers(
             pageNumber = pageNumber,
             platformFilter = platform,
             genreFilter = genre,
             categoryFilter = category
-        ).map{ offers =>
-            if (offers.isEmpty) Ok(createErrorJSON("No existen ofertas"))
-            else Ok(createSuccessJSON(Json.toJson(offers)))
-        }
+        )
+
+        for {
+            offers <- result._1
+            genresCount <- result._2
+            platformCount <- result._3
+            categoriesCount <- result._4
+        } yield if (offers.isEmpty) Ok(createErrorJSON("No existen ofertas"))
+                else Ok(createSuccessJSON(Json.obj(
+                                            "offers" -> Json.toJson(offers),
+                                            "genresCount" -> Json.toJson(genresCount),
+                                            "platformCount" -> Json.toJson(platformCount),
+                                            "categoriesCount" -> Json.toJson(categoriesCount))))
+
     }
 
     def createSuccessJSON(data : JsValue) = {
