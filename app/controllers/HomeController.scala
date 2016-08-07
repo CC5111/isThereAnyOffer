@@ -26,19 +26,13 @@ class HomeController @Inject()(gameDAO: GameDAO,
       tuplesPlatformCount <- platformDAO.allPlatformsOffersWithCount
       tuplesGenreCount <- genreDAO.allGenresWithCount
       tuplesCategoryCount <- categoryDAO.allCategoriesWithCount
-      tuplesOfferGamePlatform <- offerDAO.actualOffers  //obtencion de las ofertas
       tuplesBestOfferGamePlatform <- offerDAO.lastGamesWithOffers
-      gamesWithGenres <- genreDAO.allGamesWithGenres()
-      gamesWithCategories <- categoryDAO.allGamesWithCategories()
     } yield Ok(views.html.home(
       title = "Inicio",
       tuplesPlatformCount = tuplesPlatformCount.toList,
       tuplesGenreCount = tuplesGenreCount.toList,
       tuplesCategoryCount = tuplesCategoryCount.toList,
-      tuplesOfferGamePlatform = tuplesOfferGamePlatform.toList,
-      tuplesBestOfferGamePlatform = tuplesBestOfferGamePlatform.toList,
-      hashTableGenres = gamesWithGenres.groupBy(_._1).map{case (k, v) => (k, v.map(_._2).toList)},
-      hashTableCategories = gamesWithCategories.groupBy(_._1).map{case (k, v) => (k, v.map(_._2).toList)}
+      tuplesBestOfferGamePlatform = tuplesBestOfferGamePlatform.toList
     ))
   }
 

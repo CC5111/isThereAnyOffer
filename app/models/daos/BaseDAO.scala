@@ -77,7 +77,8 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
                     categoryFilter: String): (Future[Seq[(Offer, Game, Platform)]],
                                               Future[Seq[(Genre, Int)]],
                                               Future[Seq[(Platform, Int)]],
-                                              Future[Seq[(Category, Int)]]) = {
+                                              Future[Seq[(Category, Int)]],
+                                              Future[Seq[Long]]) = {
 
     val gameQ = SlickTables.gameQ
     val platformQ = SlickTables.platformQ
@@ -113,7 +114,8 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     (db.run(queryResult.sortBy(_._2.name.asc).drop(offset).take(pageSize).result),
       db.run(queryCountGenres.result),
       db.run(queryCountPlatforms.result),
-      db.run(queryCountCategories.result))
+      db.run(queryCountCategories.result),
+      db.run(queryResult.map(_._2.id).result))
   }
 
   def lastGamesWithOffers: Future[Seq[(Offer, Game, Platform)]] = {

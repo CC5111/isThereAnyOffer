@@ -126,14 +126,15 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
       genresCount <- result._2
       platformCount <- result._3
       categoriesCount <- result._4
+      totalOffers <- result._5
     } yield if (offers.isEmpty) Ok(createErrorJSON("No existen ofertas"))
-    else Ok(createSuccessJSON(Json.obj(
-      "offers" -> Json.toJson(offers),
-      // contadores de genero, plataformas y categorias
-      "genre" -> Json.toJson(genresCount),
-      "platform" -> Json.toJson(platformCount),
-      "category" -> Json.toJson(categoriesCount))))
-
+            else Ok(createSuccessJSON(Json.obj(
+              "offers" -> Json.toJson(offers),
+              // contadores de genero, plataformas y categorias
+              "genre" -> Json.toJson(genresCount),
+              "platform" -> Json.toJson(platformCount),
+              "category" -> Json.toJson(categoriesCount),
+              "totalOffers" -> Json.toJson(totalOffers.length))))
   }
 
   def createSuccessJSON(data : JsValue) = {

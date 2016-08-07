@@ -5,10 +5,7 @@
         tuplesPlatformCount: List[(models.entities.Platform, Int)],
         tuplesGenreCount: List[(models.entities.Genre, Int)],
         tuplesCategoryCount: List[(models.entities.Category, Int)],
-        tuplesOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
-        tuplesBestOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
-        hashTableGenres: Map[models.entities.Game, List[models.entities.Genre]],
-        hashTableCategories: Map[models.entities.Game, List[models.entities.Category]]
+        tuplesBestOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)]
 )
 
 @base(title){
@@ -110,21 +107,12 @@
                 <tbody id="offers">
                 </tbody>
             </table>
+
+
+
+
             <nav style="text-align: center;">
-                <ul class="pagination">
-                    <li>
-                        <a href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li><a class="page-link" href="#">1</a></li>
-                    <li><a class="page-link" href="#">2</a></li>
-                    <li>
-                        <a href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
+                <div id="pagination"></div>
             </nav>
         </div>
     </div>
@@ -164,6 +152,8 @@
 
         // Filter
         var filters = {pageNumber: 1};
+        var visiblePages = 7;
+        var sizePage = 3;
 
         function removeRows() {
             var offersTable = $('#offers').find('tr');
@@ -205,7 +195,25 @@
             updateCounter('platform', data['platform']);
             updateCounter('category', data['category']);
         }
-        function getOffersWithFilter() {
+
+        function initPagination(totalPages) {
+            $('#pagination').twbsPagination({
+                totalPages: totalPages,
+                visiblePages: visiblePages,
+                initiateStartPageClick: false,
+                onPageClick: function (event, page) {
+                    filters['pageNumber'] = page;
+                    getOffersWithFilter(true);
+                }
+            });
+        }
+        function updatePagination(totalPages) {
+            // reset pagination
+            $('#pagination').twbsPagination('destroy');
+            initPagination(totalPages);
+
+        }
+        function getOffersWithFilter(changePage, callback) {
             $.get('api/filter', filters).done(function(results) {
                 if (results.status === 'success') {
                     var data = results['data'];
@@ -225,10 +233,13 @@
                                 '</tr>';
                         offersTable.append(offerRow);
                     });
-                    updateCounters(data)
+                    updateCounters(data);
+                    if (callback) callback(parseInt(Math.ceil(data['totalOffers'])/sizePage));
+                    if (!changePage) updatePagination(Math.ceil(parseInt(data['totalOffers'])/sizePage));
                 } else {
                     removeRows();
-                    updateCounters()
+                    updateCounters();
+                    updatePagination(1);
                 }
             }).fail(function(err) {
                 console.log(err);
@@ -245,14 +256,9 @@
                 $('#button_' + typeFilter + '_' + nameFilter.replace(/ /g, '_')).toggleClass('active');
                 filters[typeFilter] = nameFilter;
             }
-            getOffersWithFilter();
+            filters.pageNumber = 1; // al filtrar partir desde la pagina 1
+            getOffersWithFilter(false);
         }
-
-        $('.page-link').on('click', function(event) {
-            event.preventDefault();
-            filters.pageNumber = parseInt($(this).text());
-            getOffersWithFilter();
-        });
 
         $('.filter-button').on('click', function (event) {
             var typeFilter = $(this).data('type');
@@ -263,7 +269,10 @@
         $(document).ready(function() {
             $("#tableOffers").tablesorter( {sortList: []} );
             getGames();
-            getOffersWithFilter();
+            // true por ser primer cambio de pagina
+            getOffersWithFilter(true, function(totalPages) {
+                initPagination(totalPages);
+            });
         });
     </script>
 }
