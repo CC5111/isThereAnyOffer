@@ -101,19 +101,16 @@
                         <th>Tienda</th>
                         <th>Precio Normal</th>
                         <th colspan=2>Precio Oferta</th>
-
                     </tr>
                 </thead>
                 <tbody id="offers">
                 </tbody>
             </table>
-
-
-
-
             <nav style="text-align: center;">
                 <div id="pagination"></div>
+                <img id="loadinggif" src="@routes.Assets.versioned("images/loading.gif")">
             </nav>
+
         </div>
     </div>
     <script type="text/javascript" >
@@ -155,6 +152,12 @@
         var visiblePages = 7;
         var sizePage = 3;
 
+        function showLoadingTable() {
+            $('#loadinggif').show()
+        }
+        function hiddenLoadingTable() {
+            $('#loadinggif').hide();
+        }
         function removeRows() {
             var offersTable = $('#offers').find('tr');
             offersTable.each(function(index, row) {
@@ -203,6 +206,7 @@
                 initiateStartPageClick: false,
                 onPageClick: function (event, page) {
                     filters['pageNumber'] = page;
+                    showLoadingTable();
                     getOffersWithFilter(true);
                 }
             });
@@ -215,6 +219,7 @@
         }
         function getOffersWithFilter(changePage, callback) {
             $.get('api/filter', filters).done(function(results) {
+                hiddenLoadingTable();
                 if (results.status === 'success') {
                     var data = results['data'];
                     var offers = data['offers'];
@@ -242,6 +247,7 @@
                     updatePagination(1);
                 }
             }).fail(function(err) {
+                hiddenLoadingTable();
                 console.log(err);
             })
         }
@@ -261,6 +267,7 @@
         }
 
         $('.filter-button').on('click', function (event) {
+            showLoadingTable();
             var typeFilter = $(this).data('type');
             var nameFilter = $(this).data('name');
             filter(typeFilter, nameFilter);
