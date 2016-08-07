@@ -5,7 +5,7 @@ import javax.inject.Inject
 import actors.SearchActor
 import akka.actor.ActorSystem
 import akka.stream.Materializer
-import models.daos.{GameDAO, GenreDAO, OfferDAO, PlatformDAO}
+import models.daos._
 import models.entities.{Game, Genre, Offer}
 import play.api.libs.json.{JsValue, Json, Writes}
 import play.api.libs.streams.ActorFlow
@@ -17,23 +17,22 @@ import scala.concurrent.ExecutionContext
 class HomeController @Inject()(gameDAO: GameDAO,
                                offerDAO: OfferDAO,
                                platformDAO: PlatformDAO,
-                               genreDAO: GenreDAO)(implicit ec:ExecutionContext, system: ActorSystem, mat:Materializer) extends Controller {
+                               genreDAO: GenreDAO,
+                               categoryDAO: CategoryDAO)(implicit ec:ExecutionContext, system: ActorSystem, mat:Materializer) extends Controller {
 
 
   def index() = Action.async { implicit request =>
     for {
       tuplesPlatformCount <- platformDAO.allPlatformsOffersWithCount
       tuplesGenreCount <- genreDAO.allGenresWithCount
-      tuplesOfferGamePlatform <- offerDAO.actualOffers  //obtencion de las ofertas
+      tuplesCategoryCount <- categoryDAO.allCategoriesWithCount
       tuplesBestOfferGamePlatform <- offerDAO.lastGamesWithOffers
-      gamesWithGenres <- genreDAO.allGamesWithGenres()
     } yield Ok(views.html.home(
       title = "Inicio",
       tuplesPlatformCount = tuplesPlatformCount.toList,
       tuplesGenreCount = tuplesGenreCount.toList,
-      tuplesOfferGamePlatform = tuplesOfferGamePlatform.toList,
-      tuplesBestOfferGamePlatform = tuplesBestOfferGamePlatform.toList,
-      hashTableGenres = gamesWithGenres.groupBy(_._1).map{case (k, v) => (k, v.map(_._2).toList)}
+      tuplesCategoryCount = tuplesCategoryCount.toList,
+      tuplesBestOfferGamePlatform = tuplesBestOfferGamePlatform.toList
     ))
   }
 

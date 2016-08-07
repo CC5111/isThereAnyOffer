@@ -4,9 +4,8 @@
         title : String,
         tuplesPlatformCount: List[(models.entities.Platform, Int)],
         tuplesGenreCount: List[(models.entities.Genre, Int)],
-        tuplesOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
-        tuplesBestOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
-        hashTableGenres: Map[models.entities.Game, List[models.entities.Genre]]
+        tuplesCategoryCount: List[(models.entities.Category, Int)],
+        tuplesBestOfferGamePlatform: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)]
 )
 
 @base(title){
@@ -69,17 +68,25 @@
             <div class="list-group">
                 <button type="button" class="list-group-item title" disabled><b>PLATAFORMA</b></button>
                 @for(tuplePlatformCount <- tuplesPlatformCount) {
-                    <button type="button" class="list-group-item filter-button" data-type="platform" data-name="@tuplePlatformCount._1">
+                    <button id="button_platform_@tuplePlatformCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="platform" data-name="@tuplePlatformCount._1">
                         @tuplePlatformCount._1
-                        <span id="platform_count_@tuplePlatformCount._1.name.replaceAll(" ", "_")" class="badge">@tuplePlatformCount._2/@tuplePlatformCount._2</span>
+                        <span id="platform_count_@tuplePlatformCount._1.name.replaceAll(" ", "_")" class="badge count-platform-span">@tuplePlatformCount._2/@tuplePlatformCount._2</span>
                     </button>
                 }
 
                 <button type="button" class="list-group-item title" disabled><b>GÉNERO</b></button>
                 @for(tupleGenreCount <- tuplesGenreCount) {
-                    <button type="button" class="list-group-item filter-button" data-type="genre" data-name="@tupleGenreCount._1">
+                    <button id="button_genre_@tupleGenreCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="genre" data-name="@tupleGenreCount._1">
                         @tupleGenreCount._1
-                        <span id="genre_count_@tupleGenreCount._1.name.replaceAll(" ", "_")" class="badge">@tupleGenreCount._2/@tupleGenreCount._2</span>
+                        <span id="genre_count_@tupleGenreCount._1.name.replaceAll(" ", "_")" class="badge count-genre-span">@tupleGenreCount._2/@tupleGenreCount._2</span>
+                    </button>
+                }
+
+                <button type="button" class="list-group-item title" disabled><b>CATEGORÍA</b></button>
+                @for(tupleCategoryCount <- tuplesCategoryCount) {
+                    <button id="button_category_@tupleCategoryCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="category" data-name="@tupleCategoryCount._1">
+                        @tupleCategoryCount._1
+                    <span id="category_count_@tupleCategoryCount._1.name.replaceAll(" ", "_")" class="badge count-category-span">@tupleCategoryCount._2/@tupleCategoryCount._2</span>
                     </button>
                 }
             </div>
@@ -94,44 +101,16 @@
                         <th>Tienda</th>
                         <th>Precio Normal</th>
                         <th colspan=2>Precio Oferta</th>
-
                     </tr>
                 </thead>
                 <tbody id="offers">
-                    @for(tupleOfferGamePlatform <- tuplesOfferGamePlatform) {
-                        <tr
-                        data-platform="@tupleOfferGamePlatform._3"
-                        data-genre='@{for {genres <- hashTableGenres.get(tupleOfferGamePlatform._2)} yield genres.mkString(",")}'>
-                            <td><a href="@routes.DetailController.index(tupleOfferGamePlatform._2.id)">@tupleOfferGamePlatform._2.name</a></td>
-                            <td>@tupleOfferGamePlatform._3</td>
-                            <td>@tupleOfferGamePlatform._2.typeGame</td>
-                            <td><a href="@tupleOfferGamePlatform._1.link">@tupleOfferGamePlatform._1.store</a></td>
-                            <td>$@tupleOfferGamePlatform._1.normalPrice</td>
-                            <td>$@tupleOfferGamePlatform._1.offerPrice</td>
-                            <td class="descuento">@tupleOfferGamePlatform._1.discount%</td>
-                        </tr>
-                    }
                 </tbody>
             </table>
             <nav style="text-align: center;">
-                <ul class="pagination">
-                    <li>
-                        <a href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li>
-                        <a href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
+                <div id="pagination"></div>
+                <img id="loadinggif" src="@routes.Assets.versioned("images/loading.gif")">
             </nav>
+
         </div>
     </div>
     <script type="text/javascript" >
@@ -169,59 +148,138 @@
 
 
         // Filter
-        var filters = {};
+        var filters = {pageNumber: 1};
+        var visiblePages = 7;
+        var sizePage = 3;
 
-        function add1(number) {return number + 1;}
-        function sus1(number) {return number - 1;}
-
-        function updateCount(row, updateFun) {
-            var allDataRow = $(row).data();
-            for (var filter in allDataRow) {
-                var datasRow = $(row).data(filter).split(',');
-                datasRow.forEach(function (data) {
-                    var countSpan = $('#' + filter + '_count_' + data.replace(/ /g, "_"));
-                    var countArray = countSpan.text().split('/');
-                    var actual = parseInt(countArray[0]);
-                    var total = parseInt(countArray[1]);
-                    countSpan.text(updateFun(actual) + '/' + total);
-                });
-            }
+        function showLoadingTable() {
+            $('#loadinggif').show()
         }
-        function filter(typeFilter, nameFilter) {
-            if (filters[typeFilter] == nameFilter) delete filters[typeFilter];
-            else filters[typeFilter] = nameFilter;
+        function hiddenLoadingTable() {
+            $('#loadinggif').hide();
+        }
+        function removeRows() {
+            var offersTable = $('#offers').find('tr');
+            offersTable.each(function(index, row) {
+                $(row).remove()
+            })
+        }
+        function updateCounter(type, data) {
+            var counters = $('.count-' + type + '-span');
+            counters.each(function(index, counterSpan) {
+                var countArray = $(counterSpan).text().split('/');
+                var total = parseInt(countArray[1]);
 
-            var trs = $('#offers').children();
-            trs.each(function(index, row) {
-                var globalMatch = true;
-                for (var filter in filters) {
-                    var datasRow = $(row).data(filter).split(',');
-                    var match = false;
-                    datasRow.forEach(function (data) {
-                        match = match || (data === filters[filter]);
-                    });
-                    globalMatch = globalMatch && match;
+                var subtype = counterSpan.id;
+                var noSubtype = true;
+                for (var i = 0; i < data.length; i++) {
+                    var actualName = type + '_count_' + data[i].name.replace(/ /g, "_");
+                    if (actualName === subtype) {
+                        $(counterSpan).text(data[i].count + '/' + total);
+                        noSubtype = false;
+                        break;
+                    }
                 }
-                var display = $(row).css('display') !== 'none';
-                if (globalMatch && !display){
-                    $(row).show();
-                    updateCount(row, add1)
+                if (noSubtype) {
+                    $(counterSpan).text('0/' + total);
                 }
-                else if (!globalMatch && display) {
-                    $(row).hide();
-                    updateCount(row, sus1)
+
+            });
+        }
+        function updateCounters(data) {
+            if (!data) {
+                data = {
+                    'genre': [],
+                    'platform': [],
+                    'category': []
+                }
+            }
+            updateCounter('genre', data['genre']);
+            updateCounter('platform', data['platform']);
+            updateCounter('category', data['category']);
+        }
+
+        function initPagination(totalPages) {
+            $('#pagination').twbsPagination({
+                totalPages: totalPages,
+                visiblePages: visiblePages,
+                initiateStartPageClick: false,
+                onPageClick: function (event, page) {
+                    filters['pageNumber'] = page;
+                    showLoadingTable();
+                    getOffersWithFilter(true);
                 }
             });
         }
+        function updatePagination(totalPages) {
+            // reset pagination
+            $('#pagination').twbsPagination('destroy');
+            initPagination(totalPages);
+
+        }
+        function getOffersWithFilter(changePage, callback) {
+            $.get('api/filter', filters).done(function(results) {
+                hiddenLoadingTable();
+                if (results.status === 'success') {
+                    var data = results['data'];
+                    var offers = data['offers'];
+                    removeRows();
+                    var offersTable = $('#offers');
+                    offers.forEach(function(offer) {
+                        var offerRow = '' +
+                                '<tr>' +
+                                    '<td><a href="/detail/' + offer.game.id + '">' + offer.game.name + '</a></td>' +
+                                    '<td>' + offer.platform.name + '</td>' +
+                                    '<td>' + offer.game.typeGame + '</td>' +
+                                    '<td><a href="' + offer.offer.link + '">' + offer.offer.store + '</a></td>' +
+                                    '<td>$' + offer.offer.normalPrice + '</td>' +
+                                    '<td>$' + offer.offer.offerPrice + '</td>' +
+                                    '<td class="descuento">' + offer.offer.discount + '%</td>' +
+                                '</tr>';
+                        offersTable.append(offerRow);
+                    });
+                    updateCounters(data);
+                    if (callback) callback(parseInt(Math.ceil(data['totalOffers'])/sizePage));
+                    if (!changePage) updatePagination(Math.ceil(parseInt(data['totalOffers'])/sizePage));
+                } else {
+                    removeRows();
+                    updateCounters();
+                    updatePagination(1);
+                }
+            }).fail(function(err) {
+                hiddenLoadingTable();
+                console.log(err);
+            })
+        }
+
+        function filter(typeFilter, nameFilter) {
+            if (filters[typeFilter] === nameFilter) {
+                $('#button_' + typeFilter + '_' + nameFilter.replace(/ /g, '_')).removeClass('active');
+                delete filters[typeFilter];
+            }
+            else {
+                if (filters[typeFilter]) $('#button_' + typeFilter + '_' + filters[typeFilter].replace(/ /g, '_')).removeClass('active');
+                $('#button_' + typeFilter + '_' + nameFilter.replace(/ /g, '_')).toggleClass('active');
+                filters[typeFilter] = nameFilter;
+            }
+            filters.pageNumber = 1; // al filtrar partir desde la pagina 1
+            getOffersWithFilter(false);
+        }
 
         $('.filter-button').on('click', function (event) {
+            showLoadingTable();
             var typeFilter = $(this).data('type');
             var nameFilter = $(this).data('name');
             filter(typeFilter, nameFilter);
         });
+
         $(document).ready(function() {
-            $("#tableOffers").tablesorter( {sortList: [[0,0], [1,0]]} );
+            $("#tableOffers").tablesorter( {sortList: []} );
             getGames();
+            // true por ser primer cambio de pagina
+            getOffersWithFilter(true, function(totalPages) {
+                initPagination(totalPages);
+            });
         });
     </script>
 }
