@@ -73,7 +73,7 @@
                 @for(tuplePlatformCount <- tuplesPlatformCount) {
                     <button id="button_platform_@tuplePlatformCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="platform" data-name="@tuplePlatformCount._1">
                         @tuplePlatformCount._1
-                        <span id="platform_count_@tuplePlatformCount._1.name.replaceAll(" ", "_")" class="badge">@tuplePlatformCount._2/@tuplePlatformCount._2</span>
+                        <span id="platform_count_@tuplePlatformCount._1.name.replaceAll(" ", "_")" class="badge count-platform-span">@tuplePlatformCount._2/@tuplePlatformCount._2</span>
                     </button>
                 }
 
@@ -81,7 +81,7 @@
                 @for(tupleGenreCount <- tuplesGenreCount) {
                     <button id="button_genre_@tupleGenreCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="genre" data-name="@tupleGenreCount._1">
                         @tupleGenreCount._1
-                        <span id="genre_count_@tupleGenreCount._1.name.replaceAll(" ", "_")" class="badge">@tupleGenreCount._2/@tupleGenreCount._2</span>
+                        <span id="genre_count_@tupleGenreCount._1.name.replaceAll(" ", "_")" class="badge count-genre-span">@tupleGenreCount._2/@tupleGenreCount._2</span>
                     </button>
                 }
 
@@ -89,7 +89,7 @@
                 @for(tupleCategoryCount <- tuplesCategoryCount) {
                     <button id="button_category_@tupleCategoryCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="category" data-name="@tupleCategoryCount._1">
                         @tupleCategoryCount._1
-                    <span id="category_count_@tupleCategoryCount._1.name.replaceAll(" ", "_")" class="badge">@tupleCategoryCount._2/@tupleCategoryCount._2</span>
+                    <span id="category_count_@tupleCategoryCount._1.name.replaceAll(" ", "_")" class="badge count-category-span">@tupleCategoryCount._2/@tupleCategoryCount._2</span>
                     </button>
                 }
             </div>
@@ -171,11 +171,45 @@
                 $(row).remove()
             })
         }
+        function updateCounter(type, data) {
+            var counters = $('.count-' + type + '-span');
+            counters.each(function(index, counterSpan) {
+                var countArray = $(counterSpan).text().split('/');
+                var total = parseInt(countArray[1]);
+
+                var subtype = counterSpan.id;
+                var noSubtype = true;
+                for (var i = 0; i < data.length; i++) {
+                    var actualName = type + '_count_' + data[i].name.replace(/ /g, "_");
+                    if (actualName === subtype) {
+                        $(counterSpan).text(data[i].count + '/' + total);
+                        noSubtype = false;
+                        break;
+                    }
+                }
+                if (noSubtype) {
+                    $(counterSpan).text('0/' + total);
+                }
+
+            });
+        }
+        function updateCounters(data) {
+            if (!data) {
+                data = {
+                    'genre': [],
+                    'platform': [],
+                    'category': []
+                }
+            }
+            updateCounter('genre', data['genre']);
+            updateCounter('platform', data['platform']);
+            updateCounter('category', data['category']);
+        }
         function getOffersWithFilter() {
-            console.log(filters);
             $.get('api/filter', filters).done(function(results) {
                 if (results.status === 'success') {
-                    var offers = results['data']['offers'];
+                    var data = results['data'];
+                    var offers = data['offers'];
                     removeRows();
                     var offersTable = $('#offers');
                     offers.forEach(function(offer) {
@@ -191,8 +225,10 @@
                                 '</tr>';
                         offersTable.append(offerRow);
                     });
+                    updateCounters(data)
                 } else {
                     removeRows();
+                    updateCounters()
                 }
             }).fail(function(err) {
                 console.log(err);
