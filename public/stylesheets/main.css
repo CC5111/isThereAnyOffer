@@ -67,6 +67,15 @@ h3{
 }
 
 /*Filter panel*/
+.panel-default {
+     border-color: white;
+}
+
+.panel-default > .panel-heading {
+    color: white;
+    background-color: black;
+    border-color: white   ;
+}
 
 .list-group button{
     background-color: #0f0f0f;
@@ -80,7 +89,7 @@ h3{
     background-color: black;
 }
 .list-group button.active , .list-group button.active:hover, .list-group button.active:focus {
-    background-color: green;
+    background-color: #5cb85c;
     color: white;
     outline: none !important;
     border: 3px solid black;
@@ -209,7 +218,7 @@ a:hover{
 }
 
 .descuento{
-    color: forestgreen;
+    color: #5cb85c;
 }
 
 .contenedor{
