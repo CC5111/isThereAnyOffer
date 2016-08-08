@@ -304,6 +304,7 @@
                 } else {
                     removeRows();
                     updateCounters();
+                    if (callback) callback(parseInt(Math.ceil(1)));
                     updatePagination(1);
                 }
             }).fail(function(err) {

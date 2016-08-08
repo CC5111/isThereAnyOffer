@@ -25,7 +25,9 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
       "description" -> game.description,
       "rating" -> game.rating,
       "releaseDate" -> game.releaseDate.toString,
-      "typeGame" -> game.typeGame
+      "typeGame" -> game.typeGame,
+      "videoLink" -> game.videoLink,
+      "metacritic" -> game.metacritic
     )
   }
 
