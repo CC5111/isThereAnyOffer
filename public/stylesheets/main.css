@@ -109,15 +109,42 @@ h3{
 ul.pagination li a{
     background-color: #0f0f0f;
     color: white;
-    border: 2px solid black;
+    border-color: white;
 }
 
+ul.pagination li.page a{
+    background-color: #0f0f0f;
+}
+
+ul.pagination li.page:hover a{
+    background-color: white;
+    color: darkgreen;
+}
+
+ul.pagination li.page.active a{
+    background-color: green;
+    border-color: white;
+}
+
+ul.pagination li.page.active:hover a{
+    color: white;
+}
+
+ul.pagination > li > a, .pagination > li  {
+    background-color: darkgreen;
+}
+
+ul.pagination > li.disabled > a, .pagination > li  {
+    background-color: darkgreen;
+}
+
+/*
 ul.pagination li a:focus, ul.pagination li a:active,ul.pagination li a:hover{
     background-color: black;
     color: white;
     border: 2px solid black;
 }
-
+*/
 
 /*cosas*/
 
