@@ -24,11 +24,13 @@ h3{
 .table-bordered thead tr{
     background-color: black;
     color: white;
+
 }
 
 .table-bordered tbody tr{
     background-color: #0f0f0f;
     color: white;
+
 }
 
 .table-bordered tbody tr:hover{
@@ -47,7 +49,6 @@ h3{
     text-align: center;
     padding-top: 5px;
     padding-bottom: 5px;
-    padding-right: 20px;
     vertical-align: middle;
 
 }
@@ -64,6 +65,28 @@ h3{
 
 .table-bordered {
     border-top: 0 solid transparent;
+}
+
+.content-cell-td{
+    height: 50px;
+    line-height: 50px;
+    overflow: inherit;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.content-cell-th{
+    height: 40px;
+    line-height: 40px;
+    overflow:inherit;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 /*Filter panel*/
@@ -248,10 +271,26 @@ a:hover{
     color: #5cb85c;
 }
 
-.contenedor{
-    padding-top: 20px;
-    padding-bottom: 20px;
+.content-image-background{
     background-color: #0f0f0f;
+    margin-right: 20px;
+    padding: 20px;
+}
+
+.content-detail-background{
+    background-color: #0f0f0f;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.content-detail{
+    padding: 0px;
+
+}
+
+.content{
+    margin-right: 40px;
+    margin-left: 40px;
     padding-left: 0;
     padding-right: 0;
 }
@@ -282,3 +321,4 @@ th.headerSortUp {
 th.headerSortDown {
     background-image: url(../images/desc.png);
 }
+

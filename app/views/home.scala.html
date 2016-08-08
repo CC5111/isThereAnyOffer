@@ -155,12 +155,12 @@
             <table id="tableOffers" class="table table-bordered" >
                 <thead>
                     <tr style="cursor: pointer">
-                        <th>Nombre</th>
-                        <th>Plataforma</th>
-                        <th>Tipo</th>
-                        <th>Tienda</th>
-                        <th>Precio Normal</th>
-                        <th colspan=2>Precio Oferta</th>
+                        <th><div class="content-cell-th">Nombre</div></th>
+                        <th><div class="content-cell-th">Plataforma</div></th>
+                        <th><div class="content-cell-th">Tipo</div></th>
+                        <th><div class="content-cell-th">Tienda</div></th>
+                        <th><div class="content-cell-th">Precio Normal</div></th>
+                        <th colspan=2><div class="content-cell-th">Precio Oferta</div></th>
                     </tr>
                 </thead>
                 <tbody id="offers">
@@ -288,13 +288,13 @@
                     offers.forEach(function(offer) {
                         var offerRow = '' +
                                 '<tr>' +
-                                    '<td><a href="/detail/' + offer.game.id + '">' + offer.game.name + '</a></td>' +
-                                    '<td>' + offer.platform.name + '</td>' +
-                                    '<td>' + offer.game.typeGame + '</td>' +
-                                    '<td><a href="' + offer.offer.link + '">' + offer.offer.store + '</a></td>' +
-                                    '<td>$' + offer.offer.normalPrice + '</td>' +
-                                    '<td>$' + offer.offer.offerPrice + '</td>' +
-                                    '<td class="descuento">' + offer.offer.discount + '%</td>' +
+                                    '<td><div class="content-cell-td"><a href="/detail/' + offer.game.id + '">' + offer.game.name + '</a></div></td>' +
+                                    '<td><div class="content-cell-td">' + offer.platform.name + '</div></td>' +
+                                    '<td><div class="content-cell-td">' + offer.game.typeGame + '</div></td>' +
+                                    '<td><div class="content-cell-td"><a href="' + offer.offer.link + '">' + offer.offer.store + '</a></div></td>' +
+                                    '<td><div class="content-cell-td">$' + offer.offer.normalPrice + '</div></td>' +
+                                    '<td><div class="content-cell-td">$' + offer.offer.offerPrice + '</div></td>' +
+                                    '<td class="descuento"><div class="content-cell-td">' + offer.offer.discount + '%</div></td>' +
                                 '</tr>';
                         offersTable.append(offerRow);
                     });

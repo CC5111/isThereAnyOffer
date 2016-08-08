@@ -35,7 +35,9 @@ case class Game(id: Long,
                 description: String,
                 rating: String,
                 releaseDate: java.sql.Timestamp,
-                typeGame: String) extends BaseEntity
+                typeGame: String,
+                videoLink: String,
+                metacritic: String) extends BaseEntity
 
 case class GameCategory(id: Long,
                         idGame: Long,

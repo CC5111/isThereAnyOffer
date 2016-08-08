@@ -4,43 +4,53 @@
         genres: List[models.entities.Genre],
         categories: List[models.entities.Category])
 @base(title){
-        <div class="container contenedor">
-                <div class="col-md-3 " style="text-align: center; margin-bottom: 0px">
-                        <div class ="detail-image" style="background-image: url(@routes.Assets.versioned(game.cover));
-                                background-size: cover; ">
+        <div class="container content">
+                <div class="col-md-3 content-detail" style="text-align: center;">
+                        <div class="content-image-background">
+                                <div class ="detail-image" style="background-image: url(@routes.Assets.versioned(game.cover));
+                                        background-size: cover; ">
+                                </div>
                         </div>
+
                 </div>
 
-                <div class="col-md-9">
-                        <h3>@game.name<small> @game.typeGame</small></h3>
-                        <p>@game.description
-                        </p>
-                        <div style="padding-left: 0">
-                                <table class="table detail">
-                                        <tbody>
-                                                <tr >
-                                                        <td >Web Page</td>
-                                                        <td ><a href="@game.link" target="_blank">@game.link</a></td>
-                                                </tr>
-                                                <tr >
-                                                        <td >Rating</td>
-                                                        <td >@game.rating</td>
-                                                </tr>
-                                                <tr >
-                                                        <td >Publisher</td>
-                                                        <td >@game.publisher</td>
-                                                </tr>
-                                                <tr >
-                                                        <td >Genre(s)</td>
-                                                        <td >@genres.mkString(", ")</td>
-                                                </tr>
-                                                <tr >
-                                                        <td >Category(ies)</td>
-                                                        <td >@categories.mkString(", ")</td>
-                                                </tr>
-                                        </tbody>
-                                </table>
+                <div class="col-md-9 content-detail">
+                        <div class="col-md-12 content-detail-background">
+
+                                <h3>@game.name<small> @game.typeGame</small></h3>
+                                <p>@game.description
+
                         </div>
+
+                        <div class="col-md-12 content-detail-background">
+                                <div style="padding-left: 0">
+                                        <table class="table detail">
+                                                <tbody>
+                                                        <tr >
+                                                                <td >Web Page</td>
+                                                                <td ><a href="@game.link" target="_blank">@game.link</a></td>
+                                                        </tr>
+                                                        <tr >
+                                                                <td >Rating</td>
+                                                                <td >@game.rating</td>
+                                                        </tr>
+                                                        <tr >
+                                                                <td >Publisher</td>
+                                                                <td >@game.publisher</td>
+                                                        </tr>
+                                                        <tr >
+                                                                <td >Genre(s)</td>
+                                                                <td >@genres.mkString(", ")</td>
+                                                        </tr>
+                                                        <tr >
+                                                                <td >Category(ies)</td>
+                                                                <td >@categories.mkString(", ")</td>
+                                                        </tr>
+                                                </tbody>
+                                        </table>
+                                </div>
+                        </div>
+
 
                 </div>
         </div>
@@ -51,11 +61,11 @@
                         <thead>
                                 <tr>
 
-                                        <th>Plataforma</th>
-                                        <th>Tipo</th>
-                                        <th>Tienda</th>
-                                        <th>Precio Normal</th>
-                                        <th colspan=2>Precio Oferta</th>
+                                        <th><div class="content-cell-th">Plataforma</div></th>
+                                        <th><div class="content-cell-th">Tipo</div></th>
+                                        <th><div class="content-cell-th">Tienda</div></th>
+                                        <th><div class="content-cell-th">Precio Normal</div></th>
+                                        <th colspan=2><div class="content-cell-th">Precio Oferta</div></th>
 
                                 </tr>
                         </thead>
@@ -63,12 +73,12 @@
                         @for(tupleOfferPlatform <- tuplesOfferPlatform) {
                                 <tr class="row_detail" onclick="trLink('@tupleOfferPlatform._1.link');">
 
-                                        <td>@tupleOfferPlatform._2.name</td>
-                                        <td>@game.typeGame</td>
-                                        <td>@tupleOfferPlatform._1.store</td>
-                                        <td>$@tupleOfferPlatform._1.normalPrice</td>
-                                        <td>$@tupleOfferPlatform._1.offerPrice</td>
-                                        <td class="descuento">@tupleOfferPlatform._1.discount%</td>
+                                        <td><div class="content-cell-td">@tupleOfferPlatform._2.name</div></td>
+                                        <td><div class="content-cell-td">@game.typeGame</div></td>
+                                        <td><div class="content-cell-td">@tupleOfferPlatform._1.store</div></td>
+                                        <td><div class="content-cell-td">$@tupleOfferPlatform._1.normalPrice</div></td>
+                                        <td><div class="content-cell-td">$@tupleOfferPlatform._1.offerPrice</div></td>
+                                        <td class="descuento"><div class="content-cell-td">@tupleOfferPlatform._1.discount%</div></td>
                                 </tr>
                         }
                         </tbody>
@@ -93,10 +103,10 @@
                 /**
                  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
                  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
-                 var disqus_config = function () {
-                 this.page.url = 'https://www.isthereanyoffer.emoreno.cl/detail/@game.id/';  // Replace PAGE_URL with your page's canonical URL variable
-                 this.page.identifier = '@game.id'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-                 };
+                var disqus_config = function () {
+                        this.page.url = 'https://www.isthereanyoffer.emoreno.cl/detail/@game.id/';  // Replace PAGE_URL with your page's canonical URL variable
+                        this.page.identifier = '@game.id'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                };
 
                 (function() { // DON'T EDIT BELOW THIS LINE
                         var d = document, s = d.createElement('script');

@@ -64,8 +64,10 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
     def rating = column[String]("rating")
     def releaseDate = column[java.sql.Timestamp]("releaseDate")
     def gameType = column[String]("gameType")
+    def videoLink = column[String]("videoLink")
+    def metacritic = column[String]("metacritic")
 
-    def * = (id, name, cover, publisher, developer, link ,description, rating, releaseDate, gameType) <> (Game.tupled, Game.unapply _)
+    def * = (id, name, cover, publisher, developer, link ,description, rating, releaseDate, gameType, videoLink, metacritic) <> (Game.tupled, Game.unapply _)
   }
   val gameQ = TableQuery[GameTable]
 

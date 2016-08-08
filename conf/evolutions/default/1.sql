@@ -40,7 +40,9 @@ create table "game" (
   "description" TEXT,
   "rating"      VARCHAR(256),
   "releaseDate" DATE,
-  "gameType"    VARCHAR(256)
+  "gameType"    VARCHAR(256),
+  "videoLink"  VARCHAR(256),
+  "metacritic"  VARCHAR(256)
 );
 
 create table "gameCategory" (
