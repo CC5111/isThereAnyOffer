@@ -91,13 +91,34 @@ h3{
 
 /*Filter panel*/
 .panel-default {
-     border-color: white;
+     border-color: black;
 }
 
 .panel-default > .panel-heading {
     color: white;
-    background-color: black;
-    border-color: white   ;
+    background-color: darkgreen;
+    border-color: black   ;
+}
+
+.panel-group .panel-heading + .panel-collapse > .list-group {
+    border-top: 3px solid black;
+}
+
+.label-success:hover {
+    background-color: darkgreen;
+}
+
+.panel > .panel-collapse > .list-group .list-group-item {
+    border-width: 3px 0;
+    border-radius: 0;
+    border-color: black;
+}
+
+/*Filter panel*/
+
+.list-group-item.active > .badge, .nav-pills > .active > a > .badge {
+    color: white;
+    background-color: darkgreen;
 }
 
 .list-group button{
@@ -105,23 +126,26 @@ h3{
     color: white;
     position: relative;
     display: block;
-    border: 3px solid black;
+    border: 5px solid black;
+    border-width: 5px;
 }
 
-.list-group button.title , .list-group button.title:active ,.list-group  button.title:hover,.list-group button.title:focus{
+.list-group button.title , .list-group button.title:active{
     background-color: black;
 }
+
+
 .list-group button.active , .list-group button.active:hover, .list-group button.active:focus {
-    background-color: #5cb85c;
+    background-color:  #0f0f0f;
     color: white;
     outline: none !important;
-    border: 3px solid black;
+    border: 5px solid black;
 }
 
 .list-group button:active ,.list-group  button:hover,.list-group button:focus {
     background-color:  #0f0f0f;
     color: white;
-    border: 3px solid black;
+    border: 5px solid black;
     outline: 0;
     -webkit-box-shadow: none;
     box-shadow: none;
@@ -286,10 +310,26 @@ a:hover{
     color: #5cb85c;
 }
 
+.content-filter-section{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.content-title-section{
+    padding: 5px;
+    background-color: darkgreen;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.content-title-section h3{
+    margin: 5px;
+}
+
 .content-image-background{
     background-color: #0f0f0f;
     margin-right: 20px;
     padding: 20px;
+    margin-bottom: 20px;
 }
 
 .content-detail-background{
@@ -300,12 +340,11 @@ a:hover{
 
 .content-detail{
     padding: 0px;
-
 }
 
+
 .content{
-    margin-right: 40px;
-    margin-left: 40px;
+
     padding-left: 0;
     padding-right: 0;
 }
@@ -314,12 +353,13 @@ a:hover{
     cursor: pointer;
 }
 
-.dropdown-menu > .active > a,
-.dropdown-menu > .active > a:hover,
-.dropdown-menu > .active > a:focus {
-
-    background-color: #5cb85c;
-}
+/*.dropdown-menu > .active > a,*/
+/*.dropdown-menu > .active > a:hover,*/
+/*.dropdown-menu > .active > a:focus {*/
+    /*border-width: 5px;*/
+    /*border-color: black;*/
+    /*background-color: #5cb85c;*/
+/*}*/
 
 
 /*Table sorter*/
@@ -337,3 +377,74 @@ th.headerSortDown {
     background-image: url(../images/desc.png);
 }
 
+/*Metascore*/
+.metascore {
+    position: relative;
+    text-align: left;
+    height: 2em;
+    line-height: 2em;
+
+}
+.metascore .metascoreName {
+    padding-left: 2.5em;
+
+}
+
+.metascore .metascoreScore {
+    padding-right: 3.5em;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 1.5em;
+}
+
+.metascore .metascoreScore100 {
+    position: absolute;
+    right: 0;
+    top: 0;
+
+}
+
+.metascore .metascoreLogo {
+    height: 1.5em;
+    left: 0;
+    top: 0;
+    position: absolute;
+    width: 1.5em;
+}
+
+/*center modal*/
+.modal {
+    text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+    .modal:before {
+        display: inline-block;
+        vertical-align: middle;
+        content: " ";
+        height: 100%;
+    }
+}
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.modal-content {
+    background-color: transparent;
+}
+
+.modal-backdrop {
+    background-color: black;
+}
+
+body.modal-open #wrap{
+    -webkit-filter: blur(7px);
+    -moz-filter: blur(15px);
+    -o-filter: blur(15px);
+    -ms-filter: blur(15px);
+    filter: blur(15px);
+}
