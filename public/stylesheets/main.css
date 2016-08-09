@@ -129,36 +129,51 @@ h3{
 
 /*pagination*/
 
-ul.pagination li a{
-    background-color: #0f0f0f;
-    color: white;
-    border-color: white;
-}
-
-ul.pagination li.page a{
-    background-color: #0f0f0f;
-}
-
-ul.pagination li.page:hover a{
-    background-color: white;
-    color: darkgreen;
-}
-
-ul.pagination li.page.active a{
-    background-color: green;
-    border-color: white;
-}
-
-ul.pagination li.page.active:hover a{
-    color: white;
-}
-
-ul.pagination > li > a, .pagination > li  {
+/* botones presionables */
+ul.pagination > li > a{
     background-color: darkgreen;
+    border-color: black;
+    color: white;
+    border-width: 3px;
 }
 
-ul.pagination > li.disabled > a, .pagination > li  {
-    background-color: darkgreen;
+/* botones presionables con mouse encima*/
+ul.pagination > li > a:focus,
+ul.pagination > li > a:hover{
+    background-color: #5cb85c;
+    border-color: black;
+    color: white
+}
+
+/* botones activados */
+ul.pagination > li.active > a,
+ul.pagination > li.active > a:focus,
+ul.pagination > li.active > a:hover{
+    background-color: #5cb85c;
+    border-color: black;
+    color: white
+}
+
+/* botones desactivados*/
+ul.pagination > li.disabled > a,
+ul.pagination > li.disabled > a:focus,
+ul.pagination > li.disabled > a:hover{
+    cursor: not-allowed;
+    background-color: #052305;
+    border-color: black;
+}
+
+/* Bordes botones externos */
+ul.pagination > li:first-child > a, .pagination > li:first-child > span{
+    margin-left: 0;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+ul.pagination > li:last-child > a, .pagination > li:last-child > span {
+    margin-left: 0;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
 }
 
 /*
@@ -303,7 +318,7 @@ a:hover{
 .dropdown-menu > .active > a:hover,
 .dropdown-menu > .active > a:focus {
 
-    background-color: #449d44;
+    background-color: #5cb85c;
 }
 
 
