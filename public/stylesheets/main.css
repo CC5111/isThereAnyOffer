@@ -91,65 +91,84 @@ h3{
 
 /*Filter panel*/
 .panel-default {
-     border-color: black;
+    border-color: black;
+    border: 0px solid black;
+    background: black;
 }
 
-.panel-default > .panel-heading {
+
+.panel-default > .panel-heading{
     color: white;
-    background-color: darkgreen;
-    border-color: black   ;
+    background-color: #0f0f0f;
+    padding-right: 5px;
+    background-repeat: no-repeat;
+    background-image: url(../images/asc.png);
+    background-position: center right;
+
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+
 }
 
-.panel-group .panel-heading + .panel-collapse > .list-group {
-    border-top: 3px solid black;
+
+.panel-heading.active{
+    background-image: url(../images/desc.png);
+
 }
 
 .label-success:hover {
     background-color: darkgreen;
 }
 
-.panel > .panel-collapse > .list-group .list-group-item {
-    border-width: 3px 0;
-    border-radius: 0;
-    border-color: black;
+
+
+/*Filter panel item*/
+
+.panel-group .panel-heading + .panel-collapse > .list-group {
+    border-top: 5px solid black;
 }
 
-/*Filter panel*/
+.panel > .panel-collapse > .list-group .list-group-item {
+    border-radius: 0;
+    margin-bottom: 3px;
+    border-bottom: 0px;
+    border-top:  0px;
+}
 
 .list-group-item.active > .badge, .nav-pills > .active > a > .badge {
     color: white;
-    background-color: darkgreen;
+    background-color: #5cb85c;
 }
+
 
 .list-group button{
     background-color: #0f0f0f;
-    color: white;
-    position: relative;
-    display: block;
-    border: 5px solid black;
-    border-width: 5px;
+    color: #555;
 }
 
-.list-group button.title , .list-group button.title:active{
-    background-color: black;
-}
-
-
-.list-group button.active , .list-group button.active:hover, .list-group button.active:focus {
-    background-color:  #0f0f0f;
-    color: white;
+.list-group .list-group-item:hover,
+.list-group .list-group-item:focus,
+.list-group .list-group-item.active,
+.list-group .list-group-item.active:hover,
+.list-group .list-group-item.active:focus,
+.list-group button:active,
+.list-group button:active:hover,
+.list-group button:active:focus,
+.list-group button:hover,
+.list-group button:focus{
+    background-color: #0f0f0f;
     outline: none !important;
-    border: 5px solid black;
-}
-
-.list-group button:active ,.list-group  button:hover,.list-group button:focus {
-    background-color:  #0f0f0f;
-    color: white;
-    border: 5px solid black;
-    outline: 0;
     -webkit-box-shadow: none;
     box-shadow: none;
+    outline: 0;
+    color: #555;
+    border-bottom: 0px;
+    border-top:  0px;
+
+    border-left: 10px solid #5cb85c;
 }
+
+
 
 /*pagination*/
 
@@ -248,7 +267,7 @@ a{
     color: white;
 
 }
-a:hover{
+a:hover, a:focus{
     color: white;
 }
 
@@ -314,14 +333,23 @@ a:hover{
     padding-left: 0px;
     padding-right: 0px;
 }
+
+.content-title-section-decorator{
+    background-color: #0f0f0f;
+    width: 20px;
+    min-width: 20px;
+}
 .content-title-section{
     padding: 5px;
-    background-color: darkgreen;
     margin-bottom: 10px;
     color: white;
+    border-left: 10px solid #5cb85c;
+    background-color: #0f0f0f;
+
 }
 
-.content-title-section h3{
+
+.content-title-section > h4{
     margin: 5px;
 }
 
@@ -356,9 +384,9 @@ a:hover{
 /*.dropdown-menu > .active > a,*/
 /*.dropdown-menu > .active > a:hover,*/
 /*.dropdown-menu > .active > a:focus {*/
-    /*border-width: 5px;*/
-    /*border-color: black;*/
-    /*background-color: #5cb85c;*/
+/*border-width: 5px;*/
+/*border-color: black;*/
+/*background-color: #5cb85c;*/
 /*}*/
 
 
