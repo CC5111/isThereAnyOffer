@@ -11,7 +11,6 @@
 POST    /search                         controllers.HomeController.search
 GET     /update                         controllers.ActorController.update
 GET     /detail/:id                          controllers.DetailController.index(id:Long)
-GET     /result/                             controllers.HomeController.index
 GET     /result/:query                       controllers.ResultController.index(query:String)
 GET     /                                    controllers.HomeController.index
 
