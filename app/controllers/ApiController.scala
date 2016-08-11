@@ -1,11 +1,13 @@
 package controllers
 
+import java.sql.Timestamp
 import javax.inject.Inject
 
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import models.daos.{GameDAO, OfferDAO}
-import models.entities.{Game, Genre, Offer, Platform, Category}
+import models.entities.{Category, Game, Genre, Offer, Platform}
+import org.joda.time.{DateTime, Days}
 import play.api.libs.json._
 import play.api.mvc.{Action, Controller}
 
@@ -37,7 +39,7 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
       "idGame" -> offer.idGame,
       "idPlatform" -> offer.idPlatform,
       "link" -> offer.link,
-      "store" -> offer.store,
+      "idStore" -> offer.idStore,
       "normalPrice" -> offer.normalPrice,
       "offerPrice" -> offer.offerPrice,
       "discount" -> offer.discount,
@@ -53,11 +55,12 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
     )
   }
 
-  implicit val OfferGamePlatformWrites = new Writes[(Offer, Game, Platform)] {
-    override def writes(tuple: (Offer, Game, Platform)) = Json.obj(
+  implicit val OfferGamePlatformWrites = new Writes[(Offer, Game, Platform, String)] {
+    override def writes(tuple: (Offer, Game, Platform, String)) = Json.obj(
       "offer" -> tuple._1,
       "game" -> tuple._2,
-      "platform" -> tuple._3
+      "platform" -> tuple._3,
+      "store" -> tuple._4
     )
   }
 
@@ -137,6 +140,86 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
               "platform" -> Json.toJson(platformCount),
               "category" -> Json.toJson(categoriesCount),
               "totalOffers" -> Json.toJson(totalOffers.length))))
+  }
+
+
+  implicit def dateTimeOrdering: Ordering[Timestamp] = Ordering.fromLessThan(_ before  _)
+
+  def numberToMonth(numberMont: Int) = numberMont match {
+    case 1 => "Jan"
+    case 2 => "Feb"
+    case 3 => "Mar"
+    case 4 => "Apr"
+    case 5 => "May"
+    case 6 => "Jun"
+    case 7 => "Jul"
+    case 8 => "Aug"
+    case 9 => "Sep"
+    case 10 => "Oct"
+    case 11 => "Nov"
+    case 12 => "Dic"
+    case _ => "Not Found Month"
+  }
+
+  implicit val tupleDateWrite = new Writes[DateTime] {
+    override def writes(date: DateTime): JsValue = Json.toJson(date.getDayOfMonth + " " + numberToMonth(date.getMonthOfYear) + " " + date.getYear)
+  }
+
+  def sameDate(date1: DateTime, date2: DateTime) = {
+    date1.getDayOfMonth == date2.getDayOfMonth && date1.getMonthOfYear == date2.getMonthOfYear && date1.getYear == date2.getYear
+  }
+
+  def dataForGraphic(idGame: Int) = Action.async{
+    gameDAO.dataForGraphic(idGame).map{ offersStrore =>
+      if (offersStrore.isEmpty) Ok(createErrorJSON("No existen ofertas"))
+      else {
+        // obtener los labels del grafico
+        val minDate = new DateTime(offersStrore.map(_._1.fromDate).min)
+        val now = DateTime.now()
+
+        val numberOfDays = Days.daysBetween(minDate, now).getDays()
+        val days = for (f<- 0 to numberOfDays) yield minDate.plusDays(f)
+
+        val offersByStore = offersStrore.groupBy(_._2).map{case (store, offersStore) => (store, offersStore.map(offerStore => (new DateTime(offerStore._1.fromDate), offerStore._1.offerPrice)))}
+
+        val points = offersByStore.map{case (store, offersStore) =>
+          val dataStore = days.map(day => {
+            var ret: Option[Double] = None
+            offersStore.foreach((offerDayPrice) => {
+              if (sameDate(offerDayPrice._1, day)) ret = Some(offerDayPrice._2)
+            })
+            ret
+          }).toList
+
+          def lastValue(list: List[Option[Double]]) : Option[Double] = {
+            list.filter(_.nonEmpty).last
+          }
+
+          val dataStoreMoreOne = dataStore.reverse.tail.reverse :+ lastValue(dataStore)
+
+          Json.obj(
+            "label" -> store.name,
+            "lineTension" -> 0.1, //por defecto
+            "borderColor" -> store.borderColor,
+            "borderJoinStyle" -> "miter", //por defecto
+            "pointBorderColor" -> store.pointBorderColor,
+            "pointBackgroundColor" -> store.pointBackgroundColor,
+            "pointBorderWidth" -> 1,  //por defecto
+            "pointHoverRadius" -> 5,  //por defecto
+            "pointHoverBackgroundColor" -> store.pointHoverBackgroundColor,
+            "pointHoverBorderColor" -> store.pointBorderColor,
+            "pointHoverBorderWidth" -> 2, //por defecto
+            "pointRadius" -> 10,  //por defecto,
+            "data" -> dataStoreMoreOne
+          )
+        }
+        Ok(createSuccessJSON(Json.obj(
+          "datasets" -> Json.toJson(points),
+          "labels" -> Json.toJson(days)
+        )))
+        //Ok(createErrorJSON("No existen ofertas"))
+      }
+    }
   }
 
   def createSuccessJSON(data : JsValue) = {

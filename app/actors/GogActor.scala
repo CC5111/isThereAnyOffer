@@ -109,7 +109,7 @@ class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
                     case None => 0
                 },
                 5,  // PC
-                "GOG",
+                4,
                 offer.start_date,
                 offer.end_date,
                 offer.base_price,

@@ -114,7 +114,7 @@ class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
                     case "PS3" => 1
                     case _ => 2         // "PS4 TM"
                 },
-                "PlayStation Store",
+                1,
                 offer.start_date,
                 offer.end_date,
                 offer.base_price/100.0,

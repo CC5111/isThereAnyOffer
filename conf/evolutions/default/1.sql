@@ -23,7 +23,7 @@ create table "offer" (
   "link"        VARCHAR(256),
   "idGame"      BIGINT,
   "idPlatform"  BIGINT,
-  "store"       VARCHAR(256),
+  "idStore"     BIGINT,
   "fromDate"    TIMESTAMP,
   "untilDate"   TIMESTAMP,
   "normalPrice" DOUBLE PRECISION,
@@ -78,6 +78,16 @@ create table "platform" (
   "name" VARCHAR(256)
 );
 
+create table "store" (
+  "id"                        BIGSERIAL NOT NULL PRIMARY KEY,
+  "name"                      VARCHAR(256),
+  "borderColor"               VARCHAR(16),
+  "pointBorderColor"          VARCHAR(16),
+  "pointBackgroundColor"      VARCHAR(16),
+  "pointHoverBackgroundColor" VARCHAR(16),
+  "pointHoverBorderColor"     VARCHAR(16)
+);
+
 create table "g2aStore" (
   "id"      BIGSERIAL NOT NULL PRIMARY KEY,
   "idGame"  BIGINT,
@@ -120,6 +130,7 @@ drop table "gameGenre";
 drop table "genre";
 drop table "gamePlatform";
 drop table "platform";
+drop table "store";
 drop table "g2aStore";
 drop table "gogStore";
 drop table "psStore";

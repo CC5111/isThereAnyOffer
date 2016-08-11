@@ -499,18 +499,36 @@
                         })
                 }
 
-                function filter(typeFilter, nameFilter) {
-                        if (filters[typeFilter] === nameFilter) {
-                                $('#button_' + typeFilter + '_' + nameFilter.replace(/ /g, '_')).removeClass('active');
-                                delete filters[typeFilter];
-                        }
-                        else {
-                                if (filters[typeFilter]) $('#button_' + typeFilter + '_' + filters[typeFilter].replace(/ /g, '_')).removeClass('active');
-                                $('#button_' + typeFilter + '_' + nameFilter.replace(/ /g, '_')).toggleClass('active');
-                                filters[typeFilter] = nameFilter;
-                        }
-                        filters.pageNumber = 1; // al filtrar partir desde la pagina 1
-                        getOffersWithFilter(false);
+        }
+        function getOffersWithFilter(changePage, callback) {
+            $.get('api/filter', filters).done(function(results) {
+                hiddenLoadingTable();
+                if (results.status === 'success') {
+                    var data = results['data'];
+                    var offers = data['offers'];
+                    removeRows();
+                    var offersTable = $('#offers');
+                    offers.forEach(function(offer) {
+                        var offerRow = '' +
+                                '<tr>' +
+                                    '<td><div class="content-cell-td"><a href="/detail/' + offer.game.id + '">' + offer.game.name + '</a></div></td>' +
+                                    '<td><div class="content-cell-td">' + offer.platform.name + '</div></td>' +
+                                    '<td><div class="content-cell-td">' + offer.game.typeGame + '</div></td>' +
+                                    '<td><div class="content-cell-td"><a href="' + offer.offer.link + '">' + offer.offer.store + '</a></div></td>' +
+                                    '<td><div class="content-cell-td">$' + offer.offer.normalPrice + '</div></td>' +
+                                    '<td><div class="content-cell-td">$' + offer.offer.offerPrice + '</div></td>' +
+                                    '<td class="descuento"><div class="content-cell-td">' + offer.offer.discount + '%</div></td>' +
+                                '</tr>';
+                        offersTable.append(offerRow);
+                    });
+                    updateCounters(data);
+                    if (callback) callback(parseInt(Math.ceil(data['totalOffers'])/sizePage));
+                    if (!changePage) updatePagination(Math.ceil(parseInt(data['totalOffers'])/sizePage));
+                } else {
+                    removeRows();
+                    updateCounters();
+                    if (callback) callback(parseInt(Math.ceil(1)));
+                    updatePagination(1);
                 }
 
                 $('.filter-button').on('click', function (event) {

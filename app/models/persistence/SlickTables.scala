@@ -43,14 +43,14 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
   class OfferTable(tag: Tag) extends BaseTable[Offer](tag, "offer") {
     def link = column[String]("link")
     def idGame = column[Long]("idGame")
-    def store = column[String]("store")
+    def idStore = column[Long]("idStore")
     def idPlatform = column[Long]("idPlatform")
     def fromDate = column[java.sql.Timestamp]("fromDate")
     def untilDate = column[java.sql.Timestamp]("untilDate")
     def normalPrice = column[Double]("normalPrice")
     def offerPrice = column[Double]("offerPrice")
 
-    def * = (id, link, idGame, idPlatform, store, fromDate, untilDate, normalPrice, offerPrice) <> (Offer.tupled, Offer.unapply _)
+    def * = (id, link, idGame, idPlatform, idStore, fromDate, untilDate, normalPrice, offerPrice) <> (Offer.tupled, Offer.unapply _)
   }
   val offerQ = TableQuery[OfferTable]
 
@@ -115,6 +115,18 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
     def * = (id, name) <> (Platform.tupled, Platform.unapply _)
   }
   val platformQ = TableQuery[PlatformTable]
+
+  class StoreTable(tag: Tag) extends BaseTable[Store](tag, "store") {
+    def name = column[String]("name")
+    def borderColor = column[String]("borderColor")
+    def pointBorderColor = column[String]("pointBorderColor")
+    def pointBackgroundColor = column[String]("pointBackgroundColor")
+    def pointHoverBackgroundColor = column[String]("pointHoverBackgroundColor")
+    def pointHoverBorderColor = column[String]("pointHoverBorderColor")
+
+    def * = (id, name, borderColor, pointBorderColor, pointBackgroundColor, pointHoverBackgroundColor, pointHoverBorderColor) <> (Store.tupled, Store.unapply _)
+  }
+  val storeQ = TableQuery[StoreTable]
 
   // Stores
   class G2aStoreTable(tag: Tag) extends BaseTable[G2aStore](tag, "g2aStore") {
