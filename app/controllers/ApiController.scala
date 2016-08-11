@@ -55,11 +55,12 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
     )
   }
 
-  implicit val OfferGamePlatformWrites = new Writes[(Offer, Game, Platform)] {
-    override def writes(tuple: (Offer, Game, Platform)) = Json.obj(
+  implicit val OfferGamePlatformWrites = new Writes[(Offer, Game, Platform, String)] {
+    override def writes(tuple: (Offer, Game, Platform, String)) = Json.obj(
       "offer" -> tuple._1,
       "game" -> tuple._2,
-      "platform" -> tuple._3
+      "platform" -> tuple._3,
+      "store" -> tuple._4
     )
   }
 

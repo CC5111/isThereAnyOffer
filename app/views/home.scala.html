@@ -288,6 +288,7 @@
                 hiddenLoadingTable();
                 if (results.status === 'success') {
                     var data = results['data'];
+                    console.log(data)
                     var offers = data['offers'];
                     removeRows();
                     var offersTable = $('#offers');
@@ -297,7 +298,7 @@
                                     '<td><div class="content-cell-td"><a href="/detail/' + offer.game.id + '">' + offer.game.name + '</a></div></td>' +
                                     '<td><div class="content-cell-td">' + offer.platform.name + '</div></td>' +
                                     '<td><div class="content-cell-td">' + offer.game.typeGame + '</div></td>' +
-                                    '<td><div class="content-cell-td"><a href="' + offer.offer.link + '">' + offer.offer.idStore + '</a></div></td>' +
+                                    '<td><div class="content-cell-td"><a href="' + offer.offer.link + '">' + offer.store + '</a></div></td>' +
                                     '<td><div class="content-cell-td">$' + offer.offer.normalPrice + '</div></td>' +
                                     '<td><div class="content-cell-td">$' + offer.offer.offerPrice + '</div></td>' +
                                     '<td class="descuento"><div class="content-cell-td">' + offer.offer.discount + '%</div></td>' +

@@ -82,7 +82,7 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
                     pageNumber: Int,
                     platformFilter: String,
                     genreFilter: String,
-                    categoryFilter: String): (Future[Seq[(Offer, Game, Platform)]],
+                    categoryFilter: String): (Future[Seq[(Offer, Game, Platform, String)]],
                                               Future[Seq[(Genre, Int)]],
                                               Future[Seq[(Platform, Int)]],
                                               Future[Seq[(Category, Int)]],
@@ -94,13 +94,14 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     val genreQ = SlickTables.genreQ
     val gameCategoryQ = SlickTables.gameCategoryQ
     val categoryQ = SlickTables.categoryQ
+    val storeQ = SlickTables.storeQ
 
     val dateNow = new Timestamp(new java.util.Date().getTime)
 
     val query = for {
-      ((((((offer, game) , platform), gameGenre), genre), gameCategory), category) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id) join gameGenreQ on (_._1._2.id === _.idGame) join genreQ on (_._2.idGenre === _.id) join gameCategoryQ on (_._1._1._1._2.id === _.idGame) join categoryQ on (_._2.idCategory === _.id)
+      (((((((offer, game) , platform), gameGenre), genre), gameCategory), category), store) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id) join gameGenreQ on (_._1._2.id === _.idGame) join genreQ on (_._2.idGenre === _.id) join gameCategoryQ on (_._1._1._1._2.id === _.idGame) join categoryQ on (_._2.idCategory === _.id) join storeQ on (_._1._1._1._1._1._1.idStore === _.id)
       if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
-    } yield (offer, game, platform, genre, category)
+    } yield (offer, game, platform, genre, category, store.name)
 
     var queryFilter = query
     if (platformFilter != "") queryFilter = queryFilter.filter((tuple) => tuple._3.name === platformFilter)
@@ -108,8 +109,8 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     if (categoryFilter != "") queryFilter = queryFilter.filter((tuple) => tuple._5.name === categoryFilter)
 
     // query para sacar todas las ofertas
-    val queryResult = queryFilter.groupBy((t) => (t._1, t._2, t._3)).map { case (t, group) =>
-      (t._1, t._2, t._3)
+    val queryResult = queryFilter.groupBy((t) => (t._1, t._2, t._3, t._6)).map { case (t, group) =>
+      (t._1, t._2, t._3, t._4)
     }
 
     val offset = (pageNumber - 1) * pageSize
