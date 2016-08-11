@@ -43,7 +43,7 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
   class OfferTable(tag: Tag) extends BaseTable[Offer](tag, "offer") {
     def link = column[String]("link")
     def idGame = column[Long]("idGame")
-    def idStore = column[String]("idStore")
+    def idStore = column[Long]("idStore")
     def idPlatform = column[Long]("idPlatform")
     def fromDate = column[java.sql.Timestamp]("fromDate")
     def untilDate = column[java.sql.Timestamp]("untilDate")

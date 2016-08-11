@@ -23,7 +23,7 @@ create table "offer" (
   "link"        VARCHAR(256),
   "idGame"      BIGINT,
   "idPlatform"  BIGINT,
-  "idStore"     VARCHAR(256),
+  "idStore"     BIGINT,
   "fromDate"    TIMESTAMP,
   "untilDate"   TIMESTAMP,
   "normalPrice" DOUBLE PRECISION,
