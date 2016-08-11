@@ -5,131 +5,131 @@
         categories: List[models.entities.Category])
 @base(title){
         <div id="wrap">
-        <div class="container" >
-                <div class="col-md-3 content-detail" style="text-align: center;">
-                        <div class="content-image-background">
-                                <div  style="background-image: url(@routes.Assets.versioned(game.cover));
-                                        background-size: cover; ">
-                                        <img src="@routes.Assets.versioned(game.cover)"
-                                        style="visibility: hidden;max-width: 100%;
-                                                max-height: 100%;" />
-                                </div>
-                        </div>
-
-                        <div class="content-image-background">
-                                <div class="metascore">
-                                        <a target="_blank" href="@routes.Assets.versioned("images/metacritic_logo.png")">
-                                                <p class="metascoreName">Metacritic</p>
-                                                <figure class="metascoreLogo">
-                                                        <img src="@routes.Assets.versioned("images/metacritic_logo.png")" width="25">
-                                                </figure>
-
-                                                <div class="metascoreScore">
-                                                        <p class="green">@game.metacritic</p>
-                                                </div>
-
-                                        </a>
-                                </div>
-                        </div>
-
-                        <div class="content-image-background">
-                                <a type="submit" class="btn btn-danger btn-default" data-toggle="modal" data-target="#videoModal" data-theVideo="@game.videoLink">
-                                        <i class="fa fa-youtube-square" aria-hidden="true"></i> Watch video
-                                </a>
-                        </div>
-
-                </div>
-
-                <div class="col-md-9 content-detail">
-                        <div class="col-md-12 content-detail-background">
-
-                                <h3>@game.name<small> @game.typeGame</small></h3>
-                                <p>@game.description
-
-                        </div>
-                        <div class="col-md-12 content-detail">
-
-                                <div class="col-md-9 content-detail">
-                                        <div class="content-image-background">
-                                                <div >
-                                                <table class="table detail">
-                                                        <tbody>
-                                                                <tr >
-                                                                        <td >Web Page</td>
-                                                                        <td ><a href="@game.link" target="_blank">@game.link</a></td>
-                                                                </tr>
-                                                                <tr >
-                                                                        <td >Publisher</td>
-                                                                        <td >@game.publisher</td>
-                                                                </tr>
-                                                                <tr >
-                                                                        <td >Genre(s)</td>
-                                                                        <td >@genres.mkString(", ")</td>
-                                                                </tr>
-                                                                <tr >
-                                                                        <td >Category(ies)</td>
-                                                                        <td >@categories.mkString(", ")</td>
-                                                                </tr>
-                                                        </tbody>
-                                                </table>
-                                        </div>
-                                        </div>
-                                </div>
-                                <div class="col-md-3 content-detail-background">
-                                        <div style="background-image: url(@routes.Assets.versioned("images/rating/"+game.rating+".png"));
-                                                background-size: cover;  ">
-                                                <img src="@routes.Assets.versioned("images/rating/"+game.rating+".png")"
-                                                        style="visibility: hidden;max-width: 100%;
+                <div class="container" >
+                        <div class="col-md-3 content-detail" style="text-align: center;">
+                                <div class="content-image-background">
+                                        <div  style="background-image: url(@routes.Assets.versioned(game.cover));
+                                                background-size: cover; ">
+                                                <img src="@routes.Assets.versioned(game.cover)"
+                                                style="visibility: hidden;max-width: 100%;
                                                         max-height: 100%;" />
                                         </div>
                                 </div>
+
+                                <div class="content-image-background">
+                                        <div class="metascore">
+                                                <a target="_blank" href="@routes.Assets.versioned("images/metacritic_logo.png")">
+                                                        <p class="metascoreName">Metacritic</p>
+                                                        <figure class="metascoreLogo">
+                                                                <img src="@routes.Assets.versioned("images/metacritic_logo.png")" width="25">
+                                                        </figure>
+
+                                                        <div class="metascoreScore">
+                                                                <p class="green">@game.metacritic</p>
+                                                        </div>
+
+                                                </a>
+                                        </div>
+                                </div>
+
+                                <div class="content-image-background">
+                                        <a type="submit" class="btn btn-danger btn-default" data-toggle="modal" data-target="#videoModal" data-theVideo="@game.videoLink">
+                                                <i class="fa fa-youtube-square" aria-hidden="true"></i> Watch video
+                                        </a>
+                                </div>
+
                         </div>
 
+                        <div class="col-md-9 content-detail">
+                                <div class="col-md-12 content-detail-background">
 
+                                        <h3>@game.name<small> @game.typeGame</small></h3>
+                                        <p>@game.description
+
+                                </div>
+                                <div class="col-md-12 content-detail">
+
+                                        <div class="col-md-9 content-detail">
+                                                <div class="content-image-background">
+                                                        <div >
+                                                                <table class="table detail">
+                                                                        <tbody>
+                                                                                <tr >
+                                                                                        <td >Web Page</td>
+                                                                                        <td ><a href="@game.link" target="_blank">@game.link</a></td>
+                                                                                </tr>
+                                                                                <tr >
+                                                                                        <td >Publisher</td>
+                                                                                        <td >@game.publisher</td>
+                                                                                </tr>
+                                                                                <tr >
+                                                                                        <td >Genre(s)</td>
+                                                                                        <td >@genres.mkString(", ")</td>
+                                                                                </tr>
+                                                                                <tr >
+                                                                                        <td >Category(ies)</td>
+                                                                                        <td >@categories.mkString(", ")</td>
+                                                                                </tr>
+                                                                        </tbody>
+                                                                </table>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                        <div class="col-md-3 content-detail-background">
+                                                <div style="background-image: url(@routes.Assets.versioned("images/rating/"+game.rating+".png"));
+                                                        background-size: cover;  ">
+                                                        <img src="@routes.Assets.versioned("images/rating/"+game.rating+".png")"
+                                                        style="visibility: hidden;max-width: 100%;
+                                                                max-height: 100%;" />
+                                                </div>
+                                        </div>
+                                </div>
+
+
+                        </div>
                 </div>
-        </div>
 
 
-        <div class="container contenedor">
-                <table class="table table-bordered" >
-                        <thead>
-                                <tr>
+                <div class="container contenedor">
+                        <table class="table table-bordered" >
+                                <thead>
+                                        <tr>
 
-                                        <th><div class="content-cell-th">Platform</div></th>
-                                        <th><div class="content-cell-th">Type</div></th>
-                                        <th><div class="content-cell-th">Store</div></th>
-                                        <th><div class="content-cell-th">Normal Price</div></th>
-                                        <th colspan=2><div class="content-cell-th">Offer Price</div></th>
+                                                <th><div class="content-cell-th">Platform</div></th>
+                                                <th><div class="content-cell-th">Type</div></th>
+                                                <th><div class="content-cell-th">Store</div></th>
+                                                <th><div class="content-cell-th">Normal Price</div></th>
+                                                <th colspan=2><div class="content-cell-th">Offer Price</div></th>
 
-                                </tr>
-                        </thead>
-                        <tbody>
-                        @for(tupleOfferPlatform <- tuplesOfferPlatform) {
-                                <tr class="row_detail" onclick="trLink('@tupleOfferPlatform._1.link');">
+                                        </tr>
+                                </thead>
+                                <tbody>
+                                @for(tupleOfferPlatform <- tuplesOfferPlatform) {
+                                        <tr class="row_detail" onclick="trLink('@tupleOfferPlatform._1.link');">
 
-                                        <td><div class="content-cell-td">@tupleOfferPlatform._2.name</div></td>
-                                        <td><div class="content-cell-td">@game.typeGame</div></td>
-                                        <td><div class="content-cell-td">@tupleOfferPlatform._1.store</div></td>
-                                        <td><div class="content-cell-td">$@tupleOfferPlatform._1.normalPrice</div></td>
-                                        <td><div class="content-cell-td">$@tupleOfferPlatform._1.offerPrice</div></td>
-                                        <td class="descuento"><div class="content-cell-td">@tupleOfferPlatform._1.discount%</div></td>
-                                </tr>
-                        }
-                        </tbody>
-                </table>
-        </div>
-
-        <div class="container contenedor">
-                <div class="col-md-4">
-                        <canvas id="myChart"></canvas>
+                                                <td><div class="content-cell-td">@tupleOfferPlatform._2.name</div></td>
+                                                <td><div class="content-cell-td">@game.typeGame</div></td>
+                                                <td><div class="content-cell-td">@tupleOfferPlatform._1.store</div></td>
+                                                <td><div class="content-cell-td">$@tupleOfferPlatform._1.normalPrice</div></td>
+                                                <td><div class="content-cell-td">$@tupleOfferPlatform._1.offerPrice</div></td>
+                                                <td class="descuento"><div class="content-cell-td">@tupleOfferPlatform._1.discount%</div></td>
+                                        </tr>
+                                }
+                                </tbody>
+                        </table>
                 </div>
-                <div class="col-md-4">
-                        <canvas id="myChart2"></canvas>
+
+                <div class="container contenedor">
+                        <div class="col-md-4">
+                                <canvas id="myChart"></canvas>
+                        </div>
+                        <div class="col-md-4">
+                                <canvas id="myChart2"></canvas>
+                        </div>
+                        <div class="col-md-4">
+                                <canvas id="myChart3"></canvas>
+                        </div>
                 </div>
-                <div class="col-md-4">
-                        <canvas id="myChart3"></canvas>
-                </div>
-        </div>
 
 
         </div>
@@ -138,7 +138,10 @@
                         <div class="modal-content">
                                 <div class="modal-body">
                                         <div>
-                                                <iframe id="frame" width="100%" height="350" src="" allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen"></iframe>
+                                                <iframe id="frame" width="100%" height="350" src=""
+                                                allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen"
+                                                msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen"
+                                                webkitallowfullscreen="webkitallowfullscreen"></iframe>
                                         </div>
                                 </div>
                         </div>
@@ -147,129 +150,141 @@
         <br>
         <div class="container">
                 <div class="fb-comments" order_by="reverse_time" data-href="https://www.isthereanyoffer.emoreno.cl/detail/@game.id"
-                data-numposts="5" colorscheme="dark" data-width="100%"></div>
-        </div>
+data-numposts="5" colorscheme="dark" data-width="100%"></div>
+</div>
 
-        <script>
+<script>
 
+        //FUNCTION TO GET AND AUTO PLAY YOUTUBE VIDEO FROM DATATAG
+        function autoPlayYouTubeModal(){
+                var trigger = $("body").find('[data-toggle="modal"]');
+                trigger.click(function() {
+                        var theModal = $(this).data( "target" ),
+                                videoSRC = $(this).attr( "data-theVideo" ),
+                                videoSRCauto = videoSRC+"?autoplay=1" ;
+                        $(theModal+' iframe').attr('src', videoSRCauto);
+                        $(theModal+' button.close').click(function () {
+                                $(theModal+' iframe').attr('src', videoSRC);
+                        });
+                });
+        }
 
+                $(document).ready(function(){
+                        autoPlayYouTubeModal();
+                });
+</script>
 
-        $(document).ready(function(){
-                autoPlayYouTubeModal();
+<script>
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                        datasets: [{
+                                label: '# of Votes',
+                                data: [12, 19, 3, 5, 2, 3],
+                                backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(255, 206, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                        'rgba(255,99,132,1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                        }]
+                },
+                options: {
+                        scales: {
+                                yAxes: [{
+                                        ticks: {
+                                                beginAtZero:true
+                                        }
+                                }]
+                        }
+                }
         });
-        </script>
-
-        <script>
-                var ctx = document.getElementById("myChart");
-                var myChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                                datasets: [{
-                                        label: '# of Votes',
-                                        data: [12, 19, 3, 5, 2, 3],
-                                        backgroundColor: [
-                                                'rgba(255, 99, 132, 0.2)',
-                                                'rgba(54, 162, 235, 0.2)',
-                                                'rgba(255, 206, 86, 0.2)',
-                                                'rgba(75, 192, 192, 0.2)',
-                                                'rgba(153, 102, 255, 0.2)',
-                                                'rgba(255, 159, 64, 0.2)'
-                                        ],
-                                        borderColor: [
-                                                'rgba(255,99,132,1)',
-                                                'rgba(54, 162, 235, 1)',
-                                                'rgba(255, 206, 86, 1)',
-                                                'rgba(75, 192, 192, 1)',
-                                                'rgba(153, 102, 255, 1)',
-                                                'rgba(255, 159, 64, 1)'
-                                        ],
-                                        borderWidth: 1
+        var ctx3 = document.getElementById("myChart3");
+        var myChart3 = new Chart(ctx3, {
+                type: 'bar',
+                data: {
+                        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                        datasets: [{
+                                label: '# of Votes',
+                                data: [12, 19, 3, 5, 2, 3],
+                                backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(255, 206, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                        'rgba(255,99,132,1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                        }]
+                },
+                options: {
+                        scales: {
+                                yAxes: [{
+                                        ticks: {
+                                                beginAtZero:true
+                                        }
                                 }]
-                        },
-                        options: {
-                                scales: {
-                                        yAxes: [{
-                                                ticks: {
-                                                        beginAtZero:true
-                                                }
-                                        }]
-                                }
                         }
-                });
-                var ctx3 = document.getElementById("myChart3");
-                var myChart3 = new Chart(ctx3, {
-                        type: 'bar',
-                        data: {
-                                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                                datasets: [{
-                                        label: '# of Votes',
-                                        data: [12, 19, 3, 5, 2, 3],
-                                        backgroundColor: [
-                                                'rgba(255, 99, 132, 0.2)',
-                                                'rgba(54, 162, 235, 0.2)',
-                                                'rgba(255, 206, 86, 0.2)',
-                                                'rgba(75, 192, 192, 0.2)',
-                                                'rgba(153, 102, 255, 0.2)',
-                                                'rgba(255, 159, 64, 0.2)'
-                                        ],
-                                        borderColor: [
-                                                'rgba(255,99,132,1)',
-                                                'rgba(54, 162, 235, 1)',
-                                                'rgba(255, 206, 86, 1)',
-                                                'rgba(75, 192, 192, 1)',
-                                                'rgba(153, 102, 255, 1)',
-                                                'rgba(255, 159, 64, 1)'
-                                        ],
-                                        borderWidth: 1
+                }
+        });
+        var ctx2 = document.getElementById("myChart2");
+        var myChart2 = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                        datasets: [{
+                                label: '# of Votes',
+                                data: [12, 19, 3, 5, 2, 3],
+                                backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(255, 206, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                        'rgba(255,99,132,1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                        'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                        }]
+                },
+                options: {
+                        scales: {
+                                yAxes: [{
+                                        ticks: {
+                                                beginAtZero:true
+                                        }
                                 }]
-                        },
-                        options: {
-                                scales: {
-                                        yAxes: [{
-                                                ticks: {
-                                                        beginAtZero:true
-                                                }
-                                        }]
-                                }
                         }
-                });
-                var ctx2 = document.getElementById("myChart2");
-                var myChart2 = new Chart(ctx2, {
-                        type: 'bar',
-                        data: {
-                                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                                datasets: [{
-                                        label: '# of Votes',
-                                        data: [12, 19, 3, 5, 2, 3],
-                                        backgroundColor: [
-                                                'rgba(255, 99, 132, 0.2)',
-                                                'rgba(54, 162, 235, 0.2)',
-                                                'rgba(255, 206, 86, 0.2)',
-                                                'rgba(75, 192, 192, 0.2)',
-                                                'rgba(153, 102, 255, 0.2)',
-                                                'rgba(255, 159, 64, 0.2)'
-                                        ],
-                                        borderColor: [
-                                                'rgba(255,99,132,1)',
-                                                'rgba(54, 162, 235, 1)',
-                                                'rgba(255, 206, 86, 1)',
-                                                'rgba(75, 192, 192, 1)',
-                                                'rgba(153, 102, 255, 1)',
-                                                'rgba(255, 159, 64, 1)'
-                                        ],
-                                        borderWidth: 1
-                                }]
-                        },
-                        options: {
-                                scales: {
-                                        yAxes: [{
-                                                ticks: {
-                                                        beginAtZero:true
-                                                }
-                                        }]
-                                }
-                        }
-                });
-        </script>
-}
+                }
+        });
+</script>
+        }
