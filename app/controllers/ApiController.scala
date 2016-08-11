@@ -39,7 +39,7 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
       "idGame" -> offer.idGame,
       "idPlatform" -> offer.idPlatform,
       "link" -> offer.link,
-      "store" -> offer.store,
+      "idStore" -> offer.idStore,
       "normalPrice" -> offer.normalPrice,
       "offerPrice" -> offer.offerPrice,
       "discount" -> offer.discount,
@@ -179,7 +179,7 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
         val numberOfDays = Days.daysBetween(minDate, now).getDays()
         val days = for (f<- 0 to numberOfDays) yield minDate.plusDays(f)
 
-        val offersByStore = offers.groupBy(_.store).map{case (store, offersStore) => (store, offersStore.map(offer => (new DateTime(offer.fromDate), offer.offerPrice)))}
+        val offersByStore = offers.groupBy(_.idStore).map{case (store, offersStore) => (store, offersStore.map(offer => (new DateTime(offer.fromDate), offer.offerPrice)))}
 
         val points = offersByStore.map{case (store, offersStore) =>
             val dataStore = days.map(day => {

@@ -18,7 +18,7 @@ case class Offer(id: Long,
                  link: String,
                  idGame: Long,
                  idPlatform: Long,
-                 store: String,
+                 idStore: String,
                  fromDate: java.sql.Timestamp,
                  untilDate: java.sql.Timestamp,
                  normalPrice: Double,
@@ -65,3 +65,11 @@ case class Platform(id: Long,
                     name: String) extends BaseEntity {
   override def toString: String = name
 }
+
+case class Store(id: Long,
+                 name: String,
+                 borderColor: String,
+                 pointBorderColor: String,
+                 pointBackgroundColor: String,
+                 pointHoverBackgroundColor: String,
+                 pointHoverBorderColor: String) extends BaseEntity
