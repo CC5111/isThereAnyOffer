@@ -1,6 +1,6 @@
 @(title : String,
         game: models.entities.Game,
-        tuplesOfferPlatform: List[(models.entities.Offer, models.entities.Platform)],
+        tuplesOfferPlatformStore: List[(models.entities.Offer, models.entities.Platform, String)],
         genres: List[models.entities.Genre],
         categories: List[models.entities.Category])
 @base(title){
@@ -104,15 +104,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                @for(tupleOfferPlatform <- tuplesOfferPlatform) {
-                    <tr class="row_detail" onclick="trLink('@tupleOfferPlatform._1.link');">
-
-                        <td><div class="content-cell-td">@tupleOfferPlatform._2.name</div></td>
+                @for(tupleOfferPlatformStore <- tuplesOfferPlatformStore) {
+                    <tr class="row_detail" onclick="trLink('@tupleOfferPlatformStore._1.link');">
+                        <td><div class="content-cell-td">@tupleOfferPlatformStore._2.name</div></td>
                         <td><div class="content-cell-td">@game.typeGame</div></td>
-                        <td><div class="content-cell-td">@tupleOfferPlatform._1.idStore</div></td>
-                        <td><div class="content-cell-td">$@tupleOfferPlatform._1.normalPrice</div></td>
-                        <td><div class="content-cell-td">$@tupleOfferPlatform._1.offerPrice</div></td>
-                        <td class="descuento"><div class="content-cell-td">@tupleOfferPlatform._1.discount%</div></td>
+                        <td><div class="content-cell-td">@tupleOfferPlatformStore._3</div></td>
+                        <td><div class="content-cell-td">$@tupleOfferPlatformStore._1.normalPrice</div></td>
+                        <td><div class="content-cell-td">$@tupleOfferPlatformStore._1.offerPrice</div></td>
+                        <td class="descuento"><div class="content-cell-td">@tupleOfferPlatformStore._1.discount%</div></td>
                     </tr>
                 }
                 </tbody>
