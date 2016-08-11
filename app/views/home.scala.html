@@ -275,7 +275,6 @@
                                 hiddenLoadingTable();
                                 if (results.status === 'success') {
                                         var data = results['data'];
-                                        console.log(data)
                                         var offers = data['offers'];
                                         removeRows();
                                         var offersTable = $('#offers');
@@ -293,7 +292,7 @@
                                                 offersTable.append(offerRow);
                                         });
                                         updateCounters(data);
-                                        if (callback) callback(parseInt(Math.ceil(data['totalOffers'])/sizePage));
+                                        if (callback) callback(parseInt(Math.ceil(data['totalOffers']/sizePage)));
                                         if (!changePage) updatePagination(Math.ceil(parseInt(data['totalOffers'])/sizePage));
                                 } else {
                                         removeRows();
