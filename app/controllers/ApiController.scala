@@ -170,46 +170,48 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
   }
 
   def dataForGraphic(idGame: Int) = Action.async{
-    gameDAO.dataForGraphic(idGame).map{ offers =>
-      if (offers.isEmpty) Ok(createErrorJSON("No existen ofertas"))
+    gameDAO.dataForGraphic(idGame).map{ offersStrore =>
+      if (offersStrore.isEmpty) Ok(createErrorJSON("No existen ofertas"))
       else {
         // obtener los labels del grafico
-        val minDate = new DateTime(offers.map(_.fromDate).min)
+        val minDate = new DateTime(offersStrore.map(_._1.fromDate).min)
         val now = DateTime.now()
 
         val numberOfDays = Days.daysBetween(minDate, now).getDays()
         val days = for (f<- 0 to numberOfDays) yield minDate.plusDays(f)
 
-        val offersByStore = offers.groupBy(_.idStore).map{case (store, offersStore) => (store, offersStore.map(offer => (new DateTime(offer.fromDate), offer.offerPrice)))}
+        val offersByStore = offersStrore.groupBy(_._2).map{case (store, offersStore) => (store, offersStore.map(offerStore => (new DateTime(offerStore._1.fromDate), offerStore._1.offerPrice)))}
 
         val points = offersByStore.map{case (store, offersStore) =>
-            val dataStore = days.map(day => {
-              var ret: Option[Double] = None
-              offersStore.foreach((offerDayPrice) => {
-                if (sameDate(offerDayPrice._1, day)) ret = Some(offerDayPrice._2)
-              })
-              ret
+          val dataStore = days.map(day => {
+            var ret: Option[Double] = None
+            offersStore.foreach((offerDayPrice) => {
+              if (sameDate(offerDayPrice._1, day)) ret = Some(offerDayPrice._2)
             })
-            Json.obj(
-              "label" -> store,
-              "fill" -> false,
-              "lineTension" -> 0.1,
-              "backgroundColor" -> "rgba(75,192,192,0.4)",
-              "borderColor" -> "rgba(75,192,192,1)",
-              "borderCapStyle" -> "butt",
-              "borderDashOffset" -> 0.0,
-              "borderJoinStyle" -> "miter",
-              "pointBorderColor" -> "rgba(75,192,192,1)",
-              "pointBackgroundColor" -> "#fff",
-              "pointBorderWidth" -> 1,
-              "pointHoverRadius" -> 5,
-              "pointHoverBackgroundColor" -> "rgba(75,192,192,1)",
-              "pointHoverBorderColor" -> "rgba(220,220,220,1)",
-              "pointHoverBorderWidth" -> 2,
-              "pointRadius" -> 10,
-              "pointHitRadius" -> 10,
-              "data" -> dataStore
-            )
+            ret
+          }).toList
+
+          def lastValue(list: List[Option[Double]]) : Option[Double] = {
+            list.filter(_.nonEmpty).last
+          }
+
+          val dataStoreMoreOne = dataStore.reverse.tail.reverse :+ lastValue(dataStore)
+
+          Json.obj(
+            "label" -> store.name,
+            "lineTension" -> 0.1, //por defecto
+            "borderColor" -> store.borderColor,
+            "borderJoinStyle" -> "miter", //por defecto
+            "pointBorderColor" -> store.pointBorderColor,
+            "pointBackgroundColor" -> store.pointBackgroundColor,
+            "pointBorderWidth" -> 1,  //por defecto
+            "pointHoverRadius" -> 5,  //por defecto
+            "pointHoverBackgroundColor" -> store.pointHoverBackgroundColor,
+            "pointHoverBorderColor" -> store.pointBorderColor,
+            "pointHoverBorderWidth" -> 2, //por defecto
+            "pointRadius" -> 10,  //por defecto,
+            "data" -> dataStoreMoreOne
+          )
         }
         Ok(createSuccessJSON(Json.obj(
           "datasets" -> Json.toJson(points),

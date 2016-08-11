@@ -120,7 +120,7 @@
 
         <div class="container contenedor">
             <div class="col-md-12">
-                <canvas id="myChart"></canvas>
+                <canvas id="myChart" data-idgame="@game.id"></canvas>
             </div>
         </div>
 
@@ -225,22 +225,28 @@
                     "9 Jun 2016"
                 ]
             };
-            $.get('/api/graphic/id/' + id, function(data, status) {
-                console.log(data['data']);
-                var ctx = $('#myChart').get(0).getContext("2d");
-                var myChart = new Chart(ctx, {
-                    type: 'line',
-                    data: bla,
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero:true
-                                }
-                            }]
+            $(document).ready(function() {
+                var ctx = $('#myChart');
+                var id = $(ctx).data('idgame');
+
+                $.get('/api/graphic/id/' + id, function(data, status) {
+                    console.log(data['data']);
+
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: data['data'],
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero:true
+                                    }
+                                }]
+                            }
                         }
-                    }
+                    });
                 });
-            });
+            })
+
     </script>
 }
