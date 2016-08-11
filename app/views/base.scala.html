@@ -11,7 +11,7 @@
         <meta name="author" content="">
 
         <title>Is There Any Offer - @title</title>
-
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/bootstrap/bootstrap.css")">
         <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/font-awesome.css")">
         <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/main.css")">
@@ -27,6 +27,24 @@
 
     </head>
     <body>
+            <script>
+                    window.fbAsyncInit = function() {
+                            FB.init({
+                                    appId      : '1104518402972290',
+                                    xfbml      : true,
+                                    version    : 'v2.7'
+                            });
+                    };
+
+                    (function(d, s, id){
+                            var js, fjs = d.getElementsByTagName(s)[0];
+                            if (d.getElementById(id)) {return;}
+                            js = d.createElement(s); js.id = id;
+                            js.src = "//connect.facebook.net/en_US/sdk.js";
+                            fjs.parentNode.insertBefore(js, fjs);
+                    }(document, 'script', 'facebook-jssdk'));
+            </script>
+
             <!-- Fixed navbar -->
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
@@ -68,8 +86,8 @@
                             <p class="footer-company-name">IsThereAnyOffer &copy; 2016</p>
 
                             <div class="footer-icons">
-                                    <a class="facebook" href="https://www.facebook.com/Isthereanyoffer-1736371716651483/"><i class="fa fa-facebook"></i></a>
-                                    <a class="twitter" href="https://twitter.com/isthereanyoffer"><i class="fa fa-twitter"></i></a>
+                                    <a target="_blank" class="facebook" href="https://www.facebook.com/Isthereanyoffer-1736371716651483/"><i class="fa fa-facebook"></i></a>
+                                    <a target="_blank" class="twitter" href="https://twitter.com/isthereanyoffer"><i class="fa fa-twitter"></i></a>
                             </div>
 
                     </div>

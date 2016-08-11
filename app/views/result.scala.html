@@ -6,7 +6,7 @@
             <form id="form" method="post" action="/search">
                 <div class="col-md-7 search-col relative locationicon">
                     <i class="fa fa-gamepad icon-append" aria-hidden="true"></i>
-                    <input type="text" name="search" id="typeahead" class="form-control has-icon" placeholder="Yo estoy buscando ..." value="">
+                    <input type="text" name="search" id="typeahead" class="form-control has-icon" placeholder="I am looking for ..." value="">
                 </div>
                 <div class="col-md-1 search-col">
                     <button class="btn btn-success btn-search btn-block">
@@ -16,7 +16,7 @@
             </form>
         </div>
         <br><br>
-        <h4>Resultados de la búsqueda: @query</h4><br>
+        <h4>Results for search: @query</h4><br>
         <div class="row">
             @for(game <- games) {
                 <a href="@routes.DetailController.index(game.id)">

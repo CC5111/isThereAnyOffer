@@ -8,8 +8,11 @@
         <div class="container" >
                 <div class="col-md-3 content-detail" style="text-align: center;">
                         <div class="content-image-background">
-                                <div class ="detail-image" style="background-image: url(@routes.Assets.versioned(game.cover));
+                                <div  style="background-image: url(@routes.Assets.versioned(game.cover));
                                         background-size: cover; ">
+                                        <img src="@routes.Assets.versioned(game.cover)"
+                                        style="visibility: hidden;max-width: 100%;
+                                                max-height: 100%;" />
                                 </div>
                         </div>
 
@@ -31,7 +34,7 @@
 
                         <div class="content-image-background">
                                 <a type="submit" class="btn btn-danger btn-default" data-toggle="modal" data-target="#videoModal" data-theVideo="@game.videoLink">
-                                        <i class="fa fa-youtube-square" aria-hidden="true"></i> Ver video
+                                        <i class="fa fa-youtube-square" aria-hidden="true"></i> Watch video
                                 </a>
                         </div>
 
@@ -44,33 +47,41 @@
                                 <p>@game.description
 
                         </div>
+                        <div class="col-md-12 content-detail">
 
-                        <div class="col-md-12 content-detail-background">
-                                <div style="padding-left: 0">
-                                        <table class="table detail">
-                                                <tbody>
-                                                        <tr >
-                                                                <td >Web Page</td>
-                                                                <td ><a href="@game.link" target="_blank">@game.link</a></td>
-                                                        </tr>
-                                                        <tr >
-                                                                <td >Rating</td>
-                                                                <td >@game.rating</td>
-                                                        </tr>
-                                                        <tr >
-                                                                <td >Publisher</td>
-                                                                <td >@game.publisher</td>
-                                                        </tr>
-                                                        <tr >
-                                                                <td >Genre(s)</td>
-                                                                <td >@genres.mkString(", ")</td>
-                                                        </tr>
-                                                        <tr >
-                                                                <td >Category(ies)</td>
-                                                                <td >@categories.mkString(", ")</td>
-                                                        </tr>
-                                                </tbody>
-                                        </table>
+                                <div class="col-md-9 content-detail">
+                                        <div class="content-image-background">
+                                                <div >
+                                                <table class="table detail">
+                                                        <tbody>
+                                                                <tr >
+                                                                        <td >Web Page</td>
+                                                                        <td ><a href="@game.link" target="_blank">@game.link</a></td>
+                                                                </tr>
+                                                                <tr >
+                                                                        <td >Publisher</td>
+                                                                        <td >@game.publisher</td>
+                                                                </tr>
+                                                                <tr >
+                                                                        <td >Genre(s)</td>
+                                                                        <td >@genres.mkString(", ")</td>
+                                                                </tr>
+                                                                <tr >
+                                                                        <td >Category(ies)</td>
+                                                                        <td >@categories.mkString(", ")</td>
+                                                                </tr>
+                                                        </tbody>
+                                                </table>
+                                        </div>
+                                        </div>
+                                </div>
+                                <div class="col-md-3 content-detail-background">
+                                        <div style="background-image: url(@routes.Assets.versioned("images/rating/"+game.rating+".png"));
+                                                background-size: cover;  ">
+                                                <img src="@routes.Assets.versioned("images/rating/"+game.rating+".png")"
+                                                        style="visibility: hidden;max-width: 100%;
+                                                        max-height: 100%;" />
+                                        </div>
                                 </div>
                         </div>
 
@@ -84,11 +95,11 @@
                         <thead>
                                 <tr>
 
-                                        <th><div class="content-cell-th">Plataforma</div></th>
-                                        <th><div class="content-cell-th">Tipo</div></th>
-                                        <th><div class="content-cell-th">Tienda</div></th>
-                                        <th><div class="content-cell-th">Precio Normal</div></th>
-                                        <th colspan=2><div class="content-cell-th">Precio Oferta</div></th>
+                                        <th><div class="content-cell-th">Platform</div></th>
+                                        <th><div class="content-cell-th">Type</div></th>
+                                        <th><div class="content-cell-th">Store</div></th>
+                                        <th><div class="content-cell-th">Normal Price</div></th>
+                                        <th colspan=2><div class="content-cell-th">Offer Price</div></th>
 
                                 </tr>
                         </thead>
@@ -134,25 +145,12 @@
                 </div>
         </div>
         <br>
-        <div id="disqus_thread" class="container"></div>
-        <script>
-                //FUNCTION TO GET AND AUTO PLAY YOUTUBE VIDEO FROM DATATAG
-        function autoPlayYouTubeModal(){
-                var trigger = $("body").find('[data-toggle="modal"]');
-                trigger.click(function() {
-                        var theModal = $(this).data( "target" ),
-                                videoSRC = $(this).attr( "data-theVideo" ),
-                                videoSRCauto = videoSRC+"?autoplay=1" ;
-                        $(theModal+' iframe').attr('src', videoSRCauto);
-                        $(theModal+' button.close').click(function () {
-                                $(theModal+' iframe').attr('src', videoSRC);
-                        });
-                });
+        <div class="container">
+                <div class="fb-comments" order_by="reverse_time" data-href="https://www.isthereanyoffer.emoreno.cl/detail/@game.id"
+                data-numposts="5" colorscheme="dark" data-width="100%"></div>
+        </div>
 
-                $("#videoModal").on('hidden.bs.modal', function (e) {
-                        $('#frame').removeAttr('src');
-                });
-        }
+        <script>
 
 
 
@@ -160,25 +158,6 @@
                 autoPlayYouTubeModal();
         });
         </script>
-        <script>
-
-
-                /**
-                 *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-                 *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
-                var disqus_config = function () {
-                        this.page.url = 'https://www.isthereanyoffer.emoreno.cl/detail/@game.id/';  // Replace PAGE_URL with your page's canonical URL variable
-                        this.page.identifier = '@game.id'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-                };
-
-                (function() { // DON'T EDIT BELOW THIS LINE
-                        var d = document, s = d.createElement('script');
-                        s.src = '//isthereanyoffer.disqus.com/embed.js';
-                        s.setAttribute('data-timestamp', +new Date());
-                        (d.head || d.body).appendChild(s);
-                })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
         <script>
                 var ctx = document.getElementById("myChart");

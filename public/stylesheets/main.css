@@ -3,6 +3,11 @@ body {
     background:rgba(0, 0, 0, 1);
 }
 
+body :not(.fa)
+{
+    font-family: 'Roboto', sans-serif !important;
+
+}
 body p{
     color: white;
 }
