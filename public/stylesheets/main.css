@@ -731,3 +731,7 @@ body.modal-open #wrap{
     }
 
 }
+
+a.card:hover{
+    text-decoration: none;
+}
