@@ -43,6 +43,14 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
     } yield game
     db.run(query.result)
   }
+
+  def dataForGraphic(id: Long): Future[Seq[Offer]] = {
+    val offerQ = SlickTables.offerQ
+
+    val query = offerQ.filter(_.idGame === id)
+
+    db.run(query.result)
+  }
 }
 
 @Singleton

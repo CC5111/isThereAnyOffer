@@ -1,11 +1,13 @@
 package controllers
 
+import java.sql.Timestamp
 import javax.inject.Inject
 
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import models.daos.{GameDAO, OfferDAO}
-import models.entities.{Game, Genre, Offer, Platform, Category}
+import models.entities.{Category, Game, Genre, Offer, Platform}
+import org.joda.time.{DateTime, Days}
 import play.api.libs.json._
 import play.api.mvc.{Action, Controller}
 
@@ -137,6 +139,84 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
               "platform" -> Json.toJson(platformCount),
               "category" -> Json.toJson(categoriesCount),
               "totalOffers" -> Json.toJson(totalOffers.length))))
+  }
+
+
+  implicit def dateTimeOrdering: Ordering[Timestamp] = Ordering.fromLessThan(_ before  _)
+
+  def numberToMonth(numberMont: Int) = numberMont match {
+    case 1 => "Jan"
+    case 2 => "Feb"
+    case 3 => "Mar"
+    case 4 => "Apr"
+    case 5 => "May"
+    case 6 => "Jun"
+    case 7 => "Jul"
+    case 8 => "Aug"
+    case 9 => "Sep"
+    case 10 => "Oct"
+    case 11 => "Nov"
+    case 12 => "Dic"
+    case _ => "Not Found Month"
+  }
+
+  implicit val tupleDateWrite = new Writes[DateTime] {
+    override def writes(date: DateTime): JsValue = Json.toJson(date.getDayOfMonth + " " + numberToMonth(date.getMonthOfYear) + " " + date.getYear)
+  }
+
+  def sameDate(date1: DateTime, date2: DateTime) = {
+    date1.getDayOfMonth == date2.getDayOfMonth && date1.getMonthOfYear == date2.getMonthOfYear && date1.getYear == date2.getYear
+  }
+
+  def dataForGraphic(idGame: Int) = Action.async{
+    gameDAO.dataForGraphic(idGame).map{ offers =>
+      if (offers.isEmpty) Ok(createErrorJSON("No existen ofertas"))
+      else {
+        // obtener los labels del grafico
+        val minDate = new DateTime(offers.map(_.fromDate).min)
+        val now = DateTime.now()
+
+        val numberOfDays = Days.daysBetween(minDate, now).getDays()
+        val days = for (f<- 0 to numberOfDays) yield minDate.plusDays(f)
+
+        val offersByStore = offers.groupBy(_.store).map{case (store, offersStore) => (store, offersStore.map(offer => (new DateTime(offer.fromDate), offer.offerPrice)))}
+
+        val points = offersByStore.map{case (store, offersStore) =>
+            val dataStore = days.map(day => {
+              var ret: Option[Double] = None
+              offersStore.foreach((offerDayPrice) => {
+                if (sameDate(offerDayPrice._1, day)) ret = Some(offerDayPrice._2)
+              })
+              ret
+            })
+            Json.obj(
+              "label" -> store,
+              "fill" -> false,
+              "lineTension" -> 0.1,
+              "backgroundColor" -> "rgba(75,192,192,0.4)",
+              "borderColor" -> "rgba(75,192,192,1)",
+              "borderCapStyle" -> "butt",
+              "borderDashOffset" -> 0.0,
+              "borderJoinStyle" -> "miter",
+              "pointBorderColor" -> "rgba(75,192,192,1)",
+              "pointBackgroundColor" -> "#fff",
+              "pointBorderWidth" -> 1,
+              "pointHoverRadius" -> 5,
+              "pointHoverBackgroundColor" -> "rgba(75,192,192,1)",
+              "pointHoverBorderColor" -> "rgba(220,220,220,1)",
+              "pointHoverBorderWidth" -> 2,
+              "pointRadius" -> 10,
+              "pointHitRadius" -> 10,
+              "data" -> dataStore
+            )
+        }
+        Ok(createSuccessJSON(Json.obj(
+          "datasets" -> Json.toJson(points),
+          "labels" -> Json.toJson(days)
+        )))
+        //Ok(createErrorJSON("No existen ofertas"))
+      }
+    }
   }
 
   def createSuccessJSON(data : JsValue) = {
