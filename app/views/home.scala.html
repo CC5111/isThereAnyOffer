@@ -9,507 +9,354 @@
 )
 
 @base(title){
-        <div class="container">
-                <div class="jumbotron">
-                        <img src="@routes.Assets.versioned("images/logo_brand.png")"  height="100" width="150">
-                        <h1 style="color: white">Is There Any Offer</h1>
-                        <div class="container">
-                                <p style="color: white"> Find local classified ads on bootclassified in
-                                        Minutes </p>
-                                <br>
-                                <div class="row search-row animated fadeInUp col-md-offset-3">
-                                        <form id="form" method="post" action="/search"  autocomplete="off">
-                                                <div class="col-md-7 search-col relative locationicon">
-                                                        <i class="fa fa-gamepad icon-append" aria-hidden="true"></i>
-                                                        <input type="text" name="search" id="typeahead" class="form-control has-icon" placeholder="I am looking for ..." value=""  autocomplete="off">
-                                                </div>
-                                                <div class="col-md-1 search-col">
-                                                        <button class="btn btn-success btn-search btn-block">
-                                                                <i class="fa fa-search" aria-hidden="true"></i>
-                                                        </button>
-                                                </div>
-                                        </form>
-                                </div>
-
-                        </div>
-                </div><br>
-                <div class="row">
-                @for(tuple <- tuplesBestOfferGamePlatform) {
-                        <div class="col-md-3" style="padding: 2px;">
-                                <div class="offer-item">
-                                        <div class="post feature-post" style="background-image: url(@routes.Assets.versioned(tuple._2.cover));
-                                                background-size: cover; ">
-                                                <div class="post-content row ">
-                                                        <div class="col-md-8">
-                                                                <div class="category">
-                                                                        <h5> @tuple._3</h5>
-                                                                </div>
-                                                                <h2 class="entry-title">
-                                                                        <a href="@routes.DetailController.index(tuple._2.id)">@tuple._2.name</a>
-                                                                </h2>
-                                                        </div>
-
-                                                        <div class="col-md-4 porcentaje">
-                                                                <a href="@tuple._1.link" target="_blank">
-                                                                        <h3><span class="label label-success">@tuple._1.discount%</span></h3>
-
-                                                                </a></div>
-                                                </div>
-                                        </div>
-                                </div>
-                        </div>
-                }
-                </div>
-
+    <div class="container">
+        <div class="jumbotron">
+            <img src="@routes.Assets.versioned("images/logo_brand.png")"  height="100" width="150">
+            <h1 style="color: white">Is There Any Offer</h1>
+            <div class="container">
+                <p style="color: white"> Find local classified ads on bootclassified in
+                    Minutes </p>
                 <br>
-
-
-                <div class="col-md-3">
-                        <div class="col-md-12 content-title-section">
-                                <h4>Filters</h4>
-
+                <div class="row search-row animated fadeInUp col-md-offset-3">
+                    <form id="form" method="post" action="/search"  autocomplete="off">
+                        <div class="col-md-7 search-col relative locationicon">
+                            <i class="fa fa-gamepad icon-append" aria-hidden="true"></i>
+                            <input type="text" name="search" id="typeahead" class="form-control has-icon" placeholder="I am looking for ..." value=""  autocomplete="off">
                         </div>
-                        <div class="panel-group col-md-12 content-filter-section " id="accordion" role="tablist" aria-multiselectable="true">
-                                <div class="panel panel-default">
-                                        <div class="panel-heading active" role="tab" id="headingOne">
-                                                <h4 class="panel-title">
-                                                        <a role="button" class="btn-block" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                                Platform
-                                                        </a>
-                                                </h4>
-                                        </div>
-                                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                                                <div class="list-group">
-                                                @for(tuplePlatformCount <- tuplesPlatformCount) {
-                                                        <button id="button_platform_@tuplePlatformCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="platform" data-name="@tuplePlatformCount._1">
-                                                                @tuplePlatformCount._1
-                                                        <span id="platform_count_@tuplePlatformCount._1.name.replaceAll(" ", "_")" class="badge count-platform-span">@tuplePlatformCount._2/@tuplePlatformCount._2</span>
-                                                        </button>
-                                                }
-                                                </div>
-                                        </div>
-                                </div>
-                                <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="headingTwo">
-                                                <h4 class="panel-title">
-                                                        <a class="collapsed btn-block" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                                                Genre
-                                                        </a>
-                                                </h4>
-                                        </div>
-                                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                                <div class="list-group">
-                                                @for(tupleGenreCount <- tuplesGenreCount) {
-                                                        <button id="button_genre_@tupleGenreCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="genre" data-name="@tupleGenreCount._1">
-                                                                @tupleGenreCount._1
-                                                        <span id="genre_count_@tupleGenreCount._1.name.replaceAll(" ", "_")" class="badge count-genre-span">@tupleGenreCount._2/@tupleGenreCount._2</span>
-                                                        </button>
-                                                }                        </div>
-                                        </div>
-                                </div>
-                                <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="headingThree">
-                                                <h4 class="panel-title">
-                                                        <a class="collapsed btn-block" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                                Category
-                                                        </a>
-                                                </h4>
-                                        </div>
-                                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                                <div class="list-group">
-                                                @for(tupleCategoryCount <- tuplesCategoryCount) {
-                                                        <button id="button_category_@tupleCategoryCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="category" data-name="@tupleCategoryCount._1">
-                                                                @tupleCategoryCount._1
-                                                        <span id="category_count_@tupleCategoryCount._1.name.replaceAll(" ", "_")" class="badge count-category-span">@tupleCategoryCount._2/@tupleCategoryCount._2</span>
-                                                        </button>
-                                                }
-                                                </div>
-                                        </div>
-                                </div>
+                        <div class="col-md-1 search-col">
+                            <button class="btn btn-success btn-search btn-block">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
                         </div>
-
-                        @*<div class="list-group">*@
-                        @*<button type="button" class="list-group-item title" disabled><b>PLATAFORMA</b></button>*@
-                        @*@for(tuplePlatformCount <- tuplesPlatformCount) {*@
-                        @*<button id="button_platform_@tuplePlatformCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="platform" data-name="@tuplePlatformCount._1">*@
-                        @*@tuplePlatformCount._1*@
-                        @*<span id="platform_count_@tuplePlatformCount._1.name.replaceAll(" ", "_")" class="badge">@tuplePlatformCount._2/@tuplePlatformCount._2</span>*@
-                        @*</button>*@
-                        @*}*@
-
-                        @*<button type="button" class="list-group-item title" disabled><b>GÉNERO</b></button>*@
-                        @*@for(tupleGenreCount <- tuplesGenreCount) {*@
-                                @*<button id="button_genre_@tupleGenreCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="genre" data-name="@tupleGenreCount._1">*@
-                                @*@tupleGenreCount._1*@
-                                @*<span id="genre_count_@tupleGenreCount._1.name.replaceAll(" ", "_")" class="badge">@tupleGenreCount._2/@tupleGenreCount._2</span>*@
-                                @*</button>*@
-                                @*}*@
-
-                                @*<button type="button" class="list-group-item title" disabled><b>CATEGORÍA</b></button>*@
-                                @*@for(tupleCategoryCount <- tuplesCategoryCount) {*@
-                                        @*<button id="button_category_@tupleCategoryCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="category" data-name="@tupleCategoryCount._1">*@
-                                        @*@tupleCategoryCount._1*@
-                        @*<span id="category_count_@tupleCategoryCount._1.name.replaceAll(" ", "_")" class="badge">@tupleCategoryCount._2/@tupleCategoryCount._2</span>*@
-                        @*</button>*@
-                        @*}*@
-                        @*</div>*@
+                    </form>
                 </div>
-                <div class="col-md-9">
-                        <div class="col-md-12 content-title-section">
-                                <h4>Offers</h4>
+
+            </div>
+        </div><br>
+        <div class="row">
+        @for(tuple <- tuplesBestOfferGamePlatform) {
+            <div class="col-md-3" style="padding: 2px;">
+                <div class="offer-item">
+                    <div class="post feature-post" style="background-image: url(@routes.Assets.versioned(tuple._2.cover));
+                        background-size: cover; ">
+                        <div class="post-content row ">
+                            <div class="col-md-8">
+                                <div class="category">
+                                    <h5> @tuple._3</h5>
+                                </div>
+                                <h2 class="entry-title">
+                                    <a href="@routes.DetailController.index(tuple._2.id)">@tuple._2.name</a>
+                                </h2>
+                            </div>
+
+                            <div class="col-md-4 porcentaje">
+                                <a href="@tuple._1.link" target="_blank">
+                                    <h3><span class="label label-success">@tuple._1.discount%</span></h3>
+
+                                </a></div>
                         </div>
-                        <table id="tableOffers" class="table table-bordered" >
-                                <thead>
-                                        <tr style="cursor: pointer">
-                                                <th><div class="content-cell-th">Name</div></th>
-                                                <th><div class="content-cell-th">Platform</div></th>
-                                                <th><div class="content-cell-th">Type</div></th>
-                                                <th><div class="content-cell-th">Store</div></th>
-                                                <th><div class="content-cell-th">Normal Price</div></th>
-                                                <th colspan=2><div class="content-cell-th">Offer Price</div></th>
-                                        </tr>
-                                </thead>
-                                <tbody id="offers">
-                                </tbody>
-                        </table>
-                        <nav style="text-align: center;">
-                                <div id="pagination"></div>
-                                <img id="loadinggif" src="@routes.Assets.versioned("images/loading.gif")">
-                        </nav>
-                        <div class="ui four column grid">
-                                <div class="column">
-                                        <a class="ui fluid link green card" href="http://www.u-cursos.cl">
-                                                <div class="image">
-                                                        <img  src="@routes.Assets.versioned("images/games/uncharted.jpg")">
-                                                </div>
-                                                <div class="content">
-                                                        <div class="header">Uncharted 4</div>
-                                                        <div class="meta">
-                                                                <span class="right floated">PS4</span>
-                                                                <span class="date">Game</span>
-                                                        </div>
-                                                        <div class="description">
-                                                                <p>Cute dogs come in a variety of shapes and sizes.
-                                                                        Some cute dogs are cute for their adorable faces.</p>
-                                                                <p>Many people also have their own barometers for what makes a cute dog.</p>
-                                                        </div>
-
-                                                </div>
-
-
-                                        </a>
-                                </div>
-                                <div class="column">
-                                        <a class="ui fluid link green card" href="http://www.u-cursos.cl">
-                                                <div class="image">
-                                                        <img  src="@routes.Assets.versioned("images/games/uncharted.jpg")">
-                                                </div>
-                                                <div class="content">
-                                                        <div class="header">Uncharted 4</div>
-                                                        <div class="meta">
-                                                                <span class="right floated">PS4</span>
-                                                                <span class="date">Game</span>
-                                                        </div>
-                                                        <div class="description">
-                                                                <p>Cute dogs come in a variety of shapes and sizes.
-                                                                        Some cute dogs are cute for their adorable faces.</p>
-                                                                <p>Many people also have their own barometers for what makes a cute dog.</p>
-                                                        </div>
-
-                                                </div>
-
-
-                                        </a>
-                                </div>
-                                <div class="column">
-                                        <a class="ui fluid link green card" href="http://www.u-cursos.cl">
-                                                <div class="image">
-                                                        <img  src="@routes.Assets.versioned("images/games/uncharted.jpg")">
-                                                </div>
-                                                <div class="content">
-                                                        <div class="header">Uncharted 4</div>
-                                                        <div class="meta">
-                                                                <span class="right floated">PS4</span>
-                                                                <span class="date">Game</span>
-                                                        </div>
-                                                        <div class="description">
-                                                                <p>Cute dogs come in a variety of shapes and sizes.
-                                                                        Some cute dogs are cute for their adorable faces.</p>
-                                                                <p>Many people also have their own barometers for what makes a cute dog.</p>
-                                                        </div>
-
-                                                </div>
-
-
-                                        </a>
-                                </div>
-                                <div class="column">
-                                        <a class="ui fluid link green card" href="http://www.u-cursos.cl">
-                                                <div class="image">
-                                                        <img  src="@routes.Assets.versioned("images/games/uncharted.jpg")">
-                                                </div>
-                                                <div class="content">
-                                                        <div class="header">Uncharted 4</div>
-                                                        <div class="meta">
-                                                                <span class="right floated">PS4</span>
-                                                                <span class="date">Game</span>
-                                                        </div>
-                                                        <div class="description">
-                                                                <p>Cute dogs come in a variety of shapes and sizes.
-                                                                        Some cute dogs are cute for their adorable faces.</p>
-                                                                <p>Many people also have their own barometers for what makes a cute dog.</p>
-                                                        </div>
-
-                                                </div>
-
-
-                                        </a>
-                                </div>
-                        </div>
-                        <div class="ui four column grid">
-                                <div class="column">
-                                        <a class="ui fluid link green card" href="http://www.u-cursos.cl">
-                                                <div class="image">
-                                                        <img  src="@routes.Assets.versioned("images/games/uncharted.jpg")">
-                                                </div>
-                                                <div class="content">
-                                                        <div class="header">Uncharted 4</div>
-                                                        <div class="meta">
-                                                                <span class="right floated">PS4</span>
-                                                                <span class="date">Game</span>
-                                                        </div>
-                                                        <div class="description">
-                                                                <p>Cute dogs come in a variety of shapes and sizes.
-                                                                        Some cute dogs are cute for their adorable faces.</p>
-                                                                <p>Many people also have their own barometers for what makes a cute dog.</p>
-                                                        </div>
-
-                                                </div>
-
-
-                                        </a>
-                                </div>
-                                <div class="column">
-                                        <a class="ui fluid link green card" href="http://www.u-cursos.cl">
-                                                <div class="image">
-                                                        <img  src="@routes.Assets.versioned("images/games/uncharted.jpg")">
-                                                </div>
-                                                <div class="content">
-                                                        <div class="header">Uncharted 4</div>
-                                                        <div class="meta">
-                                                                <span class="right floated">PS4</span>
-                                                                <span class="date">Game</span>
-                                                        </div>
-                                                        <div class="description">
-                                                                <p>Cute dogs come in a variety of shapes and sizes.
-                                                                        Some cute dogs are cute for their adorable faces.</p>
-                                                                <p>Many people also have their own barometers for what makes a cute dog.</p>
-                                                        </div>
-
-                                                </div>
-
-
-                                        </a>
-                                </div>
-                                <div class="column">
-                                        <a class="ui fluid link green card" href="http://www.u-cursos.cl">
-                                                <div class="image">
-                                                        <img  src="@routes.Assets.versioned("images/games/uncharted.jpg")">
-                                                </div>
-                                                <div class="content">
-                                                        <div class="header">Uncharted 4</div>
-                                                        <div class="meta">
-                                                                <span class="right floated">PS4</span>
-                                                                <span class="date">Game</span>
-                                                        </div>
-                                                        <div class="description">
-                                                                <p>Cute dogs come in a variety of shapes and sizes.
-                                                                        Some cute dogs are cute for their adorable faces.</p>
-                                                                <p>Many people also have their own barometers for what makes a cute dog.</p>
-                                                        </div>
-
-                                                </div>
-
-
-                                        </a>
-                                </div>
-                                <div class="column">
-                                        <a class="ui fluid link green card" href="http://www.u-cursos.cl">
-                                                <div class="image">
-                                                        <img  src="@routes.Assets.versioned("images/games/uncharted.jpg")">
-                                                </div>
-                                                <div class="content">
-                                                        <div class="header">Uncharted 4</div>
-                                                        <div class="meta">
-                                                                <span class="right floated">PS4</span>
-                                                                <span class="date">Game</span>
-                                                        </div>
-                                                        <div class="description">
-                                                                <p>Cute dogs come in a variety of shapes and sizes.
-                                                                        Some cute dogs are cute for their adorable faces.</p>
-                                                                <p>Many people also have their own barometers for what makes a cute dog.</p>
-                                                        </div>
-
-                                                </div>
-
-
-                                        </a>
-                                </div>
-                        </div>
-
+                    </div>
                 </div>
+            </div>
+        }
         </div>
-        <script type="text/javascript" >
-                //Search
-                function getGames(){
-                        var $input = $('#typeahead');
-                        $.get('api/games', function(data){
-                                console.log(data["data"]);
-                                $input.typeahead({ source:data["data"] });
-                        },'json');
-                        $input.change(function() {
-                                var current = $input.typeahead("getActive");
-                                if (current) {
-                                        // Some item from your model is active!
-                                        if (current.name == $input.val()) {
-                                                console.log("Match: "+ current.name);
-                                                $input.val('');
-                                                window.location.href = "detail/"+current.id;
-                                        } else {
-                                                // This means it is only a partial match, you can either add a new item
-                                                // or take the active if you don't want new items
-                                        }
-                                } else {
-                                        // Nothing is active so it is a new value (or maybe empty value)
-                                }
-                        });
-                }
-                // Filter
-                var filters = {pageNumber: 1};
-                var visiblePages = 7;
-                var sizePage = 3;
-                function showLoadingTable() {
-                        $('#loadinggif').show()
-                }
-                function hiddenLoadingTable() {
-                        $('#loadinggif').hide();
-                }
-                function removeRows() {
-                        var offersTable = $('#offers').find('tr');
-                        offersTable.each(function(index, row) {
-                                $(row).remove()
-                        })
-                }
-                function updateCounter(type, data) {
-                        var counters = $('.count-' + type + '-span');
-                        counters.each(function(index, counterSpan) {
-                                var countArray = $(counterSpan).text().split('/');
-                                var total = parseInt(countArray[1]);
-                                var subtype = counterSpan.id;
-                                var noSubtype = true;
-                                for (var i = 0; i < data.length; i++) {
-                                        var actualName = type + '_count_' + data[i].name.replace(/ /g, "_");
-                                        if (actualName === subtype) {
-                                                $(counterSpan).text(data[i].count + '/' + total);
-                                                noSubtype = false;
-                                                break;
-                                        }
-                                }
-                                if (noSubtype) {
-                                        $(counterSpan).text('0/' + total);
-                                }
-                        });
-                }
-                function updateCounters(data) {
-                        if (!data) {
-                                data = {
-                                        'genre': [],
-                                        'platform': [],
-                                        'category': []
-                                }
+
+        <br>
+
+
+        <div class="col-md-3">
+            <div class="col-md-12 content-title-section">
+                <h4>Filters</h4>
+
+            </div>
+            <div class="panel-group col-md-12 content-filter-section " id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default">
+                    <div class="panel-heading active" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a role="button" class="btn-block" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Platform
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="list-group">
+                        @for(tuplePlatformCount <- tuplesPlatformCount) {
+                            <button id="button_platform_@tuplePlatformCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="platform" data-name="@tuplePlatformCount._1">
+                                @tuplePlatformCount._1
+                            <span id="platform_count_@tuplePlatformCount._1.name.replaceAll(" ", "_")" class="badge count-platform-span">@tuplePlatformCount._2/@tuplePlatformCount._2</span>
+                            </button>
                         }
-                        updateCounter('genre', data['genre']);
-                        updateCounter('platform', data['platform']);
-                        updateCounter('category', data['category']);
-                }
-                function initPagination(totalPages) {
-                        $('#pagination').twbsPagination({
-                                totalPages: totalPages,
-                                visiblePages: visiblePages,
-                                initiateStartPageClick: false,
-                                onPageClick: function (event, page) {
-                                        filters['pageNumber'] = page;
-                                        showLoadingTable();
-                                        getOffersWithFilter(true);
-                                }
-                        });
-                }
-                function updatePagination(totalPages) {
-                        // reset pagination
-                        $('#pagination').twbsPagination('destroy');
-                        initPagination(totalPages);
-                }
-                function getOffersWithFilter(changePage, callback) {
-                        $.get('api/filter', filters).done(function(results) {
-                                hiddenLoadingTable();
-                                if (results.status === 'success') {
-                                        var data = results['data'];
-                                        console.log(data)
-                                        var offers = data['offers'];
-                                        removeRows();
-                                        var offersTable = $('#offers');
-                                        offers.forEach(function(offer) {
-                                                var offerRow = '' +
-                                                        '<tr>' +
-                                                        '<td><div class="content-cell-td"><a href="/detail/' + offer.game.id + '">' + offer.game.name + '</a></div></td>' +
-                                                        '<td><div class="content-cell-td">' + offer.platform.name + '</div></td>' +
-                                                        '<td><div class="content-cell-td">' + offer.game.typeGame + '</div></td>' +
-                                                        '<td><div class="content-cell-td"><a href="' + offer.offer.link + '">' + offer.store + '</a></div></td>' +
-                                                        '<td><div class="content-cell-td">$' + offer.offer.normalPrice + '</div></td>' +
-                                                        '<td><div class="content-cell-td">$' + offer.offer.offerPrice + '</div></td>' +
-                                                        '<td class="descuento"><div class="content-cell-td">' + offer.offer.discount + '%</div></td>' +
-                                                        '</tr>';
-                                                offersTable.append(offerRow);
-                                        });
-                                        updateCounters(data);
-                                        if (callback) callback(parseInt(Math.ceil(data['totalOffers'])/sizePage));
-                                        if (!changePage) updatePagination(Math.ceil(parseInt(data['totalOffers'])/sizePage));
-                                } else {
-                                        removeRows();
-                                        updateCounters();
-                                        if (callback) callback(parseInt(Math.ceil(1)));
-                                        updatePagination(1);
-                                }
-                        }).fail(function(err) {
-                                hiddenLoadingTable();
-                                console.log(err);
-                        })
-                }
-                function filter(typeFilter, nameFilter) {
-                        if (filters[typeFilter] === nameFilter) {
-                                $('#button_' + typeFilter + '_' + nameFilter.replace(/ /g, '_')).removeClass('active');
-                                delete filters[typeFilter];
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingTwo">
+                        <h4 class="panel-title">
+                            <a class="collapsed btn-block" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Genre
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                        <div class="list-group">
+                        @for(tupleGenreCount <- tuplesGenreCount) {
+                            <button id="button_genre_@tupleGenreCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="genre" data-name="@tupleGenreCount._1">
+                                @tupleGenreCount._1
+                            <span id="genre_count_@tupleGenreCount._1.name.replaceAll(" ", "_")" class="badge count-genre-span">@tupleGenreCount._2/@tupleGenreCount._2</span>
+                            </button>
+                        }                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingThree">
+                        <h4 class="panel-title">
+                            <a class="collapsed btn-block" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Category
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                        <div class="list-group">
+                        @for(tupleCategoryCount <- tuplesCategoryCount) {
+                            <button id="button_category_@tupleCategoryCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="category" data-name="@tupleCategoryCount._1">
+                                @tupleCategoryCount._1
+                            <span id="category_count_@tupleCategoryCount._1.name.replaceAll(" ", "_")" class="badge count-category-span">@tupleCategoryCount._2/@tupleCategoryCount._2</span>
+                            </button>
                         }
-                        else {
-                                if (filters[typeFilter]) $('#button_' + typeFilter + '_' + filters[typeFilter].replace(/ /g, '_')).removeClass('active');
-                                $('#button_' + typeFilter + '_' + nameFilter.replace(/ /g, '_')).toggleClass('active');
-                                filters[typeFilter] = nameFilter;
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="list-group">*@
+            @*<button type="button" class="list-group-item title" disabled><b>PLATAFORMA</b></button>*@
+            @*@for(tuplePlatformCount <- tuplesPlatformCount) {*@
+            @*<button id="button_platform_@tuplePlatformCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="platform" data-name="@tuplePlatformCount._1">*@
+            @*@tuplePlatformCount._1*@
+            @*<span id="platform_count_@tuplePlatformCount._1.name.replaceAll(" ", "_")" class="badge">@tuplePlatformCount._2/@tuplePlatformCount._2</span>*@
+            @*</button>*@
+            @*}*@
+
+            @*<button type="button" class="list-group-item title" disabled><b>GÉNERO</b></button>*@
+            @*@for(tupleGenreCount <- tuplesGenreCount) {*@
+                @*<button id="button_genre_@tupleGenreCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="genre" data-name="@tupleGenreCount._1">*@
+                @*@tupleGenreCount._1*@
+                @*<span id="genre_count_@tupleGenreCount._1.name.replaceAll(" ", "_")" class="badge">@tupleGenreCount._2/@tupleGenreCount._2</span>*@
+                @*</button>*@
+                @*}*@
+
+                @*<button type="button" class="list-group-item title" disabled><b>CATEGORÍA</b></button>*@
+                @*@for(tupleCategoryCount <- tuplesCategoryCount) {*@
+                    @*<button id="button_category_@tupleCategoryCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="category" data-name="@tupleCategoryCount._1">*@
+                    @*@tupleCategoryCount._1*@
+            @*<span id="category_count_@tupleCategoryCount._1.name.replaceAll(" ", "_")" class="badge">@tupleCategoryCount._2/@tupleCategoryCount._2</span>*@
+            @*</button>*@
+            @*}*@
+            @*</div>*@
+        </div>
+        <div class="col-md-9">
+            <div class="col-md-12 content-title-section">
+                <h4>Offers</h4>
+            </div>
+            <div id="containerOffer">
+
+            </div>
+
+            <nav style="text-align: center;">
+                <div id="pagination"></div>
+                <img id="loadinggif" src="@routes.Assets.versioned("images/loading.gif")">
+            </nav>
+
+
+
+
+        </div>
+    </div>
+    <script type="text/javascript" >
+            //Search
+            function getGames(){
+                var $input = $('#typeahead');
+                $.get('api/games', function(data){
+                    console.log(data["data"]);
+                    $input.typeahead({ source:data["data"] });
+                },'json');
+                $input.change(function() {
+                    var current = $input.typeahead("getActive");
+                    if (current) {
+                        // Some item from your model is active!
+                        if (current.name == $input.val()) {
+                            console.log("Match: "+ current.name);
+                            $input.val('');
+                            window.location.href = "detail/"+current.id;
+                        } else {
+                            // This means it is only a partial match, you can either add a new item
+                            // or take the active if you don't want new items
                         }
-                        filters.pageNumber = 1; // al filtrar partir desde la pagina 1
-                        getOffersWithFilter(false);
+                    } else {
+                        // Nothing is active so it is a new value (or maybe empty value)
+                    }
+                });
+            }
+            // Filter
+            var filters = {pageNumber: 1};
+            var visiblePages = 7;
+            var sizePage = 3;
+            function showLoadingTable() {
+                $('#loadinggif').show()
+            }
+            function hiddenLoadingTable() {
+                $('#loadinggif').hide();
+            }
+            function removeRows() {
+                $('#containerOffer').empty();
+
+            }
+            function updateCounter(type, data) {
+                var counters = $('.count-' + type + '-span');
+                counters.each(function(index, counterSpan) {
+                    var countArray = $(counterSpan).text().split('/');
+                    var total = parseInt(countArray[1]);
+                    var subtype = counterSpan.id;
+                    var noSubtype = true;
+                    for (var i = 0; i < data.length; i++) {
+                        var actualName = type + '_count_' + data[i].name.replace(/ /g, "_");
+                        if (actualName === subtype) {
+                            $(counterSpan).text(data[i].count + '/' + total);
+                            noSubtype = false;
+                            break;
+                        }
+                    }
+                    if (noSubtype) {
+                        $(counterSpan).text('0/' + total);
+                    }
+                });
+            }
+            function updateCounters(data) {
+                if (!data) {
+                    data = {
+                        'genre': [],
+                        'platform': [],
+                        'category': []
+                    }
                 }
-                $('.filter-button').on('click', function (event) {
+                updateCounter('genre', data['genre']);
+                updateCounter('platform', data['platform']);
+                updateCounter('category', data['category']);
+            }
+            function initPagination(totalPages) {
+                $('#pagination').twbsPagination({
+                    totalPages: totalPages,
+                    visiblePages: visiblePages,
+                    initiateStartPageClick: false,
+                    onPageClick: function (event, page) {
+                        filters['pageNumber'] = page;
                         showLoadingTable();
-                        var typeFilter = $(this).data('type');
-                        var nameFilter = $(this).data('name');
-                        filter(typeFilter, nameFilter);
+                        getOffersWithFilter(true);
+                    }
                 });
-                $(document).ready(function() {
-                        getGames();
-                        // true por ser primer cambio de pagina
-                        getOffersWithFilter(true, function(totalPages) {
-                                initPagination(totalPages);
-                        });
+            }
+            function updatePagination(totalPages) {
+                // reset pagination
+                $('#pagination').twbsPagination('destroy');
+                initPagination(totalPages);
+            }
+            function getOffersWithFilter(changePage, callback) {
+                $.get('api/filter', filters).done(function(results) {
+                    hiddenLoadingTable();
+                    if (results.status === 'success') {
+                        var data = results['data'];
+                        console.log(data)
+                        var offers = data['offers'];
+                        removeRows();
+                        var containerOffer =  $('#containerOffer');
+
+                        var open =false;
+                        var row = '';
+                        for(var i = 0; i < offers.length ; i++){
+                            if(!open && i%4 == 0){
+                                row = '<div class="ui four column grid">';
+                                open = true;
+                            }
+
+                            row = row
+                                    +'<div class="column"> '
+                                    +'<div class="ui fluid link green card">'
+                                    +'<a class="image" href="/detail/' + offers[i].game.id + '">'
+                                    +'<div class="ui green ribbon label"> ' + offers[i].offer.discount + '<i class="fa fa-percent"></i></div>'
+                                    +'<img src="/assets/'+offers[i].game.cover+'">'
+                                    +'</a>'
+                                    +'<div class="content">'
+                                    +'<div style="white-space: nowrap;overflow: hidden;"><a style="text-overflow: ellipsis;' +
+                                    ' " class="header" href="/detail/' + offers[i].game.id + '">' + offers[i].game.name + '</a></div>'
+                                    +'<div class="meta">'
+                                    +'<span class="right floated">'+ offers[i].platform.name +'</span>'
+                                    +'<span class="date">' + offers[i].game.typeGame + '</span>'
+                                    +'</div>'
+                                    +'<div class="meta">'
+                                    +'<span class="date">' + offers[i].store + '</span>'
+                                    +'</div>'
+                                    +'<div class="meta">'
+                                    +'<span class="date">Normal: $' + offers[i].offer.normalPrice + '</span>'
+                                    +' </div>'
+                                    +'<div class="description">'
+                                    +'<p>Offer: $' + offers[i].offer.offerPrice + '</p>'
+                                    +'</div>'
+                                    +'</div>'
+                                    +'<a class="ui bottom attached button" href="' + offers[i].offer.link + '">Ver oferta</a>'
+                                    +'</div>'
+                                    +'</div>';
+
+
+                            if(open && ((i+1)%4 == 0 || (i+1) == offers.length)){
+                                open = false;
+                                row = row + '</div>';
+                                containerOffer.append(row);
+
+                            }
+
+                        }
+
+
+
+                        updateCounters(data);
+                        if (callback) callback(parseInt(Math.ceil(data['totalOffers'])/sizePage));
+                        if (!changePage) updatePagination(Math.ceil(parseInt(data['totalOffers'])/sizePage));
+                    } else {
+                        removeRows();
+                        updateCounters();
+                        if (callback) callback(parseInt(Math.ceil(1)));
+                        updatePagination(1);
+                    }
+                }).fail(function(err) {
+                    hiddenLoadingTable();
+                    console.log(err);
+                })
+            }
+            function filter(typeFilter, nameFilter) {
+                if (filters[typeFilter] === nameFilter) {
+                    $('#button_' + typeFilter + '_' + nameFilter.replace(/ /g, '_')).removeClass('active');
+                    delete filters[typeFilter];
+                }
+                else {
+                    if (filters[typeFilter]) $('#button_' + typeFilter + '_' + filters[typeFilter].replace(/ /g, '_')).removeClass('active');
+                    $('#button_' + typeFilter + '_' + nameFilter.replace(/ /g, '_')).toggleClass('active');
+                    filters[typeFilter] = nameFilter;
+                }
+                filters.pageNumber = 1; // al filtrar partir desde la pagina 1
+                getOffersWithFilter(false);
+            }
+            $('.filter-button').on('click', function (event) {
+                showLoadingTable();
+                var typeFilter = $(this).data('type');
+                var nameFilter = $(this).data('name');
+                filter(typeFilter, nameFilter);
+            });
+            $(document).ready(function() {
+                getGames();
+                // true por ser primer cambio de pagina
+                getOffersWithFilter(true, function(totalPages) {
+                    initPagination(totalPages);
                 });
-        </script>
+            });
+    </script>
 }
