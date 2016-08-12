@@ -222,6 +222,7 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
             "pointHoverBorderColor" -> store.pointBorderColor,
             "pointHoverBorderWidth" -> 2, //por defecto
             "pointRadius" -> 10,  //por defecto,
+            "spanGaps" -> true,
             "data" -> dataStoreMoreOne
           )
         }
