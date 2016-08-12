@@ -18,7 +18,6 @@
   "dependencies": {
     "jquery": "^2.2.4",
     "bootstrap": "^3.3.6",
-    "Chart.js": "^2.1.4",
     "bootstrap3-typeahead": "git://github.com/bassjobsen/Bootstrap-3-Typeahead.git#master"
   },
   "install": {

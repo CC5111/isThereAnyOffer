@@ -26,7 +26,7 @@ class UpdateActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
   println("yo soy "+self.path)
 
   val gogActor = context.actorOf(GogActor.props(gameDAO, offerDAO), "GOG-Actor")
-  val psActor = context.actorOf(PsActor.props(gameDAO, offerDAO), "PS-Actor")
+  val psActor = context.actorOf(PsActor.props(gameDAO, offerDAO,ps), "PS-Actor")
   implicit val timeout = Timeout(1 minute)
 
   def receive = {
