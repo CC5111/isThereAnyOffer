@@ -212,6 +212,7 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
           Json.obj(
             "label" -> store.name,
             "lineTension" -> 0.1, //por defecto
+            "steppedLine" -> true,
             "borderColor" -> store.borderColor,
             "borderJoinStyle" -> "miter", //por defecto
             "pointBorderColor" -> store.pointBorderColor,
