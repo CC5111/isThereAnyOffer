@@ -25,7 +25,6 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
     db.run(tableQ.result)
   }
 
-
   def offersByGame(id :Long): Future[Seq[(Offer, Platform, String)]] = {
     val offerQ = SlickTables.offerQ
     val platformQ = SlickTables.platformQ
@@ -54,6 +53,22 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
     db.run(query.result)
   }
 }
+
+@Singleton
+class PsStoreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[PsStoreTable, PsStore]{
+  import dbConfig.driver.api._
+
+  protected val tableQ = SlickTables.psStoreQ
+
+  def all: Future[Seq[(String, Long)]] = {
+    val query = for {
+      p <- tableQ
+    } yield (p.idStore, p.idGame)
+    db.run(query.result)
+  }
+
+}
+
 
 @Singleton
 class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[OfferTable, Offer]{

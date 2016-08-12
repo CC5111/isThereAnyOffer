@@ -5,22 +5,22 @@ import java.util.Date
 import javax.inject.Inject
 
 import akka.actor.{Actor, ActorRef, Props}
-import models.daos.{GameDAO, OfferDAO}
-import models.entities.Offer
+import models.daos.{GameDAO, OfferDAO, PsStoreDAO}
+import models.entities.{Offer, PsStore}
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.ws.WSClient
 
-import scala.util.{Success, Failure}
+import scala.util.{Failure, Success}
 
 object PsActor {
     case class Query(game: Long)
     case object Update
-    def props(gameDAO: GameDAO, offerDAO: OfferDAO)(implicit ws:WSClient) =
-        Props(new PsActor(gameDAO, offerDAO)(ws))
+    def props(gameDAO: GameDAO, offerDAO: OfferDAO, psDAO: PsStoreDAO)(implicit ws:WSClient) =
+        Props(new PsActor(gameDAO, offerDAO, psDAO)(ws))
 }
 
-class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
+class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, psDAO: PsStoreDAO)
                         (implicit ws: WSClient) extends Actor{
     import context._
     import actors.PsActor._
@@ -79,20 +79,21 @@ class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
 
     def receive = {
         case Update => {
-            //val gameIDs: Map[String, Long] = ???
             println("PsActor: Message received from ", sender)
             val s = sender
-            val gameIDs: Map[String, Long] = Map[String, Long](("id1", 1), ("id2", 2))
-            println("PsActor: Getting PsStore's JSON response")
-            val response =  ws.url(allDealsUrl).get().map {
-                resp => (resp.json \ "links").as[List[OfferData]]
-            }.onComplete{
-                case Success(newOffers) =>
-                    val number = processOffers(newOffers, gameIDs)
-                    println("PsActor: Sending response to UpdateActor", sender, sender.path)
-                    s ! ("Se encontraron " + number + " ofertas en PsStore")
-                case Failure(error) =>
-                    s ! "Error al buscar ofertas en PsStore"
+            psDAO.all.map{ seq =>
+                val gameIDs: Map[String, Long] = seq.toMap
+                println("PsActor: Getting PsStore's JSON response")
+                val response =  ws.url(allDealsUrl).get().map {
+                    resp => (resp.json \ "links").as[List[OfferData]]
+                }.onComplete{
+                    case Success(newOffers) =>
+                        val number = processOffers(newOffers, gameIDs)
+                        println("PsActor: Sending response to UpdateActor", sender, sender.path)
+                        s ! ("Se encontraron " + number + " ofertas en PsStore")
+                    case Failure(error) =>
+                        s ! "Error al buscar ofertas en PsStore"
+                }
             }
         }
         case a => println("Recibí " + a)
@@ -119,11 +120,9 @@ class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
                 offer.end_date,
                 offer.base_price/100.0,
                 offer.discounted_price/100.0)
-        //offerDAO.insert(valid_offers)
-        //validOffers.length // -> necesita un gameIDs real
-        println("PsActor: JSON response processed. Found " + newOffers.length + " offers")
-        newOffers.length
-
+        offerDAO.insert(validOffers)
+        validOffers.length // -> necesita un gameIDs real
+        println("PsActor: JSON response processed. Found " + validOffers.length + " offers")
     }
 
 }
