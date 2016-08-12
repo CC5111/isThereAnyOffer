@@ -208,10 +208,8 @@
                 $('#loadinggif').hide();
             }
             function removeRows() {
-                var offersTable = $('#offers').find('tr');
-                offersTable.each(function(index, row) {
-                    $(row).remove()
-                })
+                 $('#containerOffer').empty();
+
             }
             function updateCounter(type, data) {
                 var counters = $('.count-' + type + '-span');
@@ -295,7 +293,7 @@
                                     +'<span class="date">' + offers[i].game.typeGame + '</span>'
                                     +'</div>'
                                     +'<div class="meta">'
-                                    +'<span class="date">' + offers[i].store + '</span>'
+                                    +'<span class="date">' + offers[i].offer.store.name + '</span>'
                                     +'</div>'
                                     +'<div class="meta">'
                                     +'<span class="date">Normal: $' + offers[i].offer.normalPrice + '</span>'
