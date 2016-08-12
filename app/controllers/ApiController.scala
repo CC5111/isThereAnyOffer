@@ -6,7 +6,7 @@ import javax.inject.Inject
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import models.daos.{GameDAO, OfferDAO}
-import models.entities.{Category, Game, Genre, Offer, Platform}
+import models.entities._
 import org.joda.time.{DateTime, Days}
 import play.api.libs.json._
 import play.api.mvc.{Action, Controller}
@@ -55,8 +55,20 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
     )
   }
 
-  implicit val OfferGamePlatformWrites = new Writes[(Offer, Game, Platform, String)] {
-    override def writes(tuple: (Offer, Game, Platform, String)) = Json.obj(
+  implicit val storeWrites = new Writes[Store] {
+    def writes(store: Store) = Json.obj(
+      "id" -> store.id,
+      "name" -> store.name,
+      "borderColor" -> store.borderColor,
+      "pointBorderColor" -> store.pointBorderColor,
+      "pointBackgroundColor" -> store.pointBackgroundColor,
+      "pointHoverBackgroundColor" -> store.pointHoverBackgroundColor,
+      "pointHoverBorderColor" -> store.pointHoverBorderColor
+    )
+  }
+
+  implicit val OfferGamePlatformWrites = new Writes[(Offer, Game, Platform, Store)] {
+    override def writes(tuple: (Offer, Game, Platform, Store)) = Json.obj(
       "offer" -> tuple._1,
       "game" -> tuple._2,
       "platform" -> tuple._3,
@@ -217,7 +229,6 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
           "datasets" -> Json.toJson(points),
           "labels" -> Json.toJson(days)
         )))
-        //Ok(createErrorJSON("No existen ofertas"))
       }
     }
   }

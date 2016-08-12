@@ -84,7 +84,7 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
                     pageNumber: Int,
                     platformFilter: String,
                     genreFilter: String,
-                    categoryFilter: String): (Future[Seq[(Offer, Game, Platform, String)]],
+                    categoryFilter: String): (Future[Seq[(Offer, Game, Platform, Store)]],
                                               Future[Seq[(Genre, Int)]],
                                               Future[Seq[(Platform, Int)]],
                                               Future[Seq[(Category, Int)]],
@@ -103,7 +103,7 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     val query = for {
       (((((((offer, game) , platform), gameGenre), genre), gameCategory), category), store) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id) join gameGenreQ on (_._1._2.id === _.idGame) join genreQ on (_._2.idGenre === _.id) join gameCategoryQ on (_._1._1._1._2.id === _.idGame) join categoryQ on (_._2.idCategory === _.id) join storeQ on (_._1._1._1._1._1._1.idStore === _.id)
       if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
-    } yield (offer, game, platform, genre, category, store.name)
+    } yield (offer, game, platform, genre, category, store)
 
     var queryFilter = query
     if (platformFilter != "") queryFilter = queryFilter.filter((tuple) => tuple._3.name === platformFilter)
