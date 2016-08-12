@@ -284,14 +284,15 @@
                                     +'<div class="column"> '
                                     +'<div class="ui fluid link green card">'
                                     +'<a class="image" href="/detail/' + offers[i].game.id + '">'
-                                    +'<div class="ui green ribbon label"> ' + offers[i].offer.discount + '<i class="fa fa-percent"></i></div>'
+                                    +'<div class="ui blue ribbon label" >' + offers[i].platform.name + '</div>'
+
+                                    +'<div class="ui green ribbon label" style="margin-top: 3.5rem">' + offers[i].offer.discount + '<i class="fa fa-percent"></i></div>'
                                     +'<img src="/assets/'+offers[i].game.cover+'">'
                                     +'</a>'
                                     +'<div class="content">'
                                     +'<div style="white-space: nowrap;overflow: hidden;"><a style="text-overflow: ellipsis;' +
                                     ' " class="header" href="/detail/' + offers[i].game.id + '">' + offers[i].game.name + '</a></div>'
                                     +'<div class="meta">'
-                                    +'<span class="right floated">'+ offers[i].platform.name +'</span>'
                                     +'<span class="date">' + offers[i].game.typeGame + '</span>'
                                     +'</div>'
                                     +'<div class="meta">'
@@ -304,7 +305,7 @@
                                     +'<p>Offer: $' + offers[i].offer.offerPrice + '</p>'
                                     +'</div>'
                                     +'</div>'
-                                    +'<a class="ui bottom attached button" href="' + offers[i].offer.link + '">Ver oferta</a>'
+                                    +'<a target="_blank" class="ui bottom attached button" href="' + offers[i].offer.link + '">Ver oferta</a>'
                                     +'</div>'
                                     +'</div>';
 
