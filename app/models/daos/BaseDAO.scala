@@ -80,7 +80,7 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   }
 
   def filterOffers(
-                    pageSize:Int = 3,
+                    pageSize:Int = 4,
                     pageNumber: Int,
                     platformFilter: String,
                     genreFilter: String,
