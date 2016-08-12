@@ -91,31 +91,31 @@ create table "store" (
 create table "g2aStore" (
   "id"      BIGSERIAL NOT NULL PRIMARY KEY,
   "idGame"  BIGINT,
-  "idStore" VARCHAR(32)
+  "idStore" VARCHAR(256)
 );
 
 create table "gogStore" (
   "id"      BIGSERIAL NOT NULL PRIMARY KEY,
   "idGame"  BIGINT,
-  "idStore" VARCHAR(32)
+  "idStore" VARCHAR(256)
 );
 
 create table "psStore" (
   "id"      BIGSERIAL NOT NULL PRIMARY KEY,
   "idGame"  BIGINT,
-  "idStore" VARCHAR(32)
+  "idStore" VARCHAR(256)
 );
 
 create table "steamStore" (
   "id"      BIGSERIAL NOT NULL PRIMARY KEY,
   "idGame"  BIGINT,
-  "idStore" VARCHAR(32)
+  "idStore" VARCHAR(256)
 );
 
 create table "xboxStore" (
   "id"      BIGSERIAL NOT NULL PRIMARY KEY,
   "idGame"  BIGINT,
-  "idStore" VARCHAR(32)
+  "idStore" VARCHAR(256)
 );
 
 # --- !Downs
