@@ -1,6 +1,6 @@
 package controllers
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 import actors.SearchActor
 import akka.actor.ActorSystem
@@ -14,6 +14,7 @@ import play.api.mvc.{Action, AnyContent, Controller, WebSocket}
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext
 
+@Singleton()
 class HomeController @Inject()(gameDAO: GameDAO,
                                offerDAO: OfferDAO,
                                platformDAO: PlatformDAO,

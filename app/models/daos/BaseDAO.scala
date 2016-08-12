@@ -16,9 +16,9 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import models.entities._
 
 @Singleton
-class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[GameTable, Game]{
+class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[GameTable, Game](dbConfigProvider){
   import dbConfig.driver.api._
-
+  import dbConfig._
   protected val tableQ = SlickTables.gameQ
 
   def all: Future[Seq[Game]] = {
@@ -55,8 +55,9 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
 }
 
 @Singleton
-class PsStoreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[PsStoreTable, PsStore]{
+class PsStoreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[PsStoreTable, PsStore](dbConfigProvider){
   import dbConfig.driver.api._
+    import dbConfig._
 
   protected val tableQ = SlickTables.psStoreQ
 
@@ -71,8 +72,9 @@ class PsStoreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
 
 
 @Singleton
-class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[OfferTable, Offer]{
+class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[OfferTable, Offer](dbConfigProvider){
   import dbConfig.driver.api._
+    import dbConfig._
 
   protected val tableQ = SlickTables.offerQ
 
@@ -159,8 +161,9 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 }
 
 @Singleton
-class PlatformDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[PlatformTable, Platform]{
+class PlatformDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[PlatformTable, Platform](dbConfigProvider){
   import dbConfig.driver.api._
+    import dbConfig._
 
   protected val tableQ = SlickTables.platformQ
 
@@ -188,8 +191,9 @@ class PlatformDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
 }
 
 @Singleton
-class GenreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[GenreTable, Genre]{
+class GenreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[GenreTable, Genre](dbConfigProvider){
   import dbConfig.driver.api._
+    import dbConfig._
 
   protected val tableQ = SlickTables.genreQ
 
@@ -239,8 +243,9 @@ class GenreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 }
 
 @Singleton
-class CategoryDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[CategoryTable, Category]{
+class CategoryDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[CategoryTable, Category](dbConfigProvider){
   import dbConfig.driver.api._
+    import dbConfig._
 
   protected val tableQ = SlickTables.categoryQ
 
@@ -302,9 +307,11 @@ trait AbstractBaseDAO[T,A] {
 }
 
 
-abstract class BaseDAO[T <: BaseTable[A], A <: BaseEntity]() extends AbstractBaseDAO[T,A] with HasDatabaseConfig[JdbcProfile] {
-  protected lazy val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfigProvider.get[JdbcProfile](Play.current)
+abstract class BaseDAO[T <: BaseTable[A], A <: BaseEntity] @Inject()(dbConfigProvider: DatabaseConfigProvider) extends AbstractBaseDAO[T,A]{ //with HasDatabaseConfig[JdbcProfile]
+//  protected lazy val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfigProvider.get[JdbcProfile](Play.current)
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
   import dbConfig.driver.api._
+  import dbConfig._
 
   protected val tableQ: TableQuery[T]
 
