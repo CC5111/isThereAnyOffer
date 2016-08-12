@@ -211,18 +211,19 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
 
           Json.obj(
             "label" -> store.name,
+            "fill" -> false,
             "lineTension" -> 0.1, //por defecto
             "steppedLine" -> true,
             "borderColor" -> store.borderColor,
             "borderJoinStyle" -> "miter", //por defecto
             "pointBorderColor" -> store.pointBorderColor,
             "pointBackgroundColor" -> store.pointBackgroundColor,
-            "pointBorderWidth" -> 1,  //por defecto
-            "pointHoverRadius" -> 5,  //por defecto
             "pointHoverBackgroundColor" -> store.pointHoverBackgroundColor,
             "pointHoverBorderColor" -> store.pointBorderColor,
+            "pointHoverRadius" -> 7,  //por defecto
             "pointHoverBorderWidth" -> 2, //por defecto
-            "pointRadius" -> 10,  //por defecto,
+            "pointBorderWidth" -> 2,  //por defecto
+            "pointRadius" -> 5,  //por defecto,
             "spanGaps" -> true,
             "data" -> dataStoreMoreOne
           )
