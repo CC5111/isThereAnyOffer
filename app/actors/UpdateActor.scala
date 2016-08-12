@@ -7,7 +7,7 @@ import akka.pattern.ask
 import akka.util.Timeout
 
 import scala.concurrent.duration._
-import models.daos.{GameDAO, OfferDAO}
+import models.daos.{GameDAO, OfferDAO, PsStoreDAO}
 import play.api.libs.ws.WSClient
 
 import scala.concurrent.{Await, ExecutionContext}
@@ -15,10 +15,10 @@ import scala.concurrent.{Await, ExecutionContext}
 
 object UpdateActor {
   case object Update
-  def props(gameDAO: GameDAO, offerDAO: OfferDAO)(implicit system: ActorSystem, ec: ExecutionContext, ws:WSClient) =
-    Props(new UpdateActor(gameDAO, offerDAO)(system, ec, ws))
+  def props(gameDAO: GameDAO, offerDAO: OfferDAO, psStoreDAO: PsStoreDAO)(implicit system: ActorSystem, ec: ExecutionContext, ws:WSClient) =
+    Props(new UpdateActor(gameDAO, offerDAO, psStoreDAO)(system, ec, ws))
 }
-class UpdateActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
+class UpdateActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, psStoreDAO: PsStoreDAO)
                             (implicit system: ActorSystem, ec: ExecutionContext, ws:WSClient) extends Actor{
   import UpdateActor._
   import context._
@@ -26,14 +26,14 @@ class UpdateActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
   println("yo soy "+self.path)
 
   val gogActor = context.actorOf(GogActor.props(gameDAO, offerDAO), "GOG-Actor")
-  val psActor = context.actorOf(PsActor.props(gameDAO, offerDAO,ps), "PS-Actor")
+  val psActor = context.actorOf(PsActor.props(gameDAO, offerDAO, psStoreDAO), "PS-Actor")
   implicit val timeout = Timeout(1 minute)
 
   def receive = {
     case Update => {
       println("Update message received. Sending messages to GOGActor and PsActor")
       //val gogResult = gogActor ? actors.GogActor.Update
-      val psResult = (psActor ? actors.PsActor.Update)
+      val psResult = psActor ? actors.PsActor.Update
       /*psResult.onSuccess{
         case r: String=>
           println("Success!!, recibi", r)
