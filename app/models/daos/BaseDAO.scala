@@ -101,7 +101,9 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
                     pageNumber: Int,
                     platformFilter: String,
                     genreFilter: String,
-                    categoryFilter: String): (Future[Seq[(Offer, Game, Platform, Store)]],
+                    categoryFilter: String,
+                    sort: String,
+                    order: String): (Future[Seq[(Offer, Game, Platform, Store)]],
                                               Future[Seq[(Genre, Int)]],
                                               Future[Seq[(Platform, Int)]],
                                               Future[Seq[(Category, Int)]],
@@ -118,7 +120,7 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     val dateNow = new Timestamp(new java.util.Date().getTime)
 
     val query = for {
-      (((((((offer, game) , platform), gameGenre), genre), gameCategory), category), store) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id) join gameGenreQ on (_._1._2.id === _.idGame) join genreQ on (_._2.idGenre === _.id) join gameCategoryQ on (_._1._1._1._2.id === _.idGame) join categoryQ on (_._2.idCategory === _.id) join storeQ on (_._1._1._1._1._1._1.idStore === _.id)
+      (((((((offer, game), platform), gameGenre), genre), gameCategory), category), store) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id) join gameGenreQ on (_._1._2.id === _.idGame) join genreQ on (_._2.idGenre === _.id) join gameCategoryQ on (_._1._1._1._2.id === _.idGame) join categoryQ on (_._2.idCategory === _.id) join storeQ on (_._1._1._1._1._1._1.idStore === _.id)
       if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
     } yield (offer, game, platform, genre, category, store)
 
@@ -128,18 +130,27 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     if (categoryFilter != "") queryFilter = queryFilter.filter((tuple) => tuple._5.name === categoryFilter)
 
     // query para sacar todas las ofertas
-    val queryResult = queryFilter.groupBy((t) => (t._1, t._2, t._3, t._6)).map { case (t, group) =>
+    var queryResult = queryFilter.groupBy((t) => (t._1, t._2, t._3, t._6)).map { case (t, group) =>
       (t._1, t._2, t._3, t._4)
     }
 
     val offset = (pageNumber - 1) * pageSize
 
     //query para sacar el conteo de generos, plataformas y categorias
-    val queryCountGenres = queryFilter.groupBy(_._4).map{case (genre, group) => (genre, group.map(_._1.id).countDistinct)}
-    val queryCountPlatforms = queryFilter.groupBy(_._3).map{case (platform, group) => (platform, group.map(_._1.id).countDistinct)}
-    val queryCountCategories = queryFilter.groupBy(_._5).map{case (category, group) => (category, group.map(_._1.id).countDistinct)}
+    val queryCountGenres = queryFilter.groupBy(_._4).map { case (genre, group) => (genre, group.map(_._1.id).countDistinct) }
+    val queryCountPlatforms = queryFilter.groupBy(_._3).map { case (platform, group) => (platform, group.map(_._1.id).countDistinct) }
+    val queryCountCategories = queryFilter.groupBy(_._5).map { case (category, group) => (category, group.map(_._1.id).countDistinct) }
 
-    (db.run(queryResult.sortBy(_._2.name.asc).drop(offset).take(pageSize).result),
+    // ordenar: posibles parametros de sort -> name, priceOffer // order -> asc, desc
+    queryResult = if (order == "asc") {
+        if (sort == "name") queryResult.sortBy(_._2.name.asc)
+        else queryResult.sortBy(_._1.offerPrice.asc)  //filtro es priceOffer
+      } else {  // es desc
+        if (sort == "name") queryResult.sortBy(_._2.name.desc)
+        else queryResult.sortBy(_._1.offerPrice.desc)
+      }
+
+    (db.run(queryResult.drop(offset).take(pageSize).result),
       db.run(queryCountGenres.result),
       db.run(queryCountPlatforms.result),
       db.run(queryCountCategories.result),

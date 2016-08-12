@@ -19,7 +19,7 @@ GET     /api/games/name/:name                controllers.ApiController.gameByNam
 GET     /api/games/id/:id                    controllers.ApiController.gameById(id:Long)
 GET     /api/games                           controllers.ApiController.games
 
-GET     /api/filter                          controllers.ApiController.filterOffers(pageNumber:Int ?= 1, platform:String ?= "", genre:String ?= "", category ?= "")
+GET     /api/filter                          controllers.ApiController.filterOffers(pageNumber:Int ?= 1, platform:String ?= "", genre:String ?= "", category ?= "", sort ?= "name", order ?= "asc")
 
 GET     /api/graphic/id/:id                    controllers.ApiController.dataForGraphic(id: Int)
 
