@@ -1,6 +1,6 @@
 package controllers
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 import akka.actor.ActorSystem
 import akka.stream.Materializer
@@ -9,6 +9,7 @@ import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.ExecutionContext
 
+@Singleton()
 class ResultController @Inject()(gameDAO: GameDAO)(implicit ec:ExecutionContext, system: ActorSystem, mat:Materializer) extends Controller {
 
   def index(query: String) = Action.async { implicit request =>

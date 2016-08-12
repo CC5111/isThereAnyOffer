@@ -13,6 +13,7 @@ import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.ExecutionContext
 
+@Singleton()
 class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
                              (implicit ec:ExecutionContext, system: ActorSystem, mat:Materializer) extends Controller {
 

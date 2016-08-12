@@ -3,191 +3,195 @@
         tuplesOfferPlatformStore: List[(models.entities.Offer, models.entities.Platform, String)],
         genres: List[models.entities.Genre],
         categories: List[models.entities.Category])
-@base(title){
-    <div id="wrap">
-        <div class="container" >
-            <div class="col-md-3 content-detail" style="text-align: center;">
-                <div class="content-image-background">
-                    <div  style="background-image: url(@routes.Assets.versioned(game.cover));
-                        background-size: cover; ">
-                        <img src="@routes.Assets.versioned(game.cover)"
-                        style="visibility: hidden;max-width: 100%;
-                            max-height: 100%;" />
-                    </div>
-                </div>
-
-                <div class="content-image-background">
-                    <div class="metascore">
-                        <a target="_blank" href="@routes.Assets.versioned("images/metacritic_logo.png")">
-                            <p class="metascoreName">Metacritic</p>
-                            <figure class="metascoreLogo">
-                                <img src="@routes.Assets.versioned("images/metacritic_logo.png")" width="25">
-                            </figure>
-
-                            <div class="metascoreScore">
-                                <p class="green">@game.metacritic</p>
-                            </div>
-
-                        </a>
-                    </div>
-                </div>
-
-                <div class="content-image-background">
-                    <a type="submit" class="btn btn-danger btn-default" data-toggle="modal" data-target="#videoModal" data-theVideo="@game.videoLink">
-                        <i class="fa fa-youtube-square" aria-hidden="true"></i> Watch video
-                    </a>
-                </div>
-
-            </div>
-
-            <div class="col-md-9 content-detail">
-                <div class="col-md-12 content-detail-background">
-
-                    <h3>@game.name<small> @game.typeGame</small></h3>
-                    <p>@game.description
-
-                </div>
-                <div class="col-md-12 content-detail">
-
-                    <div class="col-md-9 content-detail">
-                        <div class="content-image-background">
-                            <div >
-                                <table class="table detail">
-                                    <tbody>
-                                        <tr >
-                                            <td >Web Page</td>
-                                            <td ><a href="@game.link" target="_blank">@game.link</a></td>
-                                        </tr>
-                                        <tr >
-                                            <td >Publisher</td>
-                                            <td >@game.publisher</td>
-                                        </tr>
-                                        <tr >
-                                            <td >Genre(s)</td>
-                                            <td >@genres.mkString(", ")</td>
-                                        </tr>
-                                        <tr >
-                                            <td >Category(ies)</td>
-                                            <td >@categories.mkString(", ")</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 content-detail-background">
-                        <div style="background-image: url(@routes.Assets.versioned("images/rating/"+game.rating+".png"));
-                            background-size: cover;  ">
-                            <img src="@routes.Assets.versioned("images/rating/"+game.rating+".png")"
+    @base(title){
+        <div id="wrap">
+            <div class="container" >
+                <div class="col-md-3 content-detail" style="text-align: center;">
+                    <div class="content-image-background">
+                        <div  style="background-image: url(@routes.Assets.versioned(game.cover));
+                            background-size: cover; ">
+                            <img src="@routes.Assets.versioned(game.cover)"
                             style="visibility: hidden;max-width: 100%;
                                 max-height: 100%;" />
                         </div>
                     </div>
+
+                    <div class="content-image-background">
+                        <div class="metascore">
+                            <a target="_blank" href="@routes.Assets.versioned("images/metacritic_logo.png")">
+                                <p class="metascoreName">Metacritic</p>
+                                <figure class="metascoreLogo">
+                                    <img src="@routes.Assets.versioned("images/metacritic_logo.png")" width="25">
+                                </figure>
+
+                                <div class="metascoreScore">
+                                    <p class="green">@game.metacritic</p>
+                                </div>
+
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="content-image-background">
+                        <a type="submit" class="btn btn-danger btn-default" data-toggle="modal" data-target="#videoModal" data-theVideo="@game.videoLink">
+                            <i class="fa fa-youtube-square" aria-hidden="true"></i> Watch video
+                        </a>
+                    </div>
+
                 </div>
 
+                <div class="col-md-9 content-detail">
+                    <div class="col-md-12 content-detail-background">
 
+                        <h3>@game.name<small> @game.typeGame</small></h3>
+                        <p>@game.description
+
+                    </div>
+                    <div class="col-md-12 content-detail">
+
+                        <div class="col-md-9 content-detail">
+                            <div class="content-image-background">
+                                <div >
+                                    <table class="table detail">
+                                        <tbody>
+                                            <tr >
+                                                <td >Web Page</td>
+                                                <td ><a href="@game.link" target="_blank">@game.link</a></td>
+                                            </tr>
+                                            <tr >
+                                                <td >Publisher</td>
+                                                <td >@game.publisher</td>
+                                            </tr>
+                                            <tr >
+                                                <td >Genre(s)</td>
+                                                <td >@genres.mkString(", ")</td>
+                                            </tr>
+                                            <tr >
+                                                <td >Category(ies)</td>
+                                                <td >@categories.mkString(", ")</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 content-detail-background">
+                            <div style="background-image: url(@routes.Assets.versioned("images/rating/"+game.rating+".png"));
+                                background-size: cover;  ">
+                                <img src="@routes.Assets.versioned("images/rating/"+game.rating+".png")"
+                                style="visibility: hidden;max-width: 100%;
+                                    max-height: 100%;" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
             </div>
-        </div>
 
 
-        <div class="container contenedor">
-            <table class="table table-bordered" >
-                <thead>
-                    <tr>
+            <div class="container contenedor">
+                <table class="table table-bordered" >
+                    <thead>
+                        <tr>
 
-                        <th><div class="content-cell-th">Platform</div></th>
-                        <th><div class="content-cell-th">Type</div></th>
-                        <th><div class="content-cell-th">Store</div></th>
-                        <th><div class="content-cell-th">Normal Price</div></th>
-                        <th colspan=2><div class="content-cell-th">Offer Price</div></th>
+                            <th><div class="content-cell-th">Platform</div></th>
+                            <th><div class="content-cell-th">Type</div></th>
+                            <th><div class="content-cell-th">Store</div></th>
+                            <th><div class="content-cell-th">Normal Price</div></th>
+                            <th colspan=2><div class="content-cell-th">Offer Price</div></th>
 
-                    </tr>
-                </thead>
-                <tbody>
-                @for(tupleOfferPlatformStore <- tuplesOfferPlatformStore) {
-                    <tr class="row_detail" onclick="trLink('@tupleOfferPlatformStore._1.link');">
-                        <td><div class="content-cell-td">@tupleOfferPlatformStore._2.name</div></td>
-                        <td><div class="content-cell-td">@game.typeGame</div></td>
-                        <td><div class="content-cell-td">@tupleOfferPlatformStore._3</div></td>
-                        <td><div class="content-cell-td">$@tupleOfferPlatformStore._1.normalPrice</div></td>
-                        <td><div class="content-cell-td">$@tupleOfferPlatformStore._1.offerPrice</div></td>
-                        <td class="descuento"><div class="content-cell-td">@tupleOfferPlatformStore._1.discount%</div></td>
-                    </tr>
-                }
-                </tbody>
-            </table>
-        </div>
-
-        <div class="container contenedor">
-            <div class="col-md-12">
-                <canvas id="myChart" data-idgame="@game.id"></canvas>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @for(tupleOfferPlatformStore <- tuplesOfferPlatformStore) {
+                        <tr class="row_detail" onclick="trLink('@tupleOfferPlatformStore._1.link');">
+                            <td><div class="content-cell-td">@tupleOfferPlatformStore._2.name</div></td>
+                            <td><div class="content-cell-td">@game.typeGame</div></td>
+                            <td><div class="content-cell-td">@tupleOfferPlatformStore._3</div></td>
+                            <td><div class="content-cell-td">$@tupleOfferPlatformStore._1.normalPrice</div></td>
+                            <td><div class="content-cell-td">$@tupleOfferPlatformStore._1.offerPrice</div></td>
+                            <td class="descuento"><div class="content-cell-td">@tupleOfferPlatformStore._1.discount%</div></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
             </div>
+
+            <div class="container contenedor">
+                <div class="col-md-12">
+                    <canvas id="myChart" data-idgame="@game.id"></canvas>
+                </div>
+            </div>
+
+
         </div>
-
-
-    </div>
-    <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModal" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div>
-                        <iframe id="frame" width="100%" height="350" src=""
-                        allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen"
-                        msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen"
-                        webkitallowfullscreen="webkitallowfullscreen"></iframe>
+        <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div>
+                            <iframe id="frame" width="100%" height="350" src=""
+                            allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen"
+                            msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen"
+                            webkitallowfullscreen="webkitallowfullscreen"></iframe>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <br>
-    <div class="container">
-        <div class="fb-comments" order_by="reverse_time" data-href="https://www.isthereanyoffer.emoreno.cl/detail/@game.id"
-        data-numposts="5" colorscheme="dark" data-width="100%"></div>
-    </div>
+        <br>
+        <div class="container">
+            <div class="fb-comments" order_by="reverse_time" data-href="https://www.isthereanyoffer.emoreno.cl/detail/@game.id"
+            data-numposts="5" colorscheme="dark" data-width="100%"></div>
+        </div>
 
-    <script>
-            //FUNCTION TO GET AND AUTO PLAY YOUTUBE VIDEO FROM DATATAG
-            function autoPlayYouTubeModal(){
-                var trigger = $("body").find('[data-toggle="modal"]');
-                trigger.click(function() {
-                    var theModal = $(this).data( "target" ),
-                            videoSRC = $(this).attr( "data-theVideo" ),
-                            videoSRCauto = videoSRC+"?autoplay=1" ;
-                    $(theModal+' iframe').attr('src', videoSRCauto);
-                    $(theModal+' button.close').click(function () {
-                        $(theModal+' iframe').attr('src', videoSRC);
+        <script>
+                //FUNCTION TO GET AND AUTO PLAY YOUTUBE VIDEO FROM DATATAG
+                function autoPlayYouTubeModal(){
+                    var trigger = $("body").find('[data-toggle="modal"]');
+                    trigger.click(function() {
+                        var theModal = $(this).data( "target" ),
+                                videoSRC = $(this).attr( "data-theVideo" ),
+                                videoSRCauto = videoSRC+"?autoplay=1" ;
+                        $(theModal+' iframe').attr('src', videoSRCauto);
+                        $(theModal+' button.close').click(function () {
+                            $(theModal+' iframe').attr('src', videoSRC);
+                        });
                     });
+
+                    $("#videoModal").on('hidden.bs.modal', function (e) {
+                        $('#frame').removeAttr('src');
+                    });
+                }
+                $(document).ready(function(){
+                    autoPlayYouTubeModal();
                 });
-            }
-            $(document).ready(function(){
-                autoPlayYouTubeModal();
-            });
-    </script>
+        </script>
 
-    <script>
-            $(document).ready(function() {
-                var ctx = $('#myChart');
-                var id = $(ctx).data('idgame');
+        <script>
+                $(document).ready(function() {
+                    var ctx = $('#myChart');
+                    var id = $(ctx).data('idgame');
 
-                $.get('/api/graphic/id/' + id, function(data, status) {
-                    console.log(data['data']);
+                    $.get('/api/graphic/id/' + id, function(data, status) {
+                        console.log(data['data']);
 
-                    new Chart(ctx, {
-                        type: 'line',
-                        data: data['data'],
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero:true
-                                    }
-                                }]
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: data['data'],
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero:true
+                                        }
+                                    }]
+                                }
                             }
-                        }
+                        });
                     });
-                });
-            })
+                })
 
-    </script>
-}
+        </script>
+    }
