@@ -731,7 +731,29 @@ body.modal-open #wrap{
     }
 
 }
+.ui.label {
+     font-size:1.29rem;
+}
 
-a.card:hover{
+.ui.ribbon.label {
+
+     padding-left: calc( 1rem  );
+     padding-right: calc( 1rem  );
+}
+
+
+.ui.card > .content > a.header,
+.ui.card > .content > a.header:hover,
+.ui.card > .content > a.header:focus {
+    color: white;
     text-decoration: none;
+
+}
+a:focus {
+
+    text-decoration: none;
+}
+
+.ui.card > .content > .header {
+    display: inline;
 }
