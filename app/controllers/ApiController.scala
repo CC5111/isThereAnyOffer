@@ -1,8 +1,7 @@
 package controllers
 
 import java.sql.Timestamp
-import javax.inject.Inject
-
+import javax.inject.{Inject, Singleton}
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import models.daos.{GameDAO, OfferDAO}

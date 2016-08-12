@@ -1,7 +1,6 @@
 package controllers
 
-import javax.inject.Inject
-
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.duration._
 import actors.UpdateActor
 import actors.UpdateActor._
@@ -12,7 +11,6 @@ import play.api.mvc.{Action, Controller}
 import akka.pattern.ask
 import akka.util.Timeout
 import models.entities.PsStore
-
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton

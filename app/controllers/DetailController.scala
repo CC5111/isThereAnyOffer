@@ -1,7 +1,6 @@
 package controllers
 
-import javax.inject.Inject
-
+import javax.inject.{Inject, Singleton}
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import models.daos.{CategoryDAO, GameDAO, GenreDAO, OfferDAO}
