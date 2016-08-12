@@ -130,12 +130,14 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
 
   }
 
-  def filterOffers(pageNumber: Int, platform: String, genre: String, category: String) = Action.async{
+  def filterOffers(pageNumber: Int, platform: String, genre: String, category: String, sort: String, order: String) = Action.async{
     val result = offerDAO.filterOffers(
       pageNumber = pageNumber,
       platformFilter = platform,
       genreFilter = genre,
-      categoryFilter = category
+      categoryFilter = category,
+      sort = sort,
+      order = order
     )
 
     for {
