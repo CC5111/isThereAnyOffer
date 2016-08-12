@@ -319,7 +319,7 @@
 
 
                         updateCounters(data);
-                        if (callback) callback(parseInt(Math.ceil(data['totalOffers'])/sizePage));
+                        if (callback) callback(parseInt(Math.ceil(data['totalOffers']/sizePage)));
                         if (!changePage) updatePagination(Math.ceil(parseInt(data['totalOffers'])/sizePage));
                     } else {
                         removeRows();
