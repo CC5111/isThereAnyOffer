@@ -10,7 +10,7 @@ import play.api.mvc.{Action, Controller, WebSocket}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@Singleton()
+@Singleton
 class DetailController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO, genreDAO: GenreDAO, categoryDAO: CategoryDAO)(implicit ec:ExecutionContext, system: ActorSystem, mat:Materializer) extends Controller {
 
     def index(id: Long) = Action.async { implicit request =>

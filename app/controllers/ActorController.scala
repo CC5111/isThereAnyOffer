@@ -15,7 +15,7 @@ import models.entities.PsStore
 
 import scala.concurrent.{Await, ExecutionContext, Future}
 
-@Singleton()
+@Singleton
 class ActorController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO, psStoreDAO: PsStoreDAO)
                                (implicit system: ActorSystem, ec: ExecutionContext, ws:WSClient) extends Controller {
 

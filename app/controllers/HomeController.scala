@@ -14,7 +14,7 @@ import play.api.mvc.{Action, AnyContent, Controller, WebSocket}
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext
 
-@Singleton()
+@Singleton
 class HomeController @Inject()(gameDAO: GameDAO,
                                offerDAO: OfferDAO,
                                platformDAO: PlatformDAO,

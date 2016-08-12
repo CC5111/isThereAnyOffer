@@ -9,7 +9,7 @@ import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.ExecutionContext
 
-@Singleton()
+@Singleton
 class ResultController @Inject()(gameDAO: GameDAO)(implicit ec:ExecutionContext, system: ActorSystem, mat:Materializer) extends Controller {
 
   def index(query: String) = Action.async { implicit request =>
