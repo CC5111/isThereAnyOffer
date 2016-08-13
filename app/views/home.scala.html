@@ -17,7 +17,11 @@
                 <p style="color: white"> Find local classified ads on bootclassified in
                     Minutes </p>
                 <br>
-                <div class="row search-row animated fadeInUp col-md-offset-3">
+
+
+            </div>
+            <div class="searchBar container" >
+                <div  class="row search-row animated fadeInUp col-md-offset-3">
                     <form id="form" method="post" action="/search"  autocomplete="off">
                         <div class="col-md-7 search-col relative locationicon">
                             <i class="fa fa-gamepad icon-append" aria-hidden="true"></i>
@@ -32,7 +36,8 @@
                 </div>
 
             </div>
-        </div><br>
+        </div>
+        <br>
         <div class="row">
         @for(tuple <- tuplesBestOfferGamePlatform) {
             <div class="col-md-3" style="padding: 2px;">
@@ -127,31 +132,7 @@
                 </div>
             </div>
 
-            @*<div class="list-group">*@
-            @*<button type="button" class="list-group-item title" disabled><b>PLATAFORMA</b></button>*@
-            @*@for(tuplePlatformCount <- tuplesPlatformCount) {*@
-            @*<button id="button_platform_@tuplePlatformCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="platform" data-name="@tuplePlatformCount._1">*@
-            @*@tuplePlatformCount._1*@
-            @*<span id="platform_count_@tuplePlatformCount._1.name.replaceAll(" ", "_")" class="badge">@tuplePlatformCount._2/@tuplePlatformCount._2</span>*@
-            @*</button>*@
-            @*}*@
 
-            @*<button type="button" class="list-group-item title" disabled><b>GÉNERO</b></button>*@
-            @*@for(tupleGenreCount <- tuplesGenreCount) {*@
-                @*<button id="button_genre_@tupleGenreCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="genre" data-name="@tupleGenreCount._1">*@
-                @*@tupleGenreCount._1*@
-                @*<span id="genre_count_@tupleGenreCount._1.name.replaceAll(" ", "_")" class="badge">@tupleGenreCount._2/@tupleGenreCount._2</span>*@
-                @*</button>*@
-                @*}*@
-
-                @*<button type="button" class="list-group-item title" disabled><b>CATEGORÍA</b></button>*@
-                @*@for(tupleCategoryCount <- tuplesCategoryCount) {*@
-                    @*<button id="button_category_@tupleCategoryCount._1.name.replaceAll(" ", "_")" type="button" class="list-group-item filter-button" data-type="category" data-name="@tupleCategoryCount._1">*@
-                    @*@tupleCategoryCount._1*@
-            @*<span id="category_count_@tupleCategoryCount._1.name.replaceAll(" ", "_")" class="badge">@tupleCategoryCount._2/@tupleCategoryCount._2</span>*@
-            @*</button>*@
-            @*}*@
-            @*</div>*@
         </div>
         <div class="col-md-9">
 
@@ -401,5 +382,11 @@
                 getOffersWithFilter(false);
 
             });
+
+//            $('.searchBar')
+//                    .visibility({
+//                        type   : 'fixed',
+//                        offset : 3 // give some space from top of screen
+//                    });
     </script>
 }
