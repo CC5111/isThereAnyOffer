@@ -111,7 +111,7 @@ class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, gogDAO: GogDAO)
                 offer <- newOffers
                 if gameIDs contains offer.id.toString
             } yield Offer(0,
-                "www.gog.com" + offer.url,
+                "https://www.gog.com" + offer.url,
                 gameIDs.get(offer.id.toString) match {
                     case Some(id) => id
                     case None => 0
