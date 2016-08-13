@@ -60,7 +60,7 @@ class UpdateActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, psStoreDAO: P
 
     case UpdatePs => {
       println("UpdatePs message received. Sending message to PsActor")
-      val psResult = gogActor ? actors.PsActor.Update
+      val psResult = psActor ? actors.PsActor.Update
       println("UpdateActor: Waiting response from PsActor")
       val psMessage = Await.result(psResult, timeout.duration).asInstanceOf[String]
       sender ! psMessage

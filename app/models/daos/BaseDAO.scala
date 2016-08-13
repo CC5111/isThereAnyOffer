@@ -96,6 +96,49 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     db.run(tableQ.result)
   }
 
+  def insertIfNotExists(offerInsert: Offer): Future[Option[Offer]] = {
+    val offerInsertAction = tableQ.filter(o => {
+      o.link === offerInsert.link
+      o.idGame === offerInsert.idGame
+      o.idStore === offerInsert.idStore
+      o.idPlatform === offerInsert.idPlatform
+      o.fromDate === offerInsert.fromDate
+      o.untilDate === offerInsert.untilDate
+      o.normalPrice === offerInsert.normalPrice
+      o.offerPrice === offerInsert.offerPrice
+    }).result.headOption.flatMap {
+      case Some(offer) =>
+        DBIO.successful(None)
+      case None =>
+        val offerId =
+          (tableQ returning tableQ.map(_.id)) += Offer(
+            id = 0,
+            link = offerInsert.link,
+            idGame = offerInsert.idGame,
+            idStore = offerInsert.idStore,
+            idPlatform = offerInsert.idPlatform,
+            fromDate = offerInsert.fromDate,
+            untilDate = offerInsert.untilDate,
+            normalPrice = offerInsert.normalPrice,
+            offerPrice = offerInsert.offerPrice
+          )
+
+        val offer = offerId.map { id => Offer(
+          id = id,
+          link = offerInsert.link,
+          idGame = offerInsert.idGame,
+          idStore = offerInsert.idStore,
+          idPlatform = offerInsert.idPlatform,
+          fromDate = offerInsert.fromDate,
+          untilDate = offerInsert.untilDate,
+          normalPrice = offerInsert.normalPrice,
+          offerPrice = offerInsert.offerPrice
+        )}
+        offer.map(Some(_))
+    }.transactionally
+    db.run(offerInsertAction)
+  }
+
   def actualOffers: Future[Seq[(Offer, Game, Platform)]] = {
     val gameQ = SlickTables.gameQ
     val platformQ = SlickTables.platformQ

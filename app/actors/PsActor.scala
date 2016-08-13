@@ -4,6 +4,7 @@ import java.sql.Timestamp
 import java.util.Date
 import javax.inject.Inject
 
+import actors.UpdateActor.UpdatePs
 import akka.actor.{Actor, ActorRef, Props}
 import akka.util.Timeout
 import models.daos.{GameDAO, OfferDAO, PsStoreDAO}
@@ -126,10 +127,13 @@ class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, psDAO: PsStoreDAO
                 offer.base_price/100.0,
                 offer.discounted_price/100.0)
         println("PsActor: Found " + validOffers.length + " offers")
-        val rows: Seq[Long] = Await.result(offerDAO.insert(validOffers), Timeout(1 minute).duration)
-        println("PsActor: Created " + rows.length + " offers")
+        val newAndOldOffers = validOffers.map(validOffer => {
+            Await.result(offerDAO.insertIfNotExists(validOffer), Timeout(10 seconds).duration)
+        }).partition(_.nonEmpty)
+        println("PsActor: Created " + newAndOldOffers._1.length + " offers")
+        println("PsActor: Already existed " + newAndOldOffers._2.length + " offers")
         println("PsActor: JSON response processed.")
-        rows.length
+        newAndOldOffers._1.length
     }
 
 }
