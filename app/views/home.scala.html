@@ -10,31 +10,29 @@
 
 @base(title){
     <div class="container">
-        <div class="jumbotron">
+        <div class="jumbotron" >
             <img src="@routes.Assets.versioned("images/logo_brand.png")"  height="100" width="150">
             <h1 style="color: white">Is There Any Offer</h1>
             <div class="container">
                 <p style="color: white"> Find local classified ads on bootclassified in
                     Minutes </p>
                 <br>
+                <div class="searchBar container row">
+                    <div  class="row search-row animated fadeInUp col-md-offset-3">
+                        <form id="form" method="post" action="/search"  autocomplete="off">
+                            <div class="col-md-7 search-col relative locationicon">
+                                <i class="fa fa-gamepad icon-append" aria-hidden="true"></i>
+                                <input type="text" name="search" id="typeahead" class="form-control has-icon" placeholder="I am looking for ..." value=""  autocomplete="off">
+                            </div>
+                            <div class="col-md-1 search-col">
+                                <button class="btn btn-success btn-search btn-block">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
 
-
-            </div>
-            <div class="searchBar container" >
-                <div  class="row search-row animated fadeInUp col-md-offset-3">
-                    <form id="form" method="post" action="/search"  autocomplete="off">
-                        <div class="col-md-7 search-col relative locationicon">
-                            <i class="fa fa-gamepad icon-append" aria-hidden="true"></i>
-                            <input type="text" name="search" id="typeahead" class="form-control has-icon" placeholder="I am looking for ..." value=""  autocomplete="off">
-                        </div>
-                        <div class="col-md-1 search-col">
-                            <button class="btn btn-success btn-search btn-block">
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </button>
-                        </div>
-                    </form>
                 </div>
-
             </div>
         </div>
         <br>
@@ -382,11 +380,5 @@
                 getOffersWithFilter(false);
 
             });
-
-//            $('.searchBar')
-//                    .visibility({
-//                        type   : 'fixed',
-//                        offset : 3 // give some space from top of screen
-//                    });
     </script>
 }

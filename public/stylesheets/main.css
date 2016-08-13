@@ -805,9 +805,3 @@ a:focus {
     width: 180px;
 }
 
-
-.fixed.searchBar {
-    position: fixed;
-    z-index: 1040;
-}
-
