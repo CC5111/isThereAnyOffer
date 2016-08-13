@@ -96,7 +96,7 @@ class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, psDAO: PsStoreDAO
                         println("PsActor: Sending response to UpdateActor", sender, sender.path)
                         s ! ("Se encontraron " + number + " ofertas en PsStore")
                     case Failure(error) =>
-                        s ! "Error al buscar ofertas en PsStore"
+                        s ! "Error al buscar ofertas en PsStore.\n" + error
                 }
             }
         }

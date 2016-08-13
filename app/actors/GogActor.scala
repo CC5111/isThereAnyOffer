@@ -68,12 +68,12 @@ class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, gogDAO: GogDAO)
 
      */
 
-    case class OfferData(id: Long, url: String, base_price: Double, discounted_price: Double, start_date: Long, end_date: Long)
+    case class OfferData(id: Long, url: String, base_price: String, discounted_price: String, start_date: Long, end_date: Long)
     implicit val offerRead: Reads[OfferData] = (
         (__ \ "id").read[Long] and
         (__ \ "url").read[String] and
-        (__ \ "price" \ "baseAmount").read[Double] and
-        (__ \ "price" \ "finalAmount").read[Double] and
+        (__ \ "price" \ "baseAmount").read[String] and
+        (__ \ "price" \ "finalAmount").read[String] and
         (__ \ "salesVisibility" \ "from").read[Long] and
         (__ \ "salesVisibility" \ "to").read[Long])(OfferData.apply _)
     implicit def longToTimestamp(l: Long): Timestamp = {
@@ -89,15 +89,15 @@ class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, gogDAO: GogDAO)
             gogDAO.all.map { seq =>
                 val gameIDs: Map[String, Long] = seq.toMap
                 println("GOGActor: Getting GOG's JSON response")
-                val response = ws.url(allDealsUrl).get().map {
-                    resp => (resp.json \ "products").as[List[OfferData]]
+                val response = ws.url(allDealsUrl).get().map { resp =>
+                    (resp.json \ "products").as[List[OfferData]]
                 }.onComplete {
                     case Success(newOffers) =>
                         val number = processOffers(newOffers, gameIDs)
                         println("GogActor: Sending response to UpdateActor", sender, sender.path)
                         s ! ("Se encontraron " + number + " ofertas en GOG")
                     case Failure(error) =>
-                        sender() ! "Error al buscar ofertas en GOG"
+                        s ! "Error al buscar ofertas en GOG.\n" + error
                 }
             }
         }
@@ -120,8 +120,8 @@ class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, gogDAO: GogDAO)
                 4,  // Store ID
                 offer.start_date,
                 offer.end_date,
-                offer.base_price,
-                offer.discounted_price)
+                offer.base_price.toDouble,
+                offer.discounted_price.toDouble)
         println("GogActor: Found " + validOffers.length + " offers")
         val rows: Seq[Long] = Await.result(offerDAO.insert(validOffers), Timeout(1 minute).duration)
         println("GogActor: Created " + rows.length + " offers")

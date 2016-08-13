@@ -21,7 +21,7 @@ class ActorController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO, psStoreDAO
 
   val updateActor = system.actorOf(UpdateActor.props(gameDAO, offerDAO, psStoreDAO, gogDAO), "Updater")
   //val cancellable = system.scheduler.schedule(0.seconds, 12.hours, updateActor, Update)
-  implicit val timeout = Timeout(2 minutes)
+  implicit val timeout = Timeout(3 minutes)
 
   def update = Action.async { implicit request =>
     println("Sending message to UpdateActor")
