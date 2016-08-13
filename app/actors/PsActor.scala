@@ -5,13 +5,17 @@ import java.util.Date
 import javax.inject.Inject
 
 import akka.actor.{Actor, ActorRef, Props}
+import akka.util.Timeout
 import models.daos.{GameDAO, OfferDAO, PsStoreDAO}
 import models.entities.{Offer, PsStore}
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.ws.WSClient
 
+import scala.concurrent.Await
+import scala.concurrent.duration._
 import scala.util.{Failure, Success}
+import org.joda.time.DateTime
 
 object PsActor {
     case class Query(game: Long)
@@ -55,13 +59,13 @@ class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, psDAO: PsStoreDAO
         ]
 
      */
-    case class OfferData(id: String, platform: String, url: String,
+    case class OfferData(id: String, platforms: Seq[String], url: String,
                          base_price: Double, discounted_price: Double,
                          start_date: String, end_date: String)
 
     implicit val offerRead: Reads[OfferData] = (
         (__ \ "id").read[String] and
-        (__ \ "playable_platform")(0).read[String] and
+        (__ \ "playable_platform").read[Seq[String]] and
         (__ \ "url").read[String] and
         (__ \ "default_sku" \ "price").read[Double] and
         ((__ \ "default_sku" \ "rewards")(0) \ "price").read[Double] and
@@ -70,13 +74,13 @@ class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, psDAO: PsStoreDAO
 
     implicit def  strToTimestamp(s: String): Timestamp = {
         // start_date = "2016-06-07T15:00:00Z"
-        val date = (s split "T")(0)
-        val split_date = date split "-"
-        new Timestamp(new Date(split_date(0).toInt, split_date(1).toInt, split_date(2).toInt).getTime)
+        val date = (s split "T")(0) split "-"
+        val time = (s split "T")(1) split ":"
+        new Timestamp(new DateTime(date(0).toInt, date(1).toInt, date(2).toInt, time(0).toInt, time(1).toInt).getMillis)
     }
 
-    val allDealsUrl = "https://store.playstation.com/chihiro-api/viewfinder/CL/es/999/STORE-MSF77008-ALLDEALS?game_content_type=games&platform=ps4%2Cps3&size=30&gkb=1&geoCountry=CL"
-
+    val allDealsUrl = "https://store.playstation.com/chihiro-api/viewfinder/CL/es/999/STORE-MSF77008-ALLDEALS?game_content_type=games&platform=ps4%2Cps3&size=100&gkb=1&geoCountry=CL"
+    val baseUrl = "https://store.playstation.com/#!/es-cl/juegos/cid="
     def receive = {
         case Update => {
             println("PsActor: Message received from ", sender)
@@ -100,29 +104,32 @@ class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, psDAO: PsStoreDAO
     }
 
     def processOffers(newOffers: List[OfferData], gameIDs: Map[String, Long]) = {
-        println("PsActor: Processing PsStore's JSON response")
+        println("PsActor: Processing " + newOffers.length + " new offers.")
         val validOffers =
             for {
                 offer <- newOffers
                 if gameIDs contains offer.id
+                playable_platform <- offer.platforms
             } yield Offer(0,
-                offer.url,
+                baseUrl + offer.id,
                 gameIDs.get(offer.id) match {
                     case Some(g) => g
                     case None => 0
                 },
-                offer.platform match {
-                    case "PS3" => 1
-                    case _ => 2         // "PS4 TM"
+                playable_platform match {
+                    case "PS3" => 2
+                    case _ => 1         // "PS4 TM"
                 },
                 1,
                 offer.start_date,
                 offer.end_date,
                 offer.base_price/100.0,
                 offer.discounted_price/100.0)
-        offerDAO.insert(validOffers)
-        validOffers.length // -> necesita un gameIDs real
-        println("PsActor: JSON response processed. Found " + validOffers.length + " offers")
+        println("PsActor: Found " + validOffers.length + " offers")
+        val rows: Seq[Long] = Await.result(offerDAO.insert(validOffers), Timeout(1 minute).duration)
+        println("PsActor: Insertado ids " + rows.length)
+        println("PsActor: JSON response processed.")
+        rows.length // -> necesita un gameIDs real
     }
 
 }
