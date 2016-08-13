@@ -160,7 +160,7 @@
                 </div>
 
             </div>
-            <div id="containerOffer">
+            <div class="ui container" id="containerOffer">
 
             </div>
 
@@ -279,12 +279,13 @@
                                 row = '<div class="ui four column grid">';
                                 open = true;
                             }
-
+                            var platform = offers[i].platform.name;
+                            var color = (platform.indexOf('PS') !== -1)?'blue':((platform.indexOf('Xbox') !== -1)?'green':'black');
                             row = row
                                     +'<div class="column"> '
                                     +'<div class="ui fluid link green card">'
                                     +'<a class="image" href="/detail/' + offers[i].game.id + '">'
-                                    +'<div class="ui blue ribbon label" >' + offers[i].platform.name + '</div>'
+                                    +'<div class="ui '+color+' ribbon label" >' + offers[i].platform.name + '</div>'
 
                                     +'<div class="ui green ribbon label" style="margin-top: 3.5rem">' + offers[i].offer.discount + '<i class="fa fa-percent"></i></div>'
                                     +'<img src="/assets/'+offers[i].game.cover+'">'
@@ -305,7 +306,7 @@
                                     +'<p>Offer: $' + offers[i].offer.offerPrice + '</p>'
                                     +'</div>'
                                     +'</div>'
-                                    +'<a target="_blank" class="ui bottom attached button" href="' + offers[i].offer.link + '">Ver oferta</a>'
+                                    +'<a target="_blank" class="ui bottom attached button '+color+'" href="' + offers[i].offer.link + '">Ver oferta</a>'
                                     +'</div>'
                                     +'</div>';
 
