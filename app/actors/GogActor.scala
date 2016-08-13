@@ -123,10 +123,14 @@ class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, gogDAO: GogDAO)
                 offer.base_price.toDouble,
                 offer.discounted_price.toDouble)
         println("GogActor: Found " + validOffers.length + " offers")
-        val rows: Seq[Long] = Await.result(offerDAO.insert(validOffers), Timeout(1 minute).duration)
-        println("GogActor: Created " + rows.length + " offers")
+
+        val newAndOldOffers = validOffers.map(validOffer => {
+            Await.result(offerDAO.insertIfNotExists(validOffer), Timeout(10 seconds).duration)
+        }).partition(_.nonEmpty)
+        println("GogActor: Created " + newAndOldOffers._1.length + " offers")
+        println("GogActor: Already existed " + newAndOldOffers._2.length + " offers")
         println("GogActor: JSON response processed.")
-        rows.length
+        newAndOldOffers._1.length
     }
 
 }

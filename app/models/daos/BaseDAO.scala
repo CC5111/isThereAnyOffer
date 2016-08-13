@@ -96,6 +96,49 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     db.run(tableQ.result)
   }
 
+  def insertIfNotExists(offerInsert: Offer): Future[Option[Offer]] = {
+    val offerInsertAction = tableQ.filter(o => {
+      o.link === offerInsert.link
+      o.idGame === offerInsert.idGame
+      o.idStore === offerInsert.idStore
+      o.idPlatform === offerInsert.idPlatform
+      o.fromDate === offerInsert.fromDate
+      o.untilDate === offerInsert.untilDate
+      o.normalPrice === offerInsert.normalPrice
+      o.offerPrice === offerInsert.offerPrice
+    }).result.headOption.flatMap {
+      case Some(offer) =>
+        DBIO.successful(None)
+      case None =>
+        val offerId =
+          (tableQ returning tableQ.map(_.id)) += Offer(
+            id = 0,
+            link = offerInsert.link,
+            idGame = offerInsert.idGame,
+            idStore = offerInsert.idStore,
+            idPlatform = offerInsert.idPlatform,
+            fromDate = offerInsert.fromDate,
+            untilDate = offerInsert.untilDate,
+            normalPrice = offerInsert.normalPrice,
+            offerPrice = offerInsert.offerPrice
+          )
+
+        val offer = offerId.map { id => Offer(
+          id = id,
+          link = offerInsert.link,
+          idGame = offerInsert.idGame,
+          idStore = offerInsert.idStore,
+          idPlatform = offerInsert.idPlatform,
+          fromDate = offerInsert.fromDate,
+          untilDate = offerInsert.untilDate,
+          normalPrice = offerInsert.normalPrice,
+          offerPrice = offerInsert.offerPrice
+        )}
+        offer.map(Some(_))
+    }.transactionally
+    db.run(offerInsertAction)
+  }
+
   def actualOffers: Future[Seq[(Offer, Game, Platform)]] = {
     val gameQ = SlickTables.gameQ
     val platformQ = SlickTables.platformQ
@@ -181,7 +224,7 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
       ((offer, game) , platform) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id)
       if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
     } yield (offer, game, platform)
-    db.run(query.sortBy(_._2.releaseDate.desc).take(4).result)
+    db.run(query.sortBy(_._1.fromDate.desc).take(4).result)
   }
 }
 

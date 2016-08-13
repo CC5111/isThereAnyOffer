@@ -179,21 +179,25 @@
                     var id = $(ctx).data('idgame');
 
                     $.get('/api/graphic/id/' + id, function(data, status) {
-                        console.log(data['data']);
-
-                        new Chart(ctx, {
-                            type: 'line',
-                            data: data['data'],
-                            options: {
-                                scales: {
-                                    yAxes: [{
-                                        ticks: {
-                                            beginAtZero:true
+                        if (status === 'success') {
+                            if (data['data']) {
+                                new Chart(ctx, {
+                                    type: 'line',
+                                    data: data['data'],
+                                    options: {
+                                        scales: {
+                                            yAxes: [{
+                                                ticks: {
+                                                    beginAtZero: true
+                                                }
+                                            }]
                                         }
-                                    }]
-                                }
+                                    }
+                                });
+                            } else {
+                                // no hay datos para hacer un grafico
                             }
-                        });
+                        }
                     });
                 })
 
