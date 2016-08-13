@@ -154,13 +154,22 @@
             @*</div>*@
         </div>
         <div class="col-md-9">
-            <div class="col-md-12 content-title-section">
-                <div>
+
+            <div class="col-md-12 content-title-section vertical-center">
+                <div class="col-md-8 content">
                     <h4>Offers</h4>
+                </div>
+                <div class="col-md-4 " >
+                        <select id="select_filter" class="selectpicker " title="Ordenar por:">
+                            <option value="1">Precio Asc</option>
+                            <option value="2">Precio Desc</option>
+                            <option value="3">Nombre Asc</option>
+                            <option value="4">Nombre Desc</option>
+                        </select>
                 </div>
 
             </div>
-            <div class="ui container" id="containerOffer">
+            <div class="ui container" id="containerOffer" style="padding-right: 0">
 
             </div>
 
@@ -263,6 +272,7 @@
                 initPagination(totalPages);
             }
             function getOffersWithFilter(changePage, callback) {
+                console.log(filters);
                 $.get('api/filter', filters).done(function(results) {
                     hiddenLoadingTable();
                     if (results.status === 'success') {
@@ -362,6 +372,34 @@
                 getOffersWithFilter(true, function(totalPages) {
                     initPagination(totalPages);
                 });
+            });
+
+
+            $('#select_filter').on("change", function(value){
+                var selectedD = $(this).val();
+                console.log(selectedD);
+                var typeFilter = '';
+                var nameFilter = '';
+
+                if(selectedD === "1"){
+                    typeFilter = 'asc';
+                    nameFilter = 'price';
+                }else if(selectedD === "2"){
+                    typeFilter = 'desc';
+                    nameFilter = 'price';
+                }else if(selectedD === "3"){
+                    typeFilter = 'asc';
+                    nameFilter = 'name';
+                }else {
+                    typeFilter = 'desc';
+                    nameFilter = 'name';
+                }
+
+                showLoadingTable();
+                filters.sort = nameFilter;
+                filters.order = typeFilter;
+                getOffersWithFilter(false);
+
             });
     </script>
 }

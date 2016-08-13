@@ -757,3 +757,53 @@ a:focus {
 .ui.card > .content > .header {
     display: inline;
 }
+
+.align-middle {
+    margin-top: 0.5px;
+    margin-bottom: 0.5px;
+}
+
+.vertical-center {
+    display: flex;
+    align-items: center;
+}
+
+
+.bootstrap-select.btn-group .dropdown-menu {
+    background-color: #0f0f0f;
+    color: white;
+}
+
+.bootstrap-select.btn-group .dropdown-menu > li{
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+
+}
+.bootstrap-select.btn-group .dropdown-menu > li > a {
+    color: white;
+}
+.bootstrap-select.btn-group .dropdown-menu > li > a:focus ,
+.bootstrap-select.btn-group .dropdown-menu > li > a:active,
+.bootstrap-select.btn-group .dropdown-menu > li > a:hover {
+    color: white;
+    background-color: #5cb85c;
+    outline:0 !important;
+    -webkit-appearance:none;
+}
+
+.bootstrap-select .dropdown-toggle{
+    padding: 1px 8px;
+}
+.bootstrap-select .dropdown-toggle:focus,
+.bootstrap-select .dropdown-toggle:active{
+    outline:0 !important;
+    -webkit-appearance:none;
+
+}
+
+.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn){
+    width: 180px;
+}
+
+
+
