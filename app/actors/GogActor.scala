@@ -6,22 +6,25 @@ import javax.inject._
 import java.util.Date
 
 import akka.actor.{Actor, ActorRef, Props}
-import models.daos.{GameDAO, OfferDAO}
+import akka.util.Timeout
+import models.daos.{GameDAO, OfferDAO, GogDAO}
 import models.entities.Offer
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.ws.WSClient
 
+import scala.concurrent.Await
+import scala.concurrent.duration._
 import scala.util.{Failure, Success}
 
 object GogActor {
     case class Query(game: Long)
     case object Update
-    def props(gameDAO: GameDAO, offerDAO: OfferDAO)(implicit ws:WSClient) =
-        Props(new GogActor(gameDAO, offerDAO)(ws))
+    def props(gameDAO: GameDAO, offerDAO: OfferDAO, gogDAO: GogDAO)(implicit ws:WSClient) =
+        Props(new GogActor(gameDAO, offerDAO, gogDAO)(ws))
 }
 
-class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
+class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, gogDAO: GogDAO)
                          (implicit ws: WSClient) extends Actor{
     import context._
     import actors.GogActor._
@@ -77,27 +80,32 @@ class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
         new Timestamp(l*1000)
     }
 
+    val allDealsUrl = "https://www.gog.com/games/ajax/filtered?mediaType=game&price=discounted&page=1"
+
     def receive = {
         case Update => {
-            //val gameIDs: Map[String, Long] = ???
-            println("GOGActor: Message received")
-            val gameIDs: Map[String, Long] = Map[String, Long](("id1", 1), ("id2", 2))
-            println("GOGActor: Getting GOG's JSON response")
-            val response =  ws.url("https://www.gog.com/games/ajax/filtered?mediaType=game&price=discounted&page=1").get().map {
-                resp => (resp.json \ "products").as[List[OfferData]]
-            }.onComplete{
-                case Success(newOffers) =>
-                    println("GOGActor: Sending response to UpdateActor")
-                    sender() ! ("Se encontraron " + processOffers(newOffers, gameIDs) + " nuevas ofertas en GOG")
-                case Failure(error) =>
-                    sender() ! "Error al buscar ofertas en GOG"
+            println("GOGActor: Message received from ", sender)
+            val s = sender
+            gogDAO.all.map { seq =>
+                val gameIDs: Map[String, Long] = seq.toMap
+                println("GOGActor: Getting GOG's JSON response")
+                val response = ws.url(allDealsUrl).get().map {
+                    resp => (resp.json \ "products").as[List[OfferData]]
+                }.onComplete {
+                    case Success(newOffers) =>
+                        val number = processOffers(newOffers, gameIDs)
+                        println("GogActor: Sending response to UpdateActor", sender, sender.path)
+                        s ! ("Se encontraron " + number + " ofertas en GOG")
+                    case Failure(error) =>
+                        sender() ! "Error al buscar ofertas en GOG"
+                }
             }
         }
         case a => println("Recibí " + a)
     }
 
     def processOffers(newOffers: List[OfferData], gameIDs: Map[String, Long]) = {
-        println("GOGActor: Processing GOG's JSON response")
+        println("GogActor: Processing " + newOffers.length + " new offers.")
         val validOffers =
             for {
                 offer <- newOffers
@@ -109,15 +117,16 @@ class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO)
                     case None => 0
                 },
                 5,  // PC
-                4,
+                4,  // Store ID
                 offer.start_date,
                 offer.end_date,
                 offer.base_price,
                 offer.discounted_price)
-        //offerDAO.insert(valid_offers)
-        //validOffers.length
-        println("GOGActor: JSON response processed. Found " + newOffers.length + " offers")
-        newOffers.length
+        println("GogActor: Found " + validOffers.length + " offers")
+        val rows: Seq[Long] = Await.result(offerDAO.insert(validOffers), Timeout(1 minute).duration)
+        println("GogActor: Created " + rows.length + " offers")
+        println("GogActor: JSON response processed.")
+        rows.length
     }
 
 }

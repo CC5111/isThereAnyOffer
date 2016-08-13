@@ -88,7 +88,7 @@ class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, psDAO: PsStoreDAO
             psDAO.all.map{ seq =>
                 val gameIDs: Map[String, Long] = seq.toMap
                 println("PsActor: Getting PsStore's JSON response")
-                val response =  ws.url(allDealsUrl).get().map {
+                val response = ws.url(allDealsUrl).get().map {
                     resp => (resp.json \ "links").as[List[OfferData]]
                 }.onComplete{
                     case Success(newOffers) =>
@@ -127,9 +127,9 @@ class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, psDAO: PsStoreDAO
                 offer.discounted_price/100.0)
         println("PsActor: Found " + validOffers.length + " offers")
         val rows: Seq[Long] = Await.result(offerDAO.insert(validOffers), Timeout(1 minute).duration)
-        println("PsActor: Insertado ids " + rows.length)
+        println("PsActor: Created " + rows.length + " offers")
         println("PsActor: JSON response processed.")
-        rows.length // -> necesita un gameIDs real
+        rows.length
     }
 
 }
