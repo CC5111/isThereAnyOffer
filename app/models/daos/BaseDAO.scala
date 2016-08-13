@@ -224,7 +224,7 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
       ((offer, game) , platform) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id)
       if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
     } yield (offer, game, platform)
-    db.run(query.sortBy(_._2.releaseDate.desc).take(4).result)
+    db.run(query.sortBy(_._1.fromDate.desc).take(4).result)
   }
 }
 
