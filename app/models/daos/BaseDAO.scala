@@ -113,16 +113,17 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 
   def insertIfNotExists(offerInsert: Offer): Future[Option[Offer]] = {
     val offerInsertAction = tableQ.filter(o => {
-      o.link === offerInsert.link
-      o.idGame === offerInsert.idGame
-      o.idStore === offerInsert.idStore
-      o.idPlatform === offerInsert.idPlatform
-      o.fromDate === offerInsert.fromDate
-      o.untilDate === offerInsert.untilDate
-      o.normalPrice === offerInsert.normalPrice
+      o.link === offerInsert.link &&
+      o.idGame === offerInsert.idGame &&
+      o.idStore === offerInsert.idStore &&
+      o.idPlatform === offerInsert.idPlatform &&
+      o.fromDate === offerInsert.fromDate &&
+      o.untilDate === offerInsert.untilDate &&
+      o.normalPrice === offerInsert.normalPrice &&
       o.offerPrice === offerInsert.offerPrice
     }).result.headOption.flatMap {
       case Some(offer) =>
+        println("encontre: " + offer)
         DBIO.successful(None)
       case None =>
         val offerId =
