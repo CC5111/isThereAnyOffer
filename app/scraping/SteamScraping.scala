@@ -34,7 +34,6 @@ case class SteamScraping(url: String) {
   }
 
   def offersWithDiscount(): List[DataSteamDb] = {
-    println("bla")
     val items = doc >> elementList(".appimg")
     items.map(item => {
       val tds = item >> elementList("td")
