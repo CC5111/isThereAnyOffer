@@ -84,6 +84,21 @@ class GogDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) e
   }
 }
 
+@Singleton
+class SteamDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[SteamStoreTable, SteamStore](dbConfigProvider){
+  import dbConfig.driver.api._
+  import dbConfig._
+
+  protected val tableQ = SlickTables.steamStoreQ
+
+  def all: Future[Seq[(String, Long)]] = {
+    val query = for {
+      p <- tableQ
+    } yield (p.idStore, p.idGame)
+    db.run(query.result)
+  }
+}
+
 
 @Singleton
 class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[OfferTable, Offer](dbConfigProvider){

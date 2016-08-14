@@ -6,7 +6,7 @@ import scala.concurrent.duration._
 import actors.UpdateActor
 import actors.UpdateActor._
 import akka.actor.ActorSystem
-import models.daos.{GameDAO, GogDAO, OfferDAO, PsStoreDAO}
+import models.daos._
 import play.api.libs.ws.WSClient
 import play.api.mvc.{Action, Controller}
 import akka.pattern.ask
@@ -16,19 +16,19 @@ import models.entities.PsStore
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
-class ActorController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO, psStoreDAO: PsStoreDAO, gogDAO: GogDAO)
+class ActorController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO, psStoreDAO: PsStoreDAO, gogDAO: GogDAO, steamDAO: SteamDAO)
                                (implicit system: ActorSystem, ec: ExecutionContext, ws:WSClient) extends Controller {
 
-  val updateActor = system.actorOf(UpdateActor.props(gameDAO, offerDAO, psStoreDAO, gogDAO), "Updater")
+  val updateActor = system.actorOf(UpdateActor.props(gameDAO, offerDAO, psStoreDAO, gogDAO, steamDAO), "Updater")
   //val cancellable = system.scheduler.schedule(0.seconds, 12.hours, updateActor, Update)
-  implicit val timeout = Timeout(3 minutes)
+  implicit val timeout = Timeout(5 minutes)
 
   def update = Action.async { implicit request =>
     println("Sending message to UpdateActor")
     val resp = updateActor ? Update
     println("Waiting for result")
-    val result = Await.result(resp, timeout.duration).asInstanceOf[(String, String)]
-    Future(Ok(result._1 + "\n " + result._2))
+    val result = Await.result(resp, timeout.duration).asInstanceOf[(String, String, String)]
+    Future(Ok(result._1 + "\n" + result._2 + "\n" + result._3))
   }
 
   def updateGOG = Action.async{ implicit request =>
@@ -42,6 +42,14 @@ class ActorController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO, psStoreDAO
   def updatePs = Action.async{ implicit request =>
     println("Sending message to UpdateActor")
     val resp = updateActor ? UpdatePs
+    println("Waiting for result")
+    val result = Await.result(resp, timeout.duration).asInstanceOf[String]
+    Future(Ok(result))
+  }
+
+  def updateSteam = Action.async{ implicit request =>
+    println("Sending message to UpdateActor")
+    val resp = updateActor ? UpdateSteam
     println("Waiting for result")
     val result = Await.result(resp, timeout.duration).asInstanceOf[String]
     Future(Ok(result))
