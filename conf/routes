@@ -12,6 +12,7 @@ POST    /search                         controllers.HomeController.search
 GET     /update                         controllers.ActorController.update
 GET     /update/ps                      controllers.ActorController.updatePs
 GET     /update/gog                     controllers.ActorController.updateGOG
+GET     /update/steam                   controllers.ActorController.updateSteam
 GET     /detail/:id                          controllers.DetailController.index(id:Long)
 GET     /result/:query                       controllers.ResultController.index(query:String)
 GET     /                                    controllers.HomeController.index

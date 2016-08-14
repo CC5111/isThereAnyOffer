@@ -84,6 +84,21 @@ class GogDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) e
   }
 }
 
+@Singleton
+class SteamDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[SteamStoreTable, SteamStore](dbConfigProvider){
+  import dbConfig.driver.api._
+  import dbConfig._
+
+  protected val tableQ = SlickTables.steamStoreQ
+
+  def all: Future[Seq[(String, Long)]] = {
+    val query = for {
+      p <- tableQ
+    } yield (p.idStore, p.idGame)
+    db.run(query.result)
+  }
+}
+
 
 @Singleton
 class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[OfferTable, Offer](dbConfigProvider){
@@ -98,16 +113,17 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 
   def insertIfNotExists(offerInsert: Offer): Future[Option[Offer]] = {
     val offerInsertAction = tableQ.filter(o => {
-      o.link === offerInsert.link
-      o.idGame === offerInsert.idGame
-      o.idStore === offerInsert.idStore
-      o.idPlatform === offerInsert.idPlatform
-      o.fromDate === offerInsert.fromDate
-      o.untilDate === offerInsert.untilDate
-      o.normalPrice === offerInsert.normalPrice
+      o.link === offerInsert.link &&
+      o.idGame === offerInsert.idGame &&
+      o.idStore === offerInsert.idStore &&
+      o.idPlatform === offerInsert.idPlatform &&
+      o.fromDate === offerInsert.fromDate &&
+      o.untilDate === offerInsert.untilDate &&
+      o.normalPrice === offerInsert.normalPrice &&
       o.offerPrice === offerInsert.offerPrice
     }).result.headOption.flatMap {
       case Some(offer) =>
+        println("encontre: " + offer)
         DBIO.successful(None)
       case None =>
         val offerId =
