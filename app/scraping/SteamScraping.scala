@@ -27,14 +27,14 @@ case class SteamScraping(url: String) {
     }
   }
 
-  private val browser = JsoupBrowser()
-  private val doc = browser.get(url)
+  private val doc = JsoupBrowser().get(url)
 
   private def isValid(id: Int, fromDateStr: String, untilDateStr: String, discount: Int, offerPrice: Int) = {
     id != -1 && fromDateStr != "" && untilDateStr != "" && discount != 0 && offerPrice != -1
   }
 
   def offersWithDiscount(): List[DataSteamDb] = {
+    println("bla")
     val items = doc >> elementList(".appimg")
     items.map(item => {
       val tds = item >> elementList("td")
