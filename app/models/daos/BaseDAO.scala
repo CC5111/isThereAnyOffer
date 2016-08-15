@@ -123,7 +123,6 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
       o.offerPrice === offerInsert.offerPrice
     }).result.headOption.flatMap {
       case Some(offer) =>
-        println("encontre: " + offer)
         DBIO.successful(None)
       case None =>
         val offerId =
