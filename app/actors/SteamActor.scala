@@ -65,7 +65,7 @@ class SteamActor (offerDAO: OfferDAO, steamDAO: SteamDAO) extends Actor{
         }).partition(_.nonEmpty)
         println("SteamActor: Created " + newAndOldOffers._1.length + " new offers")
         println("SteamActor: " + newAndOldOffers._2.length + " offers already existed")
-        println("SteamActor: JSON response processed.")
+        println("SteamActor: response processed.")
         newAndOldOffers._1.length
     }
 }

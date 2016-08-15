@@ -18,17 +18,17 @@ object UpdateActor {
   case object UpdateGOG
   case object UpdatePs
   case object UpdateSteam
-  def props(gameDAO: GameDAO, offerDAO: OfferDAO, psStoreDAO: PsStoreDAO, gogDAO: GogDAO, steamDAO: SteamDAO)
+  def props(offerDAO: OfferDAO, psStoreDAO: PsStoreDAO, gogDAO: GogDAO, steamDAO: SteamDAO)
            (implicit system: ActorSystem, ec: ExecutionContext, ws:WSClient) =
-    Props(new UpdateActor(gameDAO, offerDAO, psStoreDAO, gogDAO, steamDAO)(system, ec, ws))
+    Props(new UpdateActor(offerDAO, psStoreDAO, gogDAO, steamDAO)(system, ec, ws))
 }
-class UpdateActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, psStoreDAO: PsStoreDAO, gogDAO: GogDAO, steamDAO: SteamDAO)
+class UpdateActor @Inject() (offerDAO: OfferDAO, psStoreDAO: PsStoreDAO, gogDAO: GogDAO, steamDAO: SteamDAO)
                             (implicit system: ActorSystem, ec: ExecutionContext, ws:WSClient) extends Actor{
   import UpdateActor._
   import context._
 
-  val gogActor = context.actorOf(GogActor.props(gameDAO, offerDAO, gogDAO), "GOG-Actor")
-  val psActor = context.actorOf(PsActor.props(gameDAO, offerDAO, psStoreDAO), "PS-Actor")
+  val gogActor = context.actorOf(GogActor.props(offerDAO, gogDAO), "GOG-Actor")
+  val psActor = context.actorOf(PsActor.props(offerDAO, psStoreDAO), "PS-Actor")
   val steamActor = context.actorOf(SteamActor.props(offerDAO, steamDAO), "Steam-Actor")
   implicit val timeout = Timeout(1 minute)
 

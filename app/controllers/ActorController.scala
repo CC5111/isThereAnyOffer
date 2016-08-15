@@ -11,15 +11,14 @@ import play.api.libs.ws.WSClient
 import play.api.mvc.{Action, Controller}
 import akka.pattern.ask
 import akka.util.Timeout
-import models.entities.PsStore
 
 import scala.concurrent.{Await, ExecutionContext, Future}
 
 @Singleton
-class ActorController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO, psStoreDAO: PsStoreDAO, gogDAO: GogDAO, steamDAO: SteamDAO)
+class ActorController @Inject()(offerDAO: OfferDAO, psStoreDAO: PsStoreDAO, gogDAO: GogDAO, steamDAO: SteamDAO)
                                (implicit system: ActorSystem, ec: ExecutionContext, ws:WSClient) extends Controller {
 
-  val updateActor = system.actorOf(UpdateActor.props(gameDAO, offerDAO, psStoreDAO, gogDAO, steamDAO), "Updater")
+  val updateActor = system.actorOf(UpdateActor.props(offerDAO, psStoreDAO, gogDAO, steamDAO), "Updater")
   //val cancellable = system.scheduler.schedule(0.seconds, 12.hours, updateActor, Update)
   implicit val timeout = Timeout(5 minutes)
 

@@ -1,13 +1,11 @@
 package actors
 
-
 import java.sql.Timestamp
 import javax.inject._
-import java.util.Date
 
-import akka.actor.{Actor, ActorRef, Props}
+import akka.actor.{Actor, Props}
 import akka.util.Timeout
-import models.daos.{GameDAO, OfferDAO, GogDAO}
+import models.daos.{OfferDAO, GogDAO}
 import models.entities.Offer
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
@@ -20,53 +18,14 @@ import scala.util.{Failure, Success}
 object GogActor {
     case class Query(game: Long)
     case object Update
-    def props(gameDAO: GameDAO, offerDAO: OfferDAO, gogDAO: GogDAO)(implicit ws:WSClient) =
-        Props(new GogActor(gameDAO, offerDAO, gogDAO)(ws))
+    def props(offerDAO: OfferDAO, gogDAO: GogDAO)(implicit ws:WSClient) =
+        Props(new GogActor(offerDAO, gogDAO)(ws))
 }
 
-class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, gogDAO: GogDAO)
+class GogActor @Inject() (offerDAO: OfferDAO, gogDAO: GogDAO)
                          (implicit ws: WSClient) extends Actor{
     import context._
     import actors.GogActor._
-
-    // https://www.gog.com/games/ajax/filtered?mediaType=game&price=discounted&page=1
-    /*
-        products = [
-            {
-                title = "Witcher 3"
-                buyable = true
-                image = "url"
-                id = 1209819203
-                url = "/game/the_witcher_3_wild_hunt"
-                price = {
-                    amount = "12.49"
-                    baseAmount = "24.99"
-                    finalAmount = "12.49"
-                    isDiscounted = True
-                    discountPercentage = 50
-                    discountDifference = "12.50"
-                    ...
-                }
-                isDiscounted = True
-                salesVisibility = {
-                    isActive = True
-                    fromObject = {
-                        date = "2015-05-19 02:00:00"
-                        ...
-                    }
-                    toObject = {
-                        date = "2020-12-31 02:00:00"
-                        ...
-                    }
-                }
-                category = "Role-Playing"
-                isGame = True
-                ...
-            }, ...
-        ]
-        totalGamesFound = n
-
-     */
 
     case class OfferData(id: Long, url: String, base_price: String, discounted_price: String, start_date: Long, end_date: Long)
     implicit val offerRead: Reads[OfferData] = (
@@ -94,18 +53,18 @@ class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, gogDAO: GogDAO)
                 }.onComplete {
                     case Success(newOffers) =>
                         val number = processOffers(newOffers, gameIDs)
-                        println("GogActor: Sending response to UpdateActor", sender, sender.path)
+                        println("GogActor: Sending response to UpdateActor (" + s + ")")
                         s ! ("Se encontraron " + number + " ofertas en GOG")
                     case Failure(error) =>
                         s ! "Error al buscar ofertas en GOG.\n" + error
                 }
             }
         }
-        case a => println("Recibí " + a)
+        case a => println("GogActor: Couldn't understand message " + a  +".")
     }
 
     def processOffers(newOffers: List[OfferData], gameIDs: Map[String, Long]) = {
-        println("GogActor: Processing " + newOffers.length + " new offers.")
+        println("GogActor: Processing " + newOffers.length + " offers.")
         val validOffers =
             for {
                 offer <- newOffers
@@ -123,12 +82,11 @@ class GogActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, gogDAO: GogDAO)
                 offer.base_price.toDouble,
                 offer.discounted_price.toDouble)
         println("GogActor: Found " + validOffers.length + " offers")
-
         val newAndOldOffers = validOffers.map(validOffer => {
             Await.result(offerDAO.insertIfNotExists(validOffer), Timeout(10 seconds).duration)
         }).partition(_.nonEmpty)
-        println("GogActor: Created " + newAndOldOffers._1.length + " offers")
-        println("GogActor: Already existed " + newAndOldOffers._2.length + " offers")
+        println("GogActor: Created " + newAndOldOffers._1.length + " new offers")
+        println("GogActor: " + newAndOldOffers._2.length + " offers already existed")
         println("GogActor: JSON response processed.")
         newAndOldOffers._1.length
     }

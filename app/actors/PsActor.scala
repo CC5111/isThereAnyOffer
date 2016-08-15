@@ -1,11 +1,9 @@
 package actors
 
 import java.sql.Timestamp
-import java.util.Date
 import javax.inject.Inject
 
-import actors.UpdateActor.UpdatePs
-import akka.actor.{Actor, ActorRef, Props}
+import akka.actor.{Actor, Props}
 import akka.util.Timeout
 import models.daos.{GameDAO, OfferDAO, PsStoreDAO}
 import models.entities.{Offer, PsStore}
@@ -21,45 +19,15 @@ import org.joda.time.DateTime
 object PsActor {
     case class Query(game: Long)
     case object Update
-    def props(gameDAO: GameDAO, offerDAO: OfferDAO, psDAO: PsStoreDAO)(implicit ws:WSClient) =
-        Props(new PsActor(gameDAO, offerDAO, psDAO)(ws))
+    def props(offerDAO: OfferDAO, psDAO: PsStoreDAO)(implicit ws:WSClient) =
+        Props(new PsActor(offerDAO, psDAO)(ws))
 }
 
-class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, psDAO: PsStoreDAO)
+class PsActor @Inject() (offerDAO: OfferDAO, psDAO: PsStoreDAO)
                         (implicit ws: WSClient) extends Actor{
     import context._
     import actors.PsActor._
-    // https://store.playstation.com/store/api/chihiro/00_09_000/tumbler/CL/es/999/<query>?suggested_size=5&mode=game
-    // https://store.playstation.com/chihiro-api/viewfinder/CL/es/999/STORE-MSF77008-ALLDEALS?game_content_type=games&platform=ps4%2Cps3&size=30&gkb=1&geoCountry=CL
-    /*
-        ...
-        links = [
-            {
-                default_sku = {
-                    display_price = "US$22.99"
-                    price = 2299
-                    rewards = [
-                        {
-                            discount = 50
-                            price = 1149
-                            display_price = "US$11.49"
-                            isPlus = False
-                            start_date = "2016-06-07T15:00:00Z"
-                            end_date = "2016-06-13T15:00:00Z"
-                        }
-                    ]
-                    ...
-                }
-                metadata = {
-                    genre, game_genre, game_subgenre, playable_platform, ...
-                }
-                name = "Resident Evil 4"
-                playable_platform = [ PS3 ]
-                release_date = "2011-09-20T00:00:00Z"
-                url = "bla"
-        ]
 
-     */
     case class OfferData(id: String, platforms: Seq[String], url: String,
                          base_price: Double, discounted_price: Double,
                          start_date: String, end_date: String)
@@ -94,18 +62,18 @@ class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, psDAO: PsStoreDAO
                 }.onComplete{
                     case Success(newOffers) =>
                         val number = processOffers(newOffers, gameIDs)
-                        println("PsActor: Sending response to UpdateActor", sender, sender.path)
+                        println("PsActor: Sending response to UpdateActor (" + s + ")")
                         s ! ("Se encontraron " + number + " ofertas en PsStore")
                     case Failure(error) =>
                         s ! "Error al buscar ofertas en PsStore.\n" + error
                 }
             }
         }
-        case a => println("Recibí " + a)
+        case a => println("PsActor: Couldn't understand message " + a  +".")
     }
 
     def processOffers(newOffers: List[OfferData], gameIDs: Map[String, Long]) = {
-        println("PsActor: Processing " + newOffers.length + " new offers.")
+        println("PsActor: Processing " + newOffers.length + " offers.")
         val validOffers =
             for {
                 offer <- newOffers
@@ -130,8 +98,8 @@ class PsActor @Inject() (gameDAO: GameDAO, offerDAO: OfferDAO, psDAO: PsStoreDAO
         val newAndOldOffers = validOffers.map(validOffer => {
             Await.result(offerDAO.insertIfNotExists(validOffer), Timeout(10 seconds).duration)
         }).partition(_.nonEmpty)
-        println("PsActor: Created " + newAndOldOffers._1.length + " offers")
-        println("PsActor: Already existed " + newAndOldOffers._2.length + " offers")
+        println("PsActor: Created " + newAndOldOffers._1.length + " new offers")
+        println("PsActor: " + newAndOldOffers._2.length + " offers already existed")
         println("PsActor: JSON response processed.")
         newAndOldOffers._1.length
     }
