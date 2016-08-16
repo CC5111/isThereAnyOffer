@@ -19,14 +19,12 @@ class ResultController @Inject()(gameDAO: GameDAO,
     def index(query: String) = Action.async { implicit request =>
 
         for {
-            games <- gameDAO.searchByName(query)
             tuplesPlatformCount <- platformDAO.allPlatformsOffersWithCount
             tuplesGenreCount <- genreDAO.allGenresWithCount
             tuplesCategoryCount <- categoryDAO.allCategoriesWithCount
         } yield Ok(views.html.result(
             title = "Búsqueda",
             query = query,
-            games = games.toList,
             tuplesPlatformCount = tuplesPlatformCount.toList,
             tuplesGenreCount = tuplesGenreCount.toList,
             tuplesCategoryCount = tuplesCategoryCount.toList
