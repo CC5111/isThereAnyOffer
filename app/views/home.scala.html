@@ -1,5 +1,3 @@
-@import play.api.libs.json.JsValue
-@import scala.collection.immutable.HashMap
 @(
         title : String,
         tuplesPlatformCount: List[(models.entities.Platform, Int)],
@@ -19,10 +17,10 @@
                 <br>
                 <div class="searchBar container row">
                     <div  class="row search-row animated fadeInUp col-md-offset-3">
-                        <form id="form" method="post" action="/search"  autocomplete="off">
+                        <form id="form" method="get" action="/result"  autocomplete="off">
                             <div class="col-md-7 search-col relative locationicon">
                                 <i class="fa fa-gamepad icon-append" aria-hidden="true"></i>
-                                <input type="text" name="search" id="typeahead" class="form-control has-icon" placeholder="I am looking for ..." value=""  autocomplete="off">
+                                <input type="text" name="query" id="typeahead" class="form-control has-icon" placeholder="I am looking for ..." value=""  autocomplete="off">
                             </div>
                             <div class="col-md-1 search-col">
                                 <button class="btn btn-success btn-search btn-block">

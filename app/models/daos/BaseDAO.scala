@@ -171,6 +171,7 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   def filterOffers(
                     pageSize:Int = 8,
                     pageNumber: Int,
+                    gameName : String,
                     platformFilter: String,
                     genreFilter: String,
                     categoryFilter: String,
@@ -197,6 +198,7 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     } yield (offer, game, platform, genre, category, store)
 
     var queryFilter = query
+    if (gameName != "") queryFilter = queryFilter.filter((tuple) => tuple._2.name.toLowerCase like "%"+gameName.toLowerCase+"%")
     if (platformFilter != "") queryFilter = queryFilter.filter((tuple) => tuple._3.name === platformFilter)
     if (genreFilter != "") queryFilter = queryFilter.filter((tuple) => tuple._4.name === genreFilter)
     if (categoryFilter != "") queryFilter = queryFilter.filter((tuple) => tuple._5.name === categoryFilter)

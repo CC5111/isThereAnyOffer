@@ -36,13 +36,4 @@ class HomeController @Inject()(gameDAO: GameDAO,
       tuplesBestOfferGamePlatform = tuplesBestOfferGamePlatform.toList
     ))
   }
-
-  def search() = Action(parse.urlFormEncoded) { request =>
-    Redirect(routes.ResultController.index(request.body.get("search").head.head))
-  }
-
-  // JsValue ~ JSON
-  def socket = WebSocket.accept[JsValue, JsValue] { request =>
-    ActorFlow.actorRef(out => SearchActor.props(out,gameDAO))
-  }
 }

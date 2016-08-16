@@ -8,21 +8,20 @@
 #GET     /profile                        controllers.ProfileController.index
 #
 ##Game views
-POST    /search                         controllers.HomeController.search
 GET     /update                         controllers.ActorController.update
 GET     /update/ps                      controllers.ActorController.updatePs
 GET     /update/gog                     controllers.ActorController.updateGOG
 GET     /update/steam                   controllers.ActorController.updateSteam
-GET     /detail/:id                          controllers.DetailController.index(id:Long)
-GET     /result/:query                       controllers.ResultController.index(query:String)
-GET     /                                    controllers.HomeController.index
+GET     /detail/:id                     controllers.DetailController.index(id:Long)
+GET     /result                         controllers.ResultController.index(query:String)
+GET     /                               controllers.HomeController.index
 
 #API Rest
 GET     /api/games/name/:name                controllers.ApiController.gameByName(name:String)
 GET     /api/games/id/:id                    controllers.ApiController.gameById(id:Long)
 GET     /api/games                           controllers.ApiController.games
 
-GET     /api/filter                          controllers.ApiController.filterOffers(pageNumber:Int ?= 1, platform:String ?= "", genre:String ?= "", category ?= "", sort ?= "name", order ?= "asc")
+GET     /api/filter                          controllers.ApiController.filterOffers(pageNumber:Int ?= 1, name:String ?= "",platform:String ?= "", genre:String ?= "", category ?= "", sort ?= "name", order ?= "asc")
 
 GET     /api/graphic/id/:id                    controllers.ApiController.dataForGraphic(id: Int)
 
