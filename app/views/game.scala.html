@@ -1,0 +1,45 @@
+@(gameForm: Form[GameData])(implicit messages: Messages)
+
+
+@base("Crear juego"){
+    @helper.form(action = routes.GameController.processForm()){
+        @helper.inputText(gameForm("name"))
+        @helper.inputText(gameForm("publisher"))
+        @helper.inputText(gameForm("developer"))
+        @helper.inputText(gameForm("link"))
+        @helper.textarea(gameForm("description"))
+        @helper.inputText(gameForm("rating"))
+        @helper.inputDate(gameForm("releaseDate"))
+        @helper.select(
+            field = gameForm("gameType"),
+            options = Seq(
+                "Game" -> "Juego",
+                "DLC" -> "DLC"
+            ),
+            '_default -> "Elegir tipo"
+        )
+        @helper.inputText(gameForm("video"))
+        @helper.inputText(gameForm("score"))
+        @helper.checkbox(gameForm("category.single"))
+        @helper.checkbox(gameForm("category.coop"))
+        @helper.checkbox(gameForm("category.multi"))
+        @helper.checkbox(gameForm("platform.ps3"))
+        @helper.checkbox(gameForm("platform.ps4"))
+        @helper.checkbox(gameForm("platform.x360"))
+        @helper.checkbox(gameForm("platform.xone"))
+        @helper.checkbox(gameForm("platform.pc"))
+        @helper.inputText(gameForm("store_ids.psStore"))
+        @helper.inputText(gameForm("store_ids.xboxStore"))
+        @helper.inputText(gameForm("store_ids.steam"))
+        @helper.inputText(gameForm("store_ids.gog"))
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button id="submit" type="submit" value="Submit" class="btn btn-primary">Submit</button>
+                <button id="cancel" class="btn cancel">Cancel</button>
+            </div>
+        </div>
+    }
+
+}
+

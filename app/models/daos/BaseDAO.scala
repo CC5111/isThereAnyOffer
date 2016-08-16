@@ -99,6 +99,20 @@ class SteamDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   }
 }
 
+@Singleton
+class XboxStoreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[XboxStoreTable, XboxStore](dbConfigProvider){
+  import dbConfig.driver.api._
+  import dbConfig._
+
+  protected val tableQ = SlickTables.xboxStoreQ
+
+  def all: Future[Seq[(String, Long)]] = {
+    val query = for {
+      p <- tableQ
+    } yield (p.idStore, p.idGame)
+    db.run(query.result)
+  }
+}
 
 @Singleton
 class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[OfferTable, Offer](dbConfigProvider){
@@ -275,6 +289,14 @@ class PlatformDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
 }
 
 @Singleton
+class GamePlatformDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[GamePlatformTable, GamePlatform](dbConfigProvider){
+  import dbConfig.driver.api._
+  import dbConfig._
+
+  protected val tableQ = SlickTables.gamePlatformQ
+}
+
+@Singleton
 class GenreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[GenreTable, Genre](dbConfigProvider){
   import dbConfig.driver.api._
     import dbConfig._
@@ -378,6 +400,14 @@ class CategoryDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
   }
 }
 
+@Singleton
+class GameCategoryDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends BaseDAO[GameCategoryTable, GameCategory](dbConfigProvider){
+  import dbConfig.driver.api._
+  import dbConfig._
+
+  protected val tableQ = SlickTables.gameCategoryQ
+}
+
 trait AbstractBaseDAO[T,A] {
   def insert(row : A): Future[Long]
   def insert(rows : Seq[A]): Future[Seq[Long]]
@@ -392,8 +422,8 @@ trait AbstractBaseDAO[T,A] {
 
 
 abstract class BaseDAO[T <: BaseTable[A], A <: BaseEntity] @Inject()(dbConfigProvider: DatabaseConfigProvider) extends AbstractBaseDAO[T,A]{ //with HasDatabaseConfig[JdbcProfile]
-//  protected lazy val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfigProvider.get[JdbcProfile](Play.current)
   val dbConfig = dbConfigProvider.get[JdbcProfile]
+  //  protected lazy val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfigProvider.get[JdbcProfile](Play.current)
   import dbConfig.driver.api._
   import dbConfig._
 

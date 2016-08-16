@@ -9,6 +9,8 @@
 #
 ##Game views
 POST    /search                         controllers.HomeController.search
+GET     /game                           controllers.GameController.index
+POST    /game/add                       controllers.GameController.processForm
 GET     /update                         controllers.ActorController.update
 GET     /update/ps                      controllers.ActorController.updatePs
 GET     /update/gog                     controllers.ActorController.updateGOG
