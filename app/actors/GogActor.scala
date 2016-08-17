@@ -80,7 +80,9 @@ class GogActor @Inject() (offerDAO: OfferDAO, gogDAO: GogDAO)
                 offer.start_date,
                 offer.end_date,
                 offer.base_price.toDouble,
-                offer.discounted_price.toDouble)
+                offer.discounted_price.toDouble,
+                (100 - (offer.discounted_price.toDouble/offer.base_price.toDouble*100)).toInt,
+                0)
         println("GogActor: Found " + validOffers.length + " offers")
         val newAndOldOffers = validOffers.map(validOffer => {
             Await.result(offerDAO.insertIfNotExists(validOffer), Timeout(10 seconds).duration)

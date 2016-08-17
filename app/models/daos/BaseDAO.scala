@@ -120,7 +120,8 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
       o.fromDate === offerInsert.fromDate &&
       o.untilDate === offerInsert.untilDate &&
       o.normalPrice === offerInsert.normalPrice &&
-      o.offerPrice === offerInsert.offerPrice
+      o.offerPrice === offerInsert.offerPrice &&
+      o.discount === offerInsert.discount
     }).result.headOption.flatMap {
       case Some(offer) =>
         DBIO.successful(None)
@@ -135,7 +136,9 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
             fromDate = offerInsert.fromDate,
             untilDate = offerInsert.untilDate,
             normalPrice = offerInsert.normalPrice,
-            offerPrice = offerInsert.offerPrice
+            offerPrice = offerInsert.offerPrice,
+            discount = offerInsert.discount,
+            visits = offerInsert.visits
           )
 
         val offer = offerId.map { id => Offer(
@@ -147,7 +150,9 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
           fromDate = offerInsert.fromDate,
           untilDate = offerInsert.untilDate,
           normalPrice = offerInsert.normalPrice,
-          offerPrice = offerInsert.offerPrice
+          offerPrice = offerInsert.offerPrice,
+          discount = offerInsert.discount,
+          visits = offerInsert.visits
         )}
         offer.map(Some(_))
     }.transactionally
