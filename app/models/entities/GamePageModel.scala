@@ -27,7 +27,8 @@ case class Offer(id: Long,
                  visits: Long) extends BaseEntity{
 
   def incrementVisits: Offer =
-    this.copy(visits = this.visits + 1.toLong)
+      this.copy(visits = this.visits + 1)
+
 }
 
 case class Game(id: Long,
