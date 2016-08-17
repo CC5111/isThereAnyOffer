@@ -39,7 +39,8 @@ class PsActor @Inject() (offerDAO: OfferDAO, psDAO: PsStoreDAO)
         (__ \ "default_sku" \ "price").read[Double] and
         ((__ \ "default_sku" \ "rewards")(0) \ "price").read[Double] and
         ((__ \ "default_sku" \ "rewards")(0) \ "start_date").read[String] and
-        ((__ \ "default_sku" \ "rewards")(0) \ "end_date").read[String])(OfferData.apply _)
+        ((__ \ "default_sku" \ "rewards")(0) \ "end_date").read[String]
+      )(OfferData.apply _)
 
     implicit def  strToTimestamp(s: String): Timestamp = {
         // start_date = "2016-06-07T15:00:00Z"
@@ -48,8 +49,11 @@ class PsActor @Inject() (offerDAO: OfferDAO, psDAO: PsStoreDAO)
         new Timestamp(new DateTime(date(0).toInt, date(1).toInt, date(2).toInt, time(0).toInt, time(1).toInt).getMillis)
     }
 
-    val allDealsUrl = "https://store.playstation.com/chihiro-api/viewfinder/CL/es/999/STORE-MSF77008-ALLDEALS?game_content_type=games&platform=ps4%2Cps3&size=100&gkb=1&geoCountry=CL"
-    val baseUrl = "https://store.playstation.com/#!/es-cl/juegos/cid="
+    //val allDealsUrl = "https://store.playstation.com/chihiro-api/viewfinder/CL/es/999/STORE-MSF77008-ALLDEALS?game_content_type=games&platform=ps4%2Cps3&size=100&gkb=1&geoCountry=CL"
+    //val baseDealsUrl = "https://store.playstation.com/chihiro-api/viewfinder/CL/es/19/"
+    //val dealsUrlParameters = "game_content_type=games&platform=ps4%2Cps3&size=100&gkb=1&geoCountry=CL"
+    val weeklyDealsUrl = "https://store.playstation.com/chihiro-api/viewfinder/CL/es/19/STORE-MSF77008-WEEKLYDEALS?size=100&gkb=1&geoCountry=CL"
+    val gameUrl = "https://store.playstation.com/#!/es-cl/juegos/cid="
     def receive = {
         case Update => {
             println("PsActor: Message received from ", sender)
@@ -57,8 +61,13 @@ class PsActor @Inject() (offerDAO: OfferDAO, psDAO: PsStoreDAO)
             psDAO.all.map{ seq =>
                 val gameIDs: Map[String, Long] = seq.toMap
                 println("PsActor: Getting PsStore's JSON response")
-                val response = ws.url(allDealsUrl).get().map {
-                    resp => (resp.json \ "links").as[List[OfferData]]
+                val response = ws.url(weeklyDealsUrl).get().map { resp =>
+                    val j = resp.json
+                    val sales = (j \ "size").as[Int]
+                    val offers = for {
+                        i <- 0 until sales
+                    } yield ((j \ "links")(i) \ "links").as[Seq[OfferData]]
+                    offers.flatten
                 }.onComplete{
                     case Success(newOffers) =>
                         val number = processOffers(newOffers, gameIDs)
@@ -72,7 +81,7 @@ class PsActor @Inject() (offerDAO: OfferDAO, psDAO: PsStoreDAO)
         case a => println("PsActor: Couldn't understand message " + a  +".")
     }
 
-    def processOffers(newOffers: List[OfferData], gameIDs: Map[String, Long]) = {
+    def processOffers(newOffers: Seq[OfferData], gameIDs: Map[String, Long]) = {
         println("PsActor: Processing " + newOffers.length + " offers.")
         val validOffers =
             for {
@@ -80,7 +89,7 @@ class PsActor @Inject() (offerDAO: OfferDAO, psDAO: PsStoreDAO)
                 if gameIDs contains offer.id
                 playable_platform <- offer.platforms
             } yield Offer(0,
-                baseUrl + offer.id,
+                gameUrl + offer.id,
                 gameIDs.get(offer.id) match {
                     case Some(g) => g
                     case None => 0
