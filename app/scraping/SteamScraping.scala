@@ -8,6 +8,10 @@ case class SteamScraping(url: String) {
 
   private val doc = JsoupBrowser().get(url)
 
+  private def isValid(id: String, fromDateStr: String, untilDateStr: String, discount: Int, offerPrice: Int) = {
+    id != "" && fromDateStr != "" && untilDateStr != "" && discount != 0 && offerPrice != -1
+  }
+
   def offersWithDiscount(): List[DataSteamDb] = {
     val items = doc >> elementList(".appimg")
     items.map(item => {
@@ -25,8 +29,8 @@ case class SteamScraping(url: String) {
       val discount = tds(3).attrs.get("data-sort") match {case Some(p) => p.toInt; case None => 0}
       val offerPrice = tds(4).attrs.get("data-sort") match {case Some(po) => po.toInt; case None => -1}
 
-      val offer = DataSteamDb(id, link, untilDateStr, fromDateStr, discount, offerPrice/100.0)
-      if (offer.isValid){
+      if (isValid(id, fromDateStr, untilDateStr, discount, offerPrice)){
+        val offer = DataSteamDb(id, link, untilDateStr, fromDateStr, discount, offerPrice/100.0)
         Some(offer)
       } else None
     }).filter(_.nonEmpty).map(_.get)
