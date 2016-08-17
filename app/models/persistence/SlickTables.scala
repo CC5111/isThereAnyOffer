@@ -49,8 +49,10 @@ object SlickTables extends HasDatabaseConfig[JdbcProfile] {
     def untilDate = column[java.sql.Timestamp]("untilDate")
     def normalPrice = column[Double]("normalPrice")
     def offerPrice = column[Double]("offerPrice")
+    def discount = column[Int]("discount")
+    def visits = column[Long]("visits")
 
-    def * = (id, link, idGame, idPlatform, idStore, fromDate, untilDate, normalPrice, offerPrice) <> (Offer.tupled, Offer.unapply _)
+    def * = (id, link, idGame, idPlatform, idStore, fromDate, untilDate, normalPrice, offerPrice, discount, visits) <> (Offer.tupled, Offer.unapply _)
   }
   val offerQ = TableQuery[OfferTable]
 

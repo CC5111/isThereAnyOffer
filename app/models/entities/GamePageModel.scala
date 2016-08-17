@@ -22,9 +22,9 @@ case class Offer(id: Long,
                  fromDate: java.sql.Timestamp,
                  untilDate: java.sql.Timestamp,
                  normalPrice: Double,
-                 offerPrice: Double) extends BaseEntity {
-  def discount: Int = (100 - (offerPrice/normalPrice*100)).toInt
-}
+                 offerPrice: Double,
+                 discount: Int,
+                 visits: Long) extends BaseEntity
 
 case class Game(id: Long,
                 name: String,

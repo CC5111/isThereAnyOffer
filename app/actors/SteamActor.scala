@@ -58,7 +58,9 @@ class SteamActor (offerDAO: OfferDAO, steamDAO: SteamDAO) extends Actor{
                 offer.fromDate,
                 offer.untilDate,
                 offer.normalPrice,
-                offer.offerPrice)
+                offer.offerPrice,
+                (100 - (offer.offerPrice/offer.normalPrice*100)).toInt,
+                0)
         println("SteamActor: Found " + validOffers.length + " valid offers")
         val newAndOldOffers = validOffers.map(validOffer => {
             Await.result(offerDAO.insertIfNotExists(validOffer), Timeout(10 seconds).duration)
