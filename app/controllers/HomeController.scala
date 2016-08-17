@@ -23,16 +23,16 @@ class HomeController @Inject()(gameDAO: GameDAO,
     for {
       tuplesGamesWithOffersByEnd <- offerDAO.gamesWithOffersByEnd
       tuplesGamesWithOffersLessTenThousand <- offerDAO.gamesWithOffersLessTenThousand
-      tuplesLastGamesWithOffers <- offerDAO.lastGamesWithOffers
-//      tuplesGamesWithBestOffers <- offerDAO.gamesWithBestOffers
-//      tuplesGamesWithOffersMoreVisits <- offerDAO.gamesWithOffersMoreVisits
+      tuplesGamesWithLastOffers <- offerDAO.lastGamesWithOffers
+      tuplesGamesWithBestOffers <- offerDAO.gamesWithBestOffers
+      tuplesGamesWithOffersMoreVisits <- offerDAO.gamesWithOffersMoreVisits
     } yield Ok(views.html.home(
       title = "Inicio",
       tuplesGamesWithOffersByEnd = tuplesGamesWithOffersByEnd.toList,
       tuplesGamesWithOffersLessTenThousand = tuplesGamesWithOffersLessTenThousand.toList,
-      tuplesLastGamesWithOffers = tuplesLastGamesWithOffers.toList
-//          tuplesGamesWithBestOffers = tuplesGamesWithBestOffers.toList,
-//        tuplesGamesWithOffersMoreVisits = tuplesGamesWithOffersMoreVisits.toList
+      tuplesGamesWithLastOffers = tuplesGamesWithLastOffers.toList,
+      tuplesGamesWithBestOffers = tuplesGamesWithBestOffers.toList,
+      tuplesGamesWithOffersMoreVisits = tuplesGamesWithOffersMoreVisits.toList
     ))
   }
 }

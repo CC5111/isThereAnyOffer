@@ -1,9 +1,24 @@
 @(
         title : String,
-        tuplesGamesWithOffersByEnd: List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
-        tuplesGamesWithOffersLessTenThousand:List[(models.entities.Offer, models.entities.Game, models.entities.Platform)],
-        tuplesLastGamesWithOffers: List[(models.entities.Offer, models.entities.Game, models.entities.Platform, models.entities.Store)]
+        tuplesGamesWithOffersByEnd: List[(models.entities.Offer, models.entities.Game, models.entities.Platform, models.entities.Store)],
+        tuplesGamesWithOffersLessTenThousand:List[(models.entities.Offer, models.entities.Game, models.entities.Platform, models.entities.Store)],
+        tuplesGamesWithLastOffers: List[(models.entities.Offer, models.entities.Game, models.entities.Platform, models.entities.Store)],
+        tuplesGamesWithBestOffers: List[(models.entities.Offer, models.entities.Game, models.entities.Platform, models.entities.Store)],
+        tuplesGamesWithOffersMoreVisits: List[(models.entities.Offer, models.entities.Game, models.entities.Platform, models.entities.Store)]
 )
+@platformColor(platform: String) = @{
+    if (platform.contains("PS")) {
+        "blue"
+    }else {
+        if(platform.contains("Xbox")){
+            "green"
+        }else{
+            "black"
+        }
+    }
+
+}
+@import java.lang.Boolean; var open1=false; var open2=false; var open3=false; var open4=false;
 
 @base(title){
     <div class="container">
@@ -27,58 +42,224 @@
                             </div>
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>
-        <br>
         <div class="row">
             <div class="ui four column grid">
-        @for(tuple <- tuplesLastGamesWithOffers) {
-
-
-
-            <div class="column">
-                <div class="ui fluid link green card">
-                    <a class="image" href="/detail/@tuple._2.id">
-                        <div class="ui green ribbon label" >@tuple._3.name </div>
-                        <div class="ui green ribbon label" style="margin-top: 3.5rem">@tuple._1.discount<i class="fa fa-percent"></i></div>
-                        <img src="/assets/@tuple._2.cover">
-                    </a>
-                    <div class="content">
-                        <div style="white-space: nowrap;overflow: hidden;"><a style="text-overflow: ellipsis;
+            @for(tuple <- tuplesGamesWithLastOffers) {
+                <div class="column">
+                    <div class="ui fluid link green card">
+                        <a class="image" href="/detail/@tuple._2.id">
+                            <div class="ui @platformColor(tuple._3.name) ribbon label" >@tuple._3.name </div>
+                            <div class="ui green ribbon label" style="margin-top: 3.5rem">- @tuple._1.discount<i class="fa fa-percent"></i></div>
+                            <img src="/assets/@tuple._2.cover">
+                        </a>
+                        <div class="content">
+                            <div style="white-space: nowrap;overflow: hidden;"><a style="text-overflow: ellipsis;
                         " class="header" href="/detail/@tuple._2.id  "> @tuple._2.name  </a></div>
-                        <div class="meta">
-                            <span class="date">@tuple._2.typeGame</span>
+                            <div class="meta">
+                                <span class="date">@tuple._2.typeGame</span>
+                            </div>
+                            <div class="meta">
+                                <span class="date">  @tuple._4.name </span>
+                            </div>
+                            <div class="meta">
+                                <span class="date">Normal: $  @tuple._1.normalPrice  </span>
+                            </div>
+                            <div class="description">
+                                <p>Offer: $  @tuple._1.offerPrice  </p>
+                            </div>
                         </div>
-                        <div class="meta">
-                        <span class="date">  @tuple._4.name </span>
-                        </div>
-                        <div class="meta">
-                        <span class="date">Normal: $  @tuple._1.normalPrice  </span>
-                        </div>
-                        <div class="description">
-                        <p>Offer: $  @tuple._1.offerPrice  </p>
-                        </div>
+                        <a target="_blank" class="ui bottom @platformColor(tuple._3.name) attached button " href="   @tuple._1.link  ">Ver oferta</a>
                     </div>
-                    <a target="_blank" class="ui bottom attached button " href="   @tuple._1.link  ">Ver oferta</a>
                 </div>
-            </div>
 
 
-        }
+            }
             </div>
         </div>
         <br>
-
+        <br>
         <div class="row">
             @*Mejores ofertas y por terminar*@
-            <div class="col-md-8">
+            <div class="col-md-8" >
+                <div class="row content-title-section" style="margin-right: 15px">
+                    <h4>Mejores ofertas</h4>
+                </div>
+                @for(((offer, game, platform, store), index) <- tuplesGamesWithBestOffers.zipWithIndex) {
 
+                    @if(!open1 && index%4 == 0){
+                        <div class="ui four column grid" style="margin-right: 15px">
+                            @{open1 = true;}
+                        }
+                    <div class="column">
+                        <div class="ui fluid link green card">
+                            <a class="image" href="/detail/@game.id">
+                                <div class="ui @platformColor(platform.name) ribbon label" >@platform.name </div>
+                                <div class="ui green ribbon label" style="margin-top: 3.5rem">- @offer.discount<i class="fa fa-percent"></i></div>
+
+                                <img src="/assets/@game.cover">
+                            </a>
+                            <div class="content">
+                                <div style="white-space: nowrap;overflow: hidden;"><a style="text-overflow: ellipsis;
+                                    " class="header" href="/detail/@game.id  "> @game.name  </a></div>
+                                <div class="meta">
+                                    <span class="date">@game.typeGame</span>
+                                </div>
+                                <div class="meta" style="white-space: nowrap;overflow: hidden;">
+                                    <span class="date" style="text-overflow: ellipsis;">@store.name</span>
+                                </div>
+                                <div class="meta">
+                                    <span class="date">Normal: $@offer.normalPrice  </span>
+                                </div>
+                                <div class="description">
+                                    <p>Offer: $@offer.offerPrice  </p>
+                                </div>
+                            </div>
+                            <a target="_blank" class="ui bottom  @platformColor(platform.name)  attached button " href="@offer.link  ">Ver oferta</a>
+                        </div>
+                    </div>
+
+                    @if(open1 && ((index+1)%4 == 0 || (index+1) == tuplesGamesWithBestOffers.length)){
+                        @{open1 = false;}
+                    </div>
+                    }
+                }
+                <br>
+                <br>
+                <div class="row content-title-section" style="margin-right: 15px">
+                    <h4>Ofertas por terminar</h4>
+                </div>
+                @for(((offer, game, platform, store), index) <- tuplesGamesWithOffersByEnd.zipWithIndex) {
+
+                    @if(!open2 && index%4 == 0){
+                        <div class="ui four column grid" style="margin-right: 15px">
+                            @{open2 = true;}
+                        }
+                    <div class="column">
+                        <div class="ui fluid link green card">
+                            <a class="image" href="/detail/@game.id">
+                                <div class="ui @platformColor(platform.name) ribbon label" >@platform.name </div>
+                                <div class="ui green ribbon label" style="margin-top: 3.5rem">- @offer.discount<i class="fa fa-percent"></i></div>
+
+                                <img src="/assets/@game.cover">
+                            </a>
+                            <div class="content">
+                                <div style="white-space: nowrap;overflow: hidden;"><a style="text-overflow: ellipsis;
+                                    " class="header" href="/detail/@game.id  "> @game.name  </a></div>
+                                <div class="meta">
+                                    <span class="date">@game.typeGame</span>
+                                </div>
+                                <div class="meta"  style="white-space: nowrap;overflow: hidden;">
+                                    <span class="date" style="text-overflow: ellipsis;">@store.name  </span>
+                                </div>
+                                <div class="meta">
+                                    <span class="date">Normal: $@offer.normalPrice  </span>
+                                </div>
+                                <div class="description">
+                                    <p>Offer: $@offer.offerPrice  </p>
+                                </div>
+                            </div>
+                            <a target="_blank" class="ui bottom @platformColor(platform.name)  attached button " href="@offer.link  ">Ver oferta</a>
+                        </div>
+                    </div>
+
+                    @if(open2 && ((index+1)%4 == 0 || (index+1) == tuplesGamesWithOffersByEnd.length)){
+                        @{open2 = false;}
+                    </div>
+                    }
+                }
             </div>
             @*Menos de 10k pesos y mas visitadas*@
             <div class="col-md-4">
+                <div class="row content-title-section" >
+                    <h4>Ofertas a menos de $5</h4>
+                </div>
 
+                @for(((offer, game, platform, store), index) <- tuplesGamesWithOffersLessTenThousand.zipWithIndex) {
+
+                    @if(!open3 && index%2 == 0){
+                        <div class="ui two column grid">
+                            @{open3 = true;}
+                        }
+                    <div class="column">
+                        <div class="ui fluid link green card">
+                            <a class="image" href="/detail/@game.id">
+                                <div class="ui @platformColor(platform.name) ribbon label" >@platform.name </div>
+                                <div class="ui green ribbon label" style="margin-top: 3.5rem">- @offer.discount<i class="fa fa-percent"></i></div>
+
+                                <img src="/assets/@game.cover">
+                            </a>
+                            <div class="content">
+                                <div style="white-space: nowrap;overflow: hidden;"><a style="text-overflow: ellipsis;
+                                    " class="header" href="/detail/@game.id  "> @game.name  </a></div>
+                                <div class="meta">
+                                    <span class="date">@game.typeGame</span>
+                                </div>
+                                <div class="meta"  style="white-space: nowrap;overflow: hidden;">
+                                <span class="date" style="text-overflow: ellipsis;">@store.name  </span>
+                                </div>
+                                <div class="meta">
+                                <span class="date">Normal: $@offer.normalPrice  </span>
+                                </div>
+                                <div class="description">
+                                <p>Offer: $@offer.offerPrice  </p>
+                                </div>
+                            </div>
+                            <a target="_blank" class="ui bottom @platformColor(platform.name) attached button " href="@offer.link  ">Ver oferta</a>
+                        </div>
+                    </div>
+
+                    @if(open3 && ((index+1)%2 == 0 || (index+1) == tuplesGamesWithOffersLessTenThousand.length)){
+                        @{open3 = false;}
+                    </div>
+                    }
+                }
+                <br>
+                <br>
+                <div class="row content-title-section">
+                    <h4>Ofertas más visitadas</h4>
+                </div>
+                @for(((offer, game, platform, store), index) <- tuplesGamesWithOffersMoreVisits.zipWithIndex) {
+
+                    @if(!open4 && index%2 == 0){
+                        <div class="ui two column grid">
+                            @{open4 = true;}
+                        }
+                    <div class="column">
+                        <div class="ui fluid link green card">
+                            <a class="image" href="/detail/@game.id">
+                                <div class="ui @platformColor(platform.name) ribbon label" >@platform.name </div>
+                                <div class="ui green ribbon label" style="margin-top: 3.5rem">- @offer.discount<i class="fa fa-percent"></i></div>
+
+                                <img src="/assets/@game.cover">
+                            </a>
+                            <div class="content">
+                                <div style="white-space: nowrap;overflow: hidden;"><a style="text-overflow: ellipsis;
+                                    " class="header" href="/detail/@game.id  "> @game.name  </a></div>
+                                <div class="meta">
+                                    <span class="date">@game.typeGame</span>
+                                </div>
+                                <div class="meta"  style="white-space: nowrap;overflow: hidden;">
+                                    <span class="date" style="text-overflow: ellipsis;">@store.name  </span>
+                                </div>
+                                <div class="meta">
+                                    <span class="date">Normal: $@offer.normalPrice  </span>
+                                </div>
+                                <div class="description">
+                                    <p>Offer: $@offer.offerPrice  </p>
+                                </div>
+                            </div>
+                            <a target="_blank" class="ui bottom @platformColor(platform.name) attached button " href="@offer.link  ">Ver oferta</a>
+                        </div>
+                    </div>
+
+                    @if(open4 && ((index+1)%2 == 0 || (index+1) == tuplesGamesWithOffersMoreVisits.length)){
+                        @{open4 = false;}
+                    </div>
+                    }
+                }
             </div>
         </div>
 
