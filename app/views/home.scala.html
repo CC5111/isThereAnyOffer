@@ -50,14 +50,14 @@
             @for(tuple <- tuplesGamesWithLastOffers) {
                 <div class="column">
                     <div class="ui fluid link green card">
-                        <a class="image" href="/detail/@tuple._2.id">
+                        <a class="image" href="@routes.DetailController.index(tuple._2.id)">
                             <div class="ui @platformColor(tuple._3.name) ribbon label" >@tuple._3.name </div>
                             <div class="ui green ribbon label" style="margin-top: 3.5rem">- @tuple._1.discount<i class="fa fa-percent"></i></div>
                             <img src="/assets/@tuple._2.cover">
                         </a>
                         <div class="content">
                             <div style="white-space: nowrap;overflow: hidden;"><a style="text-overflow: ellipsis;
-                        " class="header" href="/detail/@tuple._2.id  "> @tuple._2.name  </a></div>
+                        " class="header" href="@routes.DetailController.index(tuple._2.id)"> @tuple._2.name  </a></div>
                             <div class="meta">
                                 <span class="date">@tuple._2.typeGame</span>
                             </div>
@@ -71,7 +71,7 @@
                                 <p>Offer: $  @tuple._1.offerPrice  </p>
                             </div>
                         </div>
-                        <a target="_blank" class="ui bottom @platformColor(tuple._3.name) attached button " href="   @tuple._1.link  ">Ver oferta</a>
+                        <a target="_blank" class="ui bottom @platformColor(tuple._3.name) attached button " href="@routes.HomeController.goOffer(tuple._1.id,tuple._1.link)">Ver oferta</a>
                     </div>
                 </div>
 
@@ -95,7 +95,7 @@
                         }
                     <div class="column">
                         <div class="ui fluid link green card">
-                            <a class="image" href="/detail/@game.id">
+                            <a class="image" href="@routes.DetailController.index(game.id)">
                                 <div class="ui @platformColor(platform.name) ribbon label" >@platform.name </div>
                                 <div class="ui green ribbon label" style="margin-top: 3.5rem">- @offer.discount<i class="fa fa-percent"></i></div>
 
@@ -103,7 +103,7 @@
                             </a>
                             <div class="content">
                                 <div style="white-space: nowrap;overflow: hidden;"><a style="text-overflow: ellipsis;
-                                    " class="header" href="/detail/@game.id  "> @game.name  </a></div>
+                                    " class="header" href="@routes.DetailController.index(game.id)"> @game.name  </a></div>
                                 <div class="meta">
                                     <span class="date">@game.typeGame</span>
                                 </div>
@@ -117,7 +117,7 @@
                                     <p>Offer: $@offer.offerPrice  </p>
                                 </div>
                             </div>
-                            <a target="_blank" class="ui bottom  @platformColor(platform.name)  attached button " href="@offer.link  ">Ver oferta</a>
+                            <a target="_blank" class="ui bottom  @platformColor(platform.name)  attached button " href="@routes.HomeController.goOffer(offer.id,offer.link)">Ver oferta</a>
                         </div>
                     </div>
 
@@ -139,7 +139,7 @@
                         }
                     <div class="column">
                         <div class="ui fluid link green card">
-                            <a class="image" href="/detail/@game.id">
+                            <a class="image" href="@routes.DetailController.index(game.id)">
                                 <div class="ui @platformColor(platform.name) ribbon label" >@platform.name </div>
                                 <div class="ui green ribbon label" style="margin-top: 3.5rem">- @offer.discount<i class="fa fa-percent"></i></div>
 
@@ -147,7 +147,7 @@
                             </a>
                             <div class="content">
                                 <div style="white-space: nowrap;overflow: hidden;"><a style="text-overflow: ellipsis;
-                                    " class="header" href="/detail/@game.id  "> @game.name  </a></div>
+                                    " class="header" href="@routes.DetailController.index(game.id)"> @game.name  </a></div>
                                 <div class="meta">
                                     <span class="date">@game.typeGame</span>
                                 </div>
@@ -161,7 +161,7 @@
                                     <p>Offer: $@offer.offerPrice  </p>
                                 </div>
                             </div>
-                            <a target="_blank" class="ui bottom @platformColor(platform.name)  attached button " href="@offer.link  ">Ver oferta</a>
+                            <a target="_blank" class="ui bottom @platformColor(platform.name)  attached button " href="@routes.HomeController.goOffer(offer.id,offer.link)">Ver oferta</a>
                         </div>
                     </div>
 
@@ -185,7 +185,7 @@
                         }
                     <div class="column">
                         <div class="ui fluid link green card">
-                            <a class="image" href="/detail/@game.id">
+                            <a class="image" href="@routes.DetailController.index(game.id)">
                                 <div class="ui @platformColor(platform.name) ribbon label" >@platform.name </div>
                                 <div class="ui green ribbon label" style="margin-top: 3.5rem">- @offer.discount<i class="fa fa-percent"></i></div>
 
@@ -193,7 +193,7 @@
                             </a>
                             <div class="content">
                                 <div style="white-space: nowrap;overflow: hidden;"><a style="text-overflow: ellipsis;
-                                    " class="header" href="/detail/@game.id  "> @game.name  </a></div>
+                                    " class="header" href="@routes.DetailController.index(game.id)"> @game.name  </a></div>
                                 <div class="meta">
                                     <span class="date">@game.typeGame</span>
                                 </div>
@@ -207,7 +207,7 @@
                                 <p>Offer: $@offer.offerPrice  </p>
                                 </div>
                             </div>
-                            <a target="_blank" class="ui bottom @platformColor(platform.name) attached button " href="@offer.link  ">Ver oferta</a>
+                            <a target="_blank" class="ui bottom @platformColor(platform.name) attached button " href="@routes.HomeController.goOffer(offer.id,offer.link)">Ver oferta</a>
                         </div>
                     </div>
 
@@ -229,7 +229,7 @@
                         }
                     <div class="column">
                         <div class="ui fluid link green card">
-                            <a class="image" href="/detail/@game.id">
+                            <a class="image" href="@routes.DetailController.index(game.id)">
                                 <div class="ui @platformColor(platform.name) ribbon label" >@platform.name </div>
                                 <div class="ui green ribbon label" style="margin-top: 3.5rem">- @offer.discount<i class="fa fa-percent"></i></div>
 
@@ -237,7 +237,7 @@
                             </a>
                             <div class="content">
                                 <div style="white-space: nowrap;overflow: hidden;"><a style="text-overflow: ellipsis;
-                                    " class="header" href="/detail/@game.id  "> @game.name  </a></div>
+                                    " class="header" href="@routes.DetailController.index(game.id)"> @game.name  </a></div>
                                 <div class="meta">
                                     <span class="date">@game.typeGame</span>
                                 </div>
@@ -251,7 +251,7 @@
                                     <p>Offer: $@offer.offerPrice  </p>
                                 </div>
                             </div>
-                            <a target="_blank" class="ui bottom @platformColor(platform.name) attached button " href="@offer.link  ">Ver oferta</a>
+                            <a target="_blank" class="ui bottom @platformColor(platform.name) attached button " href="@routes.HomeController.goOffer(offer.id,offer.link)">Ver oferta</a>
                         </div>
                     </div>
 

@@ -14,6 +14,7 @@ GET     /update/gog                     controllers.ActorController.updateGOG
 GET     /update/steam                   controllers.ActorController.updateSteam
 GET     /detail/:id                     controllers.DetailController.index(id:Long)
 GET     /result                         controllers.ResultController.index(query:String)
+GET     /goOffer                        controllers.HomeController.goOffer(offerId:Long, url:String)
 GET     /                               controllers.HomeController.index
 
 #API Rest

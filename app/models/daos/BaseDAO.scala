@@ -111,6 +111,17 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     db.run(tableQ.result)
   }
 
+  def incrementVisits(offerId : Long): Future[Unit] = {
+
+      val query = tableQ.filter(_.id === offerId)
+
+      val update = query.result.head.flatMap {offer =>
+          query.update(offer.incrementVisits)
+      }
+
+      db.run(update).map(_ => ())
+  }
+
   def insertIfNotExists(offerInsert: Offer): Future[Option[Offer]] = {
     val offerInsertAction = tableQ.filter(o => {
       o.link === offerInsert.link &&

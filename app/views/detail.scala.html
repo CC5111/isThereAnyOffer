@@ -109,7 +109,7 @@
                     </thead>
                     <tbody>
                     @for(tupleOfferPlatformStore <- tuplesOfferPlatformStore) {
-                        <tr class="row_detail" onclick="trLink('@tupleOfferPlatformStore._1.link');">
+                        <tr class="row_detail" onclick="trLink('@routes.HomeController.goOffer(tupleOfferPlatformStore._1.id,tupleOfferPlatformStore._1.link)');">
                             <td><div class="content-cell-td">@tupleOfferPlatformStore._2.name</div></td>
                             <td><div class="content-cell-td">@game.typeGame</div></td>
                             <td><div class="content-cell-td">@tupleOfferPlatformStore._3</div></td>
@@ -146,7 +146,7 @@
         </div>
         <br>
         <div class="container">
-            <div class="fb-comments" order_by="reverse_time" data-href="https://www.isthereanyoffer.emoreno.cl/detail/@game.id"
+            <div class="fb-comments" order_by="reverse_time" data-href="@routes.DetailController.index(game.id)"
             data-numposts="5" colorscheme="dark" data-width="100%"></div>
         </div>
 

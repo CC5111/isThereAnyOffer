@@ -18,7 +18,6 @@ class HomeController @Inject()(gameDAO: GameDAO,
                                genreDAO: GenreDAO,
                                categoryDAO: CategoryDAO)(implicit ec:ExecutionContext, system: ActorSystem, mat:Materializer) extends Controller {
 
-
   def index() = Action.async { implicit request =>
     for {
       tuplesGamesWithOffersByEnd <- offerDAO.gamesWithOffersByEnd
@@ -34,5 +33,11 @@ class HomeController @Inject()(gameDAO: GameDAO,
       tuplesGamesWithBestOffers = tuplesGamesWithBestOffers.toList,
       tuplesGamesWithOffersMoreVisits = tuplesGamesWithOffersMoreVisits.toList
     ))
+  }
+
+  def goOffer(offerId: Long, url: String) = Action { implicit request =>
+        offerDAO.incrementVisits(offerId)
+        Redirect(url, MOVED_PERMANENTLY)
+
   }
 }
