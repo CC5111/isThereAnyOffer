@@ -94,7 +94,7 @@ class PsActor @Inject() (offerDAO: OfferDAO, psDAO: PsStoreDAO)
                 offer.end_date,
                 offer.base_price/100.0,
                 offer.discounted_price/100.0,
-                (100 - (offer.discounted_price/100.0/offer.base_price/100.0*100)).toInt,
+                (100 - (offer.discounted_price/offer.base_price*100)).toInt,
                 0)
         println("PsActor: Found " + validOffers.length + " offers")
         val newAndOldOffers = validOffers.map(validOffer => {
