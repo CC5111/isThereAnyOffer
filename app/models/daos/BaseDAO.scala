@@ -231,18 +231,72 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
       db.run(queryResult.map(_._2.id).result))
   }
 
-  def lastGamesWithOffers: Future[Seq[(Offer, Game, Platform)]] = {
+  def lastGamesWithOffers: Future[Seq[(Offer, Game, Platform, Store)]] = {
     val gameQ = SlickTables.gameQ
     val platformQ = SlickTables.platformQ
+    val storeQ = SlickTables.storeQ
 
     val dateNow = new Timestamp(new java.util.Date().getTime)
 
     val query = for {
-      ((offer, game) , platform) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id)
+        (((offer, game) , platform), store) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id) join storeQ on (_._1._1.idStore === _.id)
       if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
-    } yield (offer, game, platform)
+    } yield (offer, game, platform, store)
     db.run(query.sortBy(_._1.fromDate.desc).take(4).result)
   }
+
+    def gamesWithOffersLessTenThousand : Future[Seq[(Offer, Game, Platform)]] = {
+        val gameQ = SlickTables.gameQ
+        val platformQ = SlickTables.platformQ
+
+        val dateNow = new Timestamp(new java.util.Date().getTime)
+
+        val query = for {
+            ((offer, game) , platform) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id)
+            if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice && offer.offerPrice.<=(16.toDouble)
+        } yield (offer, game, platform)
+        db.run(query.sortBy(_._1.offerPrice.asc).take(10).result)
+    }
+
+//    def gamesWithBestOffers: Future[Seq[(Offer, Game, Platform)]] = {
+//        val gameQ = SlickTables.gameQ
+//        val platformQ = SlickTables.platformQ
+//
+//        val dateNow = new Timestamp(new java.util.Date().getTime)
+//
+//        val query = for {
+//            ((offer, game) , platform) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id)
+//            if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
+//        } yield (offer, game, platform)
+//        db.run(query.sortBy(_._1.discount.desc).take(10).result)
+//    }
+
+    def gamesWithOffersByEnd : Future[Seq[(Offer, Game, Platform)]] = {
+        val gameQ = SlickTables.gameQ
+        val platformQ = SlickTables.platformQ
+
+        val dateNow = new Timestamp(new java.util.Date().getTime)
+
+        val query = for {
+            ((offer, game) , platform) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id)
+            if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
+        } yield (offer, game, platform)
+        db.run(query.sortBy(_._1.untilDate.asc).take(10).result)
+    }
+
+//    def gamesWithOffersMoreVisits : Future[Seq[(Offer, Game, Platform)]] = {
+//        val gameQ = SlickTables.gameQ
+//        val platformQ = SlickTables.platformQ
+//
+//        val dateNow = new Timestamp(new java.util.Date().getTime)
+//
+//        val query = for {
+//            ((offer, game) , platform) <- tableQ join gameQ on (_.idGame === _.id) join platformQ on (_._1.idPlatform === _.id)
+//            if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
+//        } yield (offer, game, platform)
+//        db.run(query.sortBy(_._1.visits.desc).take(10).result)
+//    }
+
 }
 
 @Singleton

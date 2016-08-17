@@ -2,16 +2,13 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 
-import actors.SearchActor
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import models.daos._
 import models.entities.{Game, Genre, Offer}
 import play.api.libs.json.{JsValue, Json, Writes}
-import play.api.libs.streams.ActorFlow
 import play.api.mvc.{Action, AnyContent, Controller, WebSocket}
 
-import scala.collection.mutable
 import scala.concurrent.ExecutionContext
 
 @Singleton
@@ -24,16 +21,18 @@ class HomeController @Inject()(gameDAO: GameDAO,
 
   def index() = Action.async { implicit request =>
     for {
-      tuplesPlatformCount <- platformDAO.allPlatformsOffersWithCount
-      tuplesGenreCount <- genreDAO.allGenresWithCount
-      tuplesCategoryCount <- categoryDAO.allCategoriesWithCount
-      tuplesBestOfferGamePlatform <- offerDAO.lastGamesWithOffers
+      tuplesGamesWithOffersByEnd <- offerDAO.gamesWithOffersByEnd
+      tuplesGamesWithOffersLessTenThousand <- offerDAO.gamesWithOffersLessTenThousand
+      tuplesLastGamesWithOffers <- offerDAO.lastGamesWithOffers
+//      tuplesGamesWithBestOffers <- offerDAO.gamesWithBestOffers
+//      tuplesGamesWithOffersMoreVisits <- offerDAO.gamesWithOffersMoreVisits
     } yield Ok(views.html.home(
       title = "Inicio",
-      tuplesPlatformCount = tuplesPlatformCount.toList,
-      tuplesGenreCount = tuplesGenreCount.toList,
-      tuplesCategoryCount = tuplesCategoryCount.toList,
-      tuplesBestOfferGamePlatform = tuplesBestOfferGamePlatform.toList
+      tuplesGamesWithOffersByEnd = tuplesGamesWithOffersByEnd.toList,
+      tuplesGamesWithOffersLessTenThousand = tuplesGamesWithOffersLessTenThousand.toList,
+      tuplesLastGamesWithOffers = tuplesLastGamesWithOffers.toList
+//          tuplesGamesWithBestOffers = tuplesGamesWithBestOffers.toList,
+//        tuplesGamesWithOffersMoreVisits = tuplesGamesWithOffersMoreVisits.toList
     ))
   }
 }
