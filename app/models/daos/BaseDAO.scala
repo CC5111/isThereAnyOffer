@@ -44,11 +44,14 @@ class GameDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
     db.run(query.result)
   }
 
-  def dataForGraphic(id: Long): Future[Seq[(Offer, Store)]] = {
+  def dataForGraphic(id: Long): Future[Seq[(Offer, Store, Platform)]] = {
     val offerQ = SlickTables.offerQ
     val storeQ = SlickTables.storeQ
+    val platformQ = SlickTables.platformQ
 
-    val query = (offerQ join storeQ on (_.idStore === _.id)).filter(_._1.idGame === id)
+    val query = for {
+      ((offer, store), platform) <- (offerQ join storeQ on (_.idStore === _.id)).filter(_._1.idGame === id) join platformQ on(_._1.idPlatform === _.id)
+    } yield (offer, store, platform)
 
     db.run(query.result)
   }
@@ -332,8 +335,11 @@ class PlatformDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
   def allPlatformsOffersWithCount: Future[Seq[(Platform, Int)]] = {
     val offerQ = SlickTables.offerQ
 
+    val dateNow = new Timestamp(new java.util.Date().getTime)
+
     val platformsWithOffers = (for {
       (platform, offer) <- tableQ join offerQ on (_.id === _.idPlatform)
+      if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
     } yield (platform, offer))
       .groupBy(_._1).map {
       case (plat, offers) => (plat, offers.length)
@@ -344,6 +350,17 @@ class PlatformDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     } yield (platform, 0)
 
     val query = (platformsWithOffers union platformsWithoutOffers) sortBy(_._1.name.asc)
+    db.run(query.result)
+  }
+
+  def platformsGame(game: Game): Future[Seq[Platform]] = {
+    val gamePlatformQ = SlickTables.gamePlatformQ
+
+    val query = for {
+      (gamePlatform, platform) <- gamePlatformQ join tableQ on (_.idPlatform === _.id)
+      if gamePlatform.idGame === game.id
+    } yield platform
+
     db.run(query.result)
   }
 }
@@ -384,8 +401,11 @@ class GenreDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     val gameGenreQ = SlickTables.gameGenreQ
     val offerQ = SlickTables.offerQ
 
+    val dateNow = new Timestamp(new java.util.Date().getTime)
+
     val genresWithGames = (for {
       ((genre, gameGenre), offer) <- tableQ join gameGenreQ on (_.id === _.idGenre) join offerQ on (_._2.idGame === _.idGame)
+      if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
     } yield (genre, gameGenre))
       .groupBy(_._1).map {
       case (gen, gameGen) => (gen, gameGen.length)
@@ -436,8 +456,11 @@ class CategoryDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     val gameCategoryQ = SlickTables.gameCategoryQ
     val offerQ = SlickTables.offerQ
 
+    val dateNow = new Timestamp(new java.util.Date().getTime)
+
     val categoriesWithGames = (for {
       ((category, gameCategory), offer) <- tableQ join gameCategoryQ on (_.id === _.idCategory) join offerQ on (_._2.idGame === _.idGame)
+      if offer.untilDate.>(dateNow) && offer.normalPrice =!= offer.offerPrice
     } yield (category, gameCategory))
       .groupBy(_._1).map {
       case (cat, gameCat) => (cat, gameCat.length)

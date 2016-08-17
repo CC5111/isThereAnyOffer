@@ -2,7 +2,8 @@
         game: models.entities.Game,
         tuplesOfferPlatformStore: List[(models.entities.Offer, models.entities.Platform, String)],
         genres: List[models.entities.Genre],
-        categories: List[models.entities.Category])
+        categories: List[models.entities.Category],
+        platforms: List[models.entities.Platform])
     @base(title){
         <div id="wrap">
             <div class="container" >
@@ -73,6 +74,10 @@
                                             <tr >
                                                 <td >Category(ies)</td>
                                                 <td >@categories.mkString(", ")</td>
+                                            </tr>
+                                            <tr >
+                                                <td >Platform(s)</td>
+                                                <td >@platforms.mkString(", ")</td>
                                             </tr>
                                         </tbody>
                                     </table>

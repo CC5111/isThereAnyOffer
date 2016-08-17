@@ -185,22 +185,24 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
   }
 
   def dataForGraphic(idGame: Int) = Action.async{
-    gameDAO.dataForGraphic(idGame).map{ offersStrore =>
-      if (offersStrore.isEmpty) Ok(createErrorJSON("No existen ofertas"))
+    gameDAO.dataForGraphic(idGame).map{ offersStorePlarform =>
+      if (offersStorePlarform.isEmpty) Ok(createErrorJSON("No existen ofertas"))
       else {
         // obtener los labels del grafico
-        val minDate = new DateTime(offersStrore.map(_._1.fromDate).min)
+        val minDate = new DateTime(offersStorePlarform.map(_._1.fromDate).min)
         val now = DateTime.now()
 
         val numberOfDays = Days.daysBetween(minDate, now).getDays()
         val days = for (f<- 0 to numberOfDays) yield minDate.plusDays(f)
 
-        val offersByStore = offersStrore.groupBy(_._2).map{case (store, offersStore) => (store, offersStore.map(offerStore => (new DateTime(offerStore._1.fromDate), offerStore._1.offerPrice)))}
+        val offersByStorePlatform = offersStorePlarform.groupBy(t => (t._2, t._3)).map{case ((store, platform), offers) =>
+          ((store, platform), offers.map(offerStore => (new DateTime(offerStore._1.fromDate), offerStore._1.offerPrice)))
+        }
 
-        val points = offersByStore.map{case (store, offersStore) =>
+        val points = offersByStorePlatform.map{case ((store, platform), offers) =>
           val dataStore = days.map(day => {
             var ret: Option[Double] = None
-            offersStore.foreach((offerDayPrice) => {
+            offers.foreach((offerDayPrice) => {
               if (sameDate(offerDayPrice._1, day)) ret = Some(offerDayPrice._2)
             })
             ret
@@ -213,7 +215,7 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
           val dataStoreMoreOne = dataStore.reverse.tail.reverse :+ lastValue(dataStore)
 
           Json.obj(
-            "label" -> store.name,
+            "label" -> (store.name + " - " + platform.name),
             "fill" -> false,
             "lineTension" -> 0.1, //por defecto
             "steppedLine" -> true,
