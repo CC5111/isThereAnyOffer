@@ -335,6 +335,17 @@ class PlatformDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     val query = (platformsWithOffers union platformsWithoutOffers) sortBy(_._1.name.asc)
     db.run(query.result)
   }
+
+  def platformsGame(game: Game): Future[Seq[Platform]] = {
+    val gamePlatformQ = SlickTables.gamePlatformQ
+
+    val query = for {
+      (gamePlatform, platform) <- gamePlatformQ join tableQ on (_.idPlatform === _.id)
+      if gamePlatform.idGame === game.id
+    } yield platform
+
+    db.run(query.result)
+  }
 }
 
 @Singleton
