@@ -218,6 +218,8 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 
     var queryFilter = query
     if (gameName != "") queryFilter = queryFilter.filter((tuple) => tuple._2.name.toLowerCase like "%"+gameName.toLowerCase+"%")
+
+
     if (platformFilter != "") queryFilter = queryFilter.filter((tuple) => tuple._3.name === platformFilter)
     if (genreFilter != "") queryFilter = queryFilter.filter((tuple) => tuple._4.name === genreFilter)
     if (categoryFilter != "") queryFilter = queryFilter.filter((tuple) => tuple._5.name === categoryFilter)
@@ -229,10 +231,25 @@ class OfferDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 
     val offset = (pageNumber - 1) * pageSize
 
-    //query para sacar el conteo de generos, plataformas y categorias
-    val queryCountGenres = queryFilter.groupBy(_._4).map { case (genre, group) => (genre, group.map(_._1.id).countDistinct) }
-    val queryCountPlatforms = queryFilter.groupBy(_._3).map { case (platform, group) => (platform, group.map(_._1.id).countDistinct) }
-    val queryCountCategories = queryFilter.groupBy(_._5).map { case (category, group) => (category, group.map(_._1.id).countDistinct) }
+    //queries para sacar el conteo de generos, plataformas y categorias
+    val queryToCount = queryFilter.groupBy(t => (t._1, t._2)).map{case ((offer, game), offers) => (offer, game)}
+    val queryCountGenres = (for {
+      (((offer, game), gameGenre), genre) <- queryToCount join gameGenreQ on (_._2.id === _.idGame) join genreQ on (_._2.idGenre === _.id)
+    } yield (genre, offer))
+      .groupBy(_._1)
+      .map{case (genre, offers) => (genre, offers.length)}
+
+    val queryCountPlatforms = (for {
+      ((offer, game), platform) <- queryToCount join platformQ on (_._1.idPlatform === _.id)
+    } yield (platform, offer))
+      .groupBy(_._1)
+      .map{case (platform, offers) => (platform, offers.length)}
+
+    val queryCountCategories = (for {
+      (((offer, game), gameCategory), category) <- queryToCount join gameCategoryQ on (_._2.id === _.idGame) join categoryQ on (_._2.idCategory === _.id)
+    } yield (category, offer))
+      .groupBy(_._1)
+      .map{case (category, offers) => (category, offers.length)}
 
     // ordenar: posibles parametros de sort -> name, priceOffer // order -> asc, desc
     queryResult = if (order == "asc") {
