@@ -24,16 +24,16 @@
     <div class="container">
         <div class="jumbotron" >
             <img src="@routes.Assets.versioned("images/logo_brand.png")"  height="100" width="150">
-            <h1 style="color: white">Is There Any Offer</h1>
+            <h1 style="color: white">GameDeals</h1>
             <div class="container">
-                <p style="color: white"> Find the best deals on the most popular stores in the world </p>
+                <p style="color: white">Find the best deals on the most popular stores in the world </p>
                 <br>
                 <div class="searchBar container row">
                     <div  class="row search-row animated fadeInUp col-md-offset-3">
                         <form id="form" method="get" action="/result"  autocomplete="off">
                             <div class="col-md-7 search-col relative locationicon">
                                 <i class="fa fa-gamepad icon-append" aria-hidden="true"></i>
-                                <input type="text" name="query" id="typeahead" class="form-control has-icon" placeholder="I am looking for ..." value=""  autocomplete="off">
+                                <input type="text" name="query" id="typeahead" class="form-control has-icon" placeholder="Buscar un juego" value=""  autocomplete="off">
                             </div>
                             <div class="col-md-1 search-col">
                                 <button class="btn btn-success btn-search btn-block">
@@ -68,14 +68,12 @@
                                 <span class="date">Normal: $  @tuple._1.normalPrice  </span>
                             </div>
                             <div class="description">
-                                <p>Offer: $  @tuple._1.offerPrice  </p>
+                                <p>Oferta: $  @tuple._1.offerPrice  </p>
                             </div>
                         </div>
                         <a target="_blank" class="ui bottom @platformColor(tuple._3.name) attached button " href="@routes.HomeController.goOffer(tuple._1.id,tuple._1.link)">Ver oferta</a>
                     </div>
                 </div>
-
-
             }
             </div>
         </div>
@@ -116,7 +114,7 @@
                                     <span class="date">Normal: $@offer.normalPrice  </span>
                                 </div>
                                 <div class="description">
-                                    <p>Offer: $@offer.offerPrice  </p>
+                                    <p>Oferta: $@offer.offerPrice  </p>
                                 </div>
                             </div>
                             <a target="_blank" class="ui bottom  @platformColor(platform.name)  attached button " href="@routes.HomeController.goOffer(offer.id,offer.link)">Ver oferta</a>
@@ -163,7 +161,7 @@
                                     <span class="date">Normal: $@offer.normalPrice  </span>
                                 </div>
                                 <div class="description">
-                                    <p>Offer: $@offer.offerPrice  </p>
+                                    <p>Oferta: $@offer.offerPrice  </p>
                                 </div>
                             </div>
                             <a target="_blank" class="ui bottom @platformColor(platform.name)  attached button " href="@routes.HomeController.goOffer(offer.id,offer.link)">Ver oferta</a>
@@ -210,7 +208,7 @@
                                     <span class="date">Normal: $@offer.normalPrice  </span>
                                 </div>
                                 <div class="description">
-                                    <p>Offer: $@offer.offerPrice  </p>
+                                    <p>Oferta: $@offer.offerPrice  </p>
                                 </div>
                             </div>
                             <a target="_blank" class="ui bottom @platformColor(platform.name) attached button " href="@routes.HomeController.goOffer(offer.id,offer.link)">Ver oferta</a>
@@ -256,7 +254,7 @@
                                     <span class="date">Normal: $@offer.normalPrice  </span>
                                 </div>
                                 <div class="description">
-                                    <p>Offer: $@offer.offerPrice  </p>
+                                    <p>Oferta: $@offer.offerPrice  </p>
                                 </div>
                             </div>
                             <a target="_blank" class="ui bottom @platformColor(platform.name) attached button " href="@routes.HomeController.goOffer(offer.id,offer.link)">Ver oferta</a>
