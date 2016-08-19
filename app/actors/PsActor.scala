@@ -52,7 +52,7 @@ class PsActor @Inject() (offerDAO: OfferDAO, psDAO: PsStoreDAO)
     //val allDealsUrl = "https://store.playstation.com/chihiro-api/viewfinder/CL/es/999/STORE-MSF77008-ALLDEALS?game_content_type=games&platform=ps4%2Cps3&size=100&gkb=1&geoCountry=CL"
     //val baseDealsUrl = "https://store.playstation.com/chihiro-api/viewfinder/CL/es/19/"
     //val dealsUrlParameters = "game_content_type=games&platform=ps4%2Cps3&size=100&gkb=1&geoCountry=CL"
-    val weeklyDealsUrl = "https://store.playstation.com/chihiro-api/viewfinder/CL/es/19/STORE-MSF77008-WEEKLYDEALS?size=100&gkb=1&geoCountry=CL"
+    val weeklyDealsUrl = "https://store.playstation.com/chihiro-api/viewfinder/CL/es/19/STORE-MSF77008-WEEKLYDEALS?size=200&gkb=1&geoCountry=CL"
     val gameUrl = "https://store.playstation.com/#!/es-cl/juegos/cid="
     def receive = {
         case Update => {
