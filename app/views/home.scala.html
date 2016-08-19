@@ -13,7 +13,7 @@
         if(platform.contains("Xbox")){
             "green"
         }else{
-            "black"
+            "orange"
         }
     }
 
@@ -49,7 +49,7 @@
             <div class="ui four column grid">
             @for(tuple <- tuplesGamesWithLastOffers) {
                 <div class="column">
-                    <div class="ui fluid link green card">
+                    <div class="ui fluid link  card">
                         <a class="image" href="@routes.DetailController.index(tuple._2.id)">
                             <div class="ui @platformColor(tuple._3.name) ribbon label" >@tuple._3.name </div>
                             <div class="ui green ribbon label" style="margin-top: 3.5rem">- @tuple._1.discount<i class="fa fa-percent"></i></div>
@@ -94,7 +94,7 @@
                             @{open1 = true;}
                         }
                     <div class="column">
-                        <div class="ui fluid link green card">
+                        <div class="ui fluid link card">
                             <a class="image" href="@routes.DetailController.index(game.id)">
                                 <div class="ui @platformColor(platform.name) ribbon label" >@platform.name </div>
                                 <div class="ui green ribbon label" style="margin-top: 3.5rem">- @offer.discount<i class="fa fa-percent"></i></div>
@@ -141,7 +141,7 @@
                             @{open2 = true;}
                         }
                     <div class="column">
-                        <div class="ui fluid link green card">
+                        <div class="ui fluid link  card">
                             <a class="image" href="@routes.DetailController.index(game.id)">
                                 <div class="ui @platformColor(platform.name) ribbon label" >@platform.name </div>
                                 <div class="ui green ribbon label" style="margin-top: 3.5rem">- @offer.discount<i class="fa fa-percent"></i></div>
@@ -188,7 +188,7 @@
                             @{open3 = true;}
                         }
                     <div class="column">
-                        <div class="ui fluid link green card">
+                        <div class="ui fluid link  card">
                             <a class="image" href="@routes.DetailController.index(game.id)">
                                 <div class="ui @platformColor(platform.name) ribbon label" >@platform.name </div>
                                 <div class="ui green ribbon label" style="margin-top: 3.5rem">- @offer.discount<i class="fa fa-percent"></i></div>
@@ -234,7 +234,7 @@
                             @{open4 = true;}
                         }
                     <div class="column">
-                        <div class="ui fluid link green card">
+                        <div class="ui fluid link  card">
                             <a class="image" href="@routes.DetailController.index(game.id)">
                                 <div class="ui @platformColor(platform.name) ribbon label" >@platform.name </div>
                                 <div class="ui green ribbon label" style="margin-top: 3.5rem">- @offer.discount<i class="fa fa-percent"></i></div>
