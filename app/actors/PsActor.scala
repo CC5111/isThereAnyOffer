@@ -76,6 +76,7 @@ class PsActor @Inject() (offerDAO: OfferDAO, psDAO: PsStoreDAO)
                     case Failure(error) =>
                         s ! "Error al buscar ofertas en PsStore.\n" + error
                 }
+
             }
         }
         case a => println("PsActor: Couldn't understand message " + a  +".")
