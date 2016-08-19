@@ -193,7 +193,7 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
         val now = DateTime.now()
 
         val numberOfDays = Days.daysBetween(minDate, now).getDays()
-        val days = for (f<- 0 to numberOfDays) yield minDate.plusDays(f)
+        val days = for (f<- 0 to (numberOfDays + 1)) yield minDate.plusDays(f)
 
         val offersByStorePlatform = offersStorePlarform.groupBy(t => (t._2, t._3)).map{case ((store, platform), offers) =>
           ((store, platform), offers.map(offerStore => (new DateTime(offerStore._1.fromDate), offerStore._1.offerPrice)))
@@ -208,11 +208,17 @@ class ApiController @Inject()(gameDAO: GameDAO, offerDAO: OfferDAO)
             ret
           }).toList
 
+
           def lastValue(list: List[Option[Double]]) : Option[Double] = {
-            list.filter(_.nonEmpty).last
+            val ret = list.filter(_.nonEmpty)
+            if (ret.isEmpty) None
+            else ret.last
           }
 
-          val dataStoreMoreOne = dataStore.reverse.tail.reverse :+ lastValue(dataStore)
+          val lastValueList = lastValue(dataStore)
+
+          var dataStoreMoreOne = List[Option[Double]]()
+          if (lastValueList.nonEmpty) dataStoreMoreOne = dataStore.reverse.tail.reverse :+ lastValue(dataStore)
 
           Json.obj(
             "label" -> (store.name + " - " + platform.name),
